@@ -1,0 +1,22 @@
+#!/bin/tcsh -f
+
+# George Foster
+# Groupe de technologies langagières interactives / Interactive Language Technologies Group
+# Institut de technologie de l'information / Institute for Information Technology
+# Conseil national de recherches Canada / National Research Council Canada
+# Copyright 2005, Conseil national de recherches du Canada / Copyright 2005, National Research Council of Canada
+
+##
+## Syntax: select-line n
+##
+## Select the nth line from stdin.
+##
+
+if ($#argv != 1) then
+   cat $0 | egrep '^##' | cut -c4-
+   exit 1
+endif
+
+set n = $1
+
+head -$n | tail -1
