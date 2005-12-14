@@ -47,6 +47,6 @@ my @lines = <>;
 print
     map { $print_numbers ? "$_->[0]\t$_->[1]" : $_->[1] }
     sort { $a->[2] <=> $b->[2] }
-    map { [$_, $lines[$_], length $lines[$_]] } # 0: line no; 1: line, 3: len
+    map { [$_+1, $lines[$_], length $lines[$_]] } # 0: line no; 1: line, 3: len
     (0 .. $#lines);
 
