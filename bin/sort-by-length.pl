@@ -25,17 +25,28 @@ Usage: $0 [<input file(s)>]
 
   Sort the input in increasing length of lines.
 
+Options:
+
+  -h(elp)   Print this help message
+  -n        Print line numbers
+
 ";
     exit 1;
 }
+
+use Getopt::Long;
+GetOptions(
+    help        => sub { usage },
+    n           => \my $print_numbers,
+) or usage;
 
 # Read the whole input, be it stdin or any number of files specified on the
 # command line
 my @lines = <>; 
 # Print it by sorted order of length using a Schwarzian transform.
 print
-    map { $_->[0] }
-    sort { $a->[1] <=> $b->[1] }
-    map { [$_, length $_] }
-    @lines;
+    map { $print_numbers ? "$_->[0]\t$_->[1]" : $_->[1] }
+    sort { $a->[2] <=> $b->[2] }
+    map { [$_, $lines[$_], length $lines[$_]] } # 0: line no; 1: line, 3: len
+    (0 .. $#lines);
 
