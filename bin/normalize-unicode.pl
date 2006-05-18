@@ -32,8 +32,9 @@ Usage: $0 [-v] UNICODEDATA UTF8InputText(s) > CanonicalUTF8Output
   the input are converted into their canonical equivalent.
 
   The program will look for UNICODEDATA first in the local directory, then in
-  \$PORTAGE/models/unicode.  Provided subset: UnicodeData-Arabic.txt, which can
-  also be referred to as \"ar\".
+  \$PORTAGE/models/unicode.  Provided subsets: UnicodeData-Arabic.txt, (alias:
+  ar), and UnicodeData-Arabic-full.txt, (alias: ar-full).  (Refer to
+  \$PORTAGE/models/unicode/README for details.)
 
 Options:
 
@@ -57,7 +58,8 @@ GetOptions(
 @ARGV > 0 or usage "Missing UnicodeData.txt file name";
 my $unicode_data = shift || "-";
 
-if ( $unicode_data eq "ar" ) { $unicode_data = "UnicodeData-Arabic.txt" }
+if ( $unicode_data eq "ar"  ) { $unicode_data = "UnicodeData-Arabic.txt" }
+if ( $unicode_data eq "ar-full" ) { $unicode_data = "UnicodeData-Arabic-full.txt" }
 
 if ( ! -e $unicode_data ) {
    if ( ! exists $ENV{PORTAGE} ) {
