@@ -136,6 +136,7 @@ foreach (sort keys %canonical) {
 #   }
 #}
 
+%normalize_freq = ();
 while (<>) {
    utf8::upgrade($_);
    $debug and print;
