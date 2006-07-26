@@ -56,6 +56,10 @@ while (<F1>) {
    die "Unexpected end of $ARGV[1] before end of $ARGV[0] at line $.\n"
       unless defined $L2;
 
+   # Optimization: don't do the fancy (and expensive) math if the lines are
+   # identical
+   next if $L1 eq $L2;
+
    if ( abs($L1 - $L2) * 10**$prec > max(abs($L1), abs($L2)) ) {
       print "$.	< $L1	> $L2\n"
    }
