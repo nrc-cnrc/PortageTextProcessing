@@ -52,7 +52,7 @@ sub max($$) {
 
 while (<F1>) {
    my $L1 = $_; chomp $L1;
-   my $L2 = <F2>; chomp $L2;
+   my $L2 = <F2>; chomp $L2 if defined $L2;
    die "Unexpected end of $ARGV[1] before end of $ARGV[0] at line $.\n"
       unless defined $L2;
 
