@@ -19,7 +19,7 @@ import re
 help = """
 strip-parallel-blank-lines.py file1 file2 [file3...]
 
-Strip blank lines in parallel from two line-aligned files: strip if either file
+Strip blank lines in parallel from two line-aligned files: strip if EITHER file
 contains a blank line.  Write output to <file1>.no-blanks. If <file3> and subsequent
 files are provided, they are stripped in parallel, but are not themselves checked
 for blank lines.
@@ -38,7 +38,7 @@ for file in sys.argv[1:]:
     ifiles.append(open(file, "r"))
     ofiles.append(open(file+".no-blanks", "w"))
 
-lines = ["" for i in range(len(ifiles))]
+lines = [""] * len(ifiles)
 for lines[0] in ifiles[0]:
 
     for i in range(1, len(ifiles)):
