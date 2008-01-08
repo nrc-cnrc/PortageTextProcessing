@@ -28,6 +28,10 @@ Usage: diff-round.pl [-h(elp)] [-prec P] infile1 infile2
   compare them ignoring differences past the P'th significant digit.
   More precisely, ignore differences where |a-b| < max(|a|,|b|) / 10^P.
 
+Notes:
+  To compare two phrase tables:
+     diff-round.pl 'sort pt1 |' 'sort pt2 |'
+
 Options:
   -prec P       precision to retain before comparing [6]
   -h(elp):      print this help message
