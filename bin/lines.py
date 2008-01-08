@@ -14,7 +14,7 @@
 # Copyright 2008, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2008, Her Majesty in Right of Canada
 
-import sys, math, string, mygzip
+import sys, math, string, gzip
 
 if len(sys.argv)!=3:
     sys.stderr.write("Usage: %s  \n\
