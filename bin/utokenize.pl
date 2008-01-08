@@ -30,7 +30,7 @@ use open IO  => ':locale';
 my $HELP = "
 Usage: tokenize.pl [-v] [-p] [-noss] [-lang=l] [in [out]]
 
-Tokenize and sent-split text.
+Tokenize and sentence-split text in UTF-8.
 
 Options:
 
