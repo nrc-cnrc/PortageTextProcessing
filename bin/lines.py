@@ -2,7 +2,7 @@
 
 # $Id$
 
-# lines.py - extrqct the given lines from a file
+# lines.py - extract the given lines from a file
 #
 # PROGRAMMER: Nicola Ueffing
 #
