@@ -31,6 +31,7 @@ Usage: diff-round.pl [-h(elp)] [-prec P] infile1 infile2
 Notes:
   To compare two phrase tables:
      diff-round.pl 'sort pt1 |' 'sort pt2 |'
+     diff-round.pl 'gzip -cqfd pt1 | LC_ALL=C sort |' 'gzip -cqfd pt2 | LC_ALL=C sort |'
 
 Options:
   -prec P       precision to retain before comparing [6]
