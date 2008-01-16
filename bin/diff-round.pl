@@ -49,6 +49,9 @@ GetOptions(
 
 2 == @ARGV or usage "Must specify exactly two input files.";
 
+# Will hold the maximum numerical difference found
+my $max_diff = 0;
+
 open F1, $ARGV[0] or die "Can't open $ARGV[0]: $!";
 open F2, $ARGV[1] or die "Can't open $ARGV[1]: $!";
 
@@ -65,7 +68,9 @@ sub diff_epsilon ($$) {
       return 1 if $_[0] + 0 ne $_[0];
       return 1 if $_[1] + 0 ne $_[1];
    }
-   return (abs($_[0] - $_[1]) * 10**$prec > max(abs($_[0]), abs($_[1])));
+   my $diff = abs($_[0] - $_[1]);
+   $max_diff = $diff if ($diff > $max_diff);
+   return ($diff * 10**$prec > max(abs($_[0]), abs($_[1])));
 }
 
 while (<F1>) {
@@ -99,4 +104,4 @@ while (<F1>) {
 die "Unexpected end of $ARGV[0] before end of $ARGV[1] at line $.\n"
    unless eof(F2);
 
-
+print STDERR "Maximal numerical difference: $max_diff";
