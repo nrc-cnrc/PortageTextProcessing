@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 # $Id$
-
+#
 # diff-round.pl - diff two ff files, i.e., files of floating point numbers, where
 #                 rounding differences are not real differences
-# 
+#
 # PROGRAMMER: Eric Joanis
-# 
+#
 # COMMENTS:
 #
 # Technologies langagieres interactives / Interactive Language Technologies
@@ -29,9 +29,9 @@ Usage: diff-round.pl [-h(elp)] [-prec P] infile1 infile2
   More precisely, ignore differences where |a-b| < max(|a|,|b|) / 10^P.
 
 Notes:
-  To compare two phrase tables:
-     diff-round.pl 'sort pt1 |' 'sort pt2 |'
-     diff-round.pl 'gzip -cqfd pt1 | LC_ALL=C sort |' 'gzip -cqfd pt2 | LC_ALL=C sort |'
+  To compare two phrase tables that contain the same phrase pairs:
+     LC_ALL=C diff-round.pl 'sort pt1 |' 'sort pt2 |'
+     LC_ALL=C diff-round.pl 'gzip -cqfd pt1 | sort |' 'gzip -cqfd pt2 | sort |'
 
 Options:
   -prec P       precision to retain before comparing [6]
@@ -46,6 +46,7 @@ GetOptions(
    help         => sub { usage },
    "prec=i"     => \$prec,
 ) or usage;
+my $pow_prec = 1/(10**$prec);
 
 2 == @ARGV or usage "Must specify exactly two input files.";
 
@@ -68,9 +69,14 @@ sub diff_epsilon ($$) {
       return 1 if $_[0] + 0 ne $_[0];
       return 1 if $_[1] + 0 ne $_[1];
    }
-   my $diff = abs($_[0] - $_[1]);
-   $max_diff = $diff if ($diff > $max_diff);
-   return ($diff * 10**$prec > max(abs($_[0]), abs($_[1])));
+   my $max = max(abs($_[0]), abs($_[1]));
+   if ( $max > 0 ) {
+      my $rel_diff = abs($_[0] - $_[1]) / $max;
+      $max_diff = $rel_diff if ($rel_diff > $max_diff);
+      return ($rel_diff > $pow_prec);
+   } else {
+      return 0;
+   }
 }
 
 while (<F1>) {
@@ -104,4 +110,4 @@ while (<F1>) {
 die "Unexpected end of $ARGV[0] before end of $ARGV[1] at line $.\n"
    unless eof(F2);
 
-print STDERR "Maximal numerical difference: $max_diff";
+print STDERR "Maximum relative numerical difference: $max_diff\n";
