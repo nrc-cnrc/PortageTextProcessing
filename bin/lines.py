@@ -18,13 +18,17 @@ import sys, math, string, gzip
 
 if len(sys.argv)!=3:
     sys.stderr.write("Usage: %s  \n\
-    <file containing line numbers>  <file containing text>\n\n\
+    <file containing line numbers>  <file containing text (can be gzipped)>\n\n\
     Extracts lines specified in first file from second file.\n\
     Line numbers have to start with 1 (not 0).\n" % sys.argv[0])
     sys.exit(1)
 
 numFile = open(sys.argv[1])
-txtFile = open(sys.argv[2])
+txtFileName = sys.argv[2]
+if txtFileName[-3:] == '.gz':
+    txtFile = gzip.open(txtFileName)
+else:
+    txtFile = open(txtFileName)
 
 ### read line numbers
 nums = []
