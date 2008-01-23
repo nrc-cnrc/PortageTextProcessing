@@ -36,6 +36,9 @@ Notes:
 Options:
   -prec P       precision to retain before comparing [6]
   -h(elp):      print this help message
+  -z:           decompress files on the fly if necessary
+  -sort:        sort the files before doing the diff - particularly useful to
+                compare two phrase tables that contain the same phrase pairs.
 ";
    exit 1;
 }
@@ -44,7 +47,9 @@ use Getopt::Long;
 my $prec = 6;
 GetOptions(
    help         => sub { usage },
-   "prec=i"     => \$prec,
+   "prec=f"     => \$prec,
+   z            => \my $z,
+   sort         => \my $sort,
 ) or usage;
 my $pow_prec = 1/(10**$prec);
 
@@ -53,8 +58,20 @@ my $pow_prec = 1/(10**$prec);
 # Will hold the maximum numerical difference found
 my $max_diff = 0;
 
-open F1, $ARGV[0] or die "Can't open $ARGV[0]: $!";
-open F2, $ARGV[1] or die "Can't open $ARGV[1]: $!";
+if ( $sort ) {
+   open F1, "gzip -cqfd $ARGV[0] | LC_ALL=C sort |"
+      or die "Can't create pipe for sorting $ARGV[0]: $!";
+   open F2, "gzip -cqfd $ARGV[1] | LC_ALL=C sort |"
+      or die "Can't create pipe for sorting $ARGV[1]: $!";
+} elsif ( $z ) {
+   open F1, "gzip -cqfd $ARGV[0] |"
+      or die "Can't create pipe for decompressing $ARGV[0]: $!";
+   open F2, "gzip -cqfd $ARGV[1] |"
+      or die "Can't create pipe for decompressing $ARGV[1]: $!";
+} else {
+   open F1, $ARGV[0] or die "Can't open $ARGV[0]: $!";
+   open F2, $ARGV[1] or die "Can't open $ARGV[1]: $!";
+}
 
 sub max($$) {
    $_[0] < $_[1] ? $_[1] : $_[0];
@@ -111,3 +128,4 @@ die "Unexpected end of $ARGV[0] before end of $ARGV[1] at line $.\n"
    unless eof(F2);
 
 print STDERR "Maximum relative numerical difference: $max_diff\n";
+print STDERR "Threshold used: $pow_prec\n";
