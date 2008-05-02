@@ -28,19 +28,21 @@ Usage: diff-round.pl [-h(elp)] [-prec P] infile1 infile2
   compare them ignoring differences past the P'th significant digit.
   More precisely, ignore differences where |a-b| < max(|a|,|b|) / 10^P.
 
-Notes:
-  To compare two phrase tables that contain the same phrase pairs:
-     LC_ALL=C diff-round.pl 'sort pt1 |' 'sort pt2 |'
-     LC_ALL=C diff-round.pl 'gzip -cqfd pt1 | sort |' 'gzip -cqfd pt2 | sort |'
-
 Options:
   -prec P       precision to retain before comparing [6]
   -h(elp):      print this help message
   -z:           decompress files on the fly if necessary
-  -sort:        sort the files before doing the diff - particularly useful to
+  -sort:        sort the files before doing the diff - implies -z - useful to
                 compare two phrase tables that contain the same phrase pairs.
+  -q:           don't print individual differences, just a global summary
+
+Exit status:
+   0 if no differences were found (within P)
+   1 if a difference was found
+   2 if the files don't have the same length
+   3 if there was some problem running the program.
 ";
-   exit 1;
+   exit 3;
 }
 
 use Getopt::Long;
@@ -50,6 +52,7 @@ GetOptions(
    "prec=f"     => \$prec,
    z            => \my $z,
    sort         => \my $sort,
+   quiet        => \my $quiet,
 ) or usage;
 my $pow_prec = 1/(10**$prec);
 
@@ -96,11 +99,14 @@ sub diff_epsilon ($$) {
    }
 }
 
+my $found_diff = 0;
 while (<F1>) {
    my $L1 = $_; chomp $L1;
    my $L2 = <F2>; chomp $L2 if defined $L2;
-   die "Unexpected end of $ARGV[1] before end of $ARGV[0] at line $.\n"
-      unless defined $L2;
+   if ( ! defined $L2 ) {
+      warn "Unexpected end of $ARGV[1] before end of $ARGV[0] at line $.\n";
+      exit 2;
+   }
 
    # Optimization: don't do the fancy (and expensive) math if the lines are
    # identical
@@ -111,11 +117,14 @@ while (<F1>) {
    my @L2 = split /\s+/, $L2;
 
    if ( $#L1 != $#L2 ) {
-      print "$. << $L1   >> $L2\n";
+      print "$. << $L1   >> $L2\n" unless $quiet;
+      $found_diff = 1;
    } else {
       for my $i (0 .. $#L1) {
          if ( diff_epsilon($L1[$i], $L2[$i]) ) {
-            print $., ($#L1 > 0 ? "($i)" : ""), " < $L1[$i]   > $L2[$i]\n";
+            print $., ($#L1 > 0 ? "($i)" : ""), " < $L1[$i]   > $L2[$i]\n"
+               unless $quiet;
+            $found_diff = 1;
          }
       }
    }
@@ -124,8 +133,19 @@ while (<F1>) {
    #   print "$.	< $L1	> $L2\n"
    #}
 }
-die "Unexpected end of $ARGV[0] before end of $ARGV[1] at line $.\n"
-   unless eof(F2);
+if ( ! eof(F2) ) {
+   warn "Unexpected end of $ARGV[0] before end of $ARGV[1] at line $.\n";
+   exit 2;
+}
 
-print STDERR "Maximum relative numerical difference: $max_diff\n";
-print STDERR "Threshold used: $pow_prec\n";
+if ( !$quiet ) {
+   print STDERR "Maximum relative numerical difference: $max_diff\n";
+   print STDERR "Threshold used: $pow_prec\n";
+}
+
+if ( $quiet and $found_diff ) {
+   print STDERR "$ARGV[0] and $ARGV[1] differ\n";
+   print STDERR "Maximum relative numerical difference: $max_diff\n";
+}
+
+exit ($found_diff ? 1 : 0);
