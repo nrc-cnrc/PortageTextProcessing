@@ -1,12 +1,10 @@
 #!/usr/bin/perl
 # $Id$
 #
-# diff-round.pl - diff two ff files, i.e., files of floating point numbers, where
-#                 rounding differences are not real differences
+# diff-round.pl - diff two ff files, i.e., files of floating point numbers,
+#                 where rounding differences are not real differences
 #
 # PROGRAMMER: Eric Joanis
-#
-# COMMENTS:
 #
 # Technologies langagieres interactives / Interactive Language Technologies
 # Institut de technologie de l'information / Institute for Information Technology
@@ -27,14 +25,14 @@ Usage: diff-round.pl [-h(elp)] [-prec P] infile1 infile2
   Assuming infile1 and infile2 are files of numbers with the same layout,
   compare them ignoring differences past the P'th significant digit.
   More precisely, ignore differences where |a-b| < max(|a|,|b|) / 10^P.
+  Compressed files are decompressed automatically as necessary.
 
 Options:
-  -prec P       precision to retain before comparing [6]
-  -h(elp):      print this help message
-  -z:           decompress files on the fly if necessary
-  -sort:        sort the files before doing the diff - implies -z - useful to
-                compare two phrase tables that contain the same phrase pairs.
-  -q:           don't print individual differences, just a global summary
+  -prec P   number of identical digits to required for equality [6]
+  -h(elp):  print this help message
+  -sort:    sort the files before doing the diff, e.g., to compare two
+            phrase tables or ttables containing the same phrase/word pairs.
+  -q:       don't print individual differences, just a global summary
 
 Exit status:
    0 if no differences were found (within P)
@@ -48,11 +46,13 @@ Exit status:
 use Getopt::Long;
 my $prec = 6;
 GetOptions(
-   help         => sub { usage },
-   "prec=f"     => \$prec,
-   z            => \my $z,
-   sort         => \my $sort,
-   quiet        => \my $quiet,
+   help     => sub { usage },
+   "prec=f" => \$prec,
+   z        => sub { print STDERR
+                  "-z no longer required: automatically enabled as needed\n";
+               },
+   sort     => \my $sort,
+   quiet    => \my $quiet,
 ) or usage;
 my $pow_prec = 1/(10**$prec);
 
@@ -66,15 +66,16 @@ if ( $sort ) {
       or die "Can't create pipe for sorting $ARGV[0]: $!";
    open F2, "gzip -cqfd $ARGV[1] | LC_ALL=C sort |"
       or die "Can't create pipe for sorting $ARGV[1]: $!";
-} elsif ( $z ) {
+} else {
    open F1, "gzip -cqfd $ARGV[0] |"
       or die "Can't create pipe for decompressing $ARGV[0]: $!";
    open F2, "gzip -cqfd $ARGV[1] |"
       or die "Can't create pipe for decompressing $ARGV[1]: $!";
-} else {
-   open F1, $ARGV[0] or die "Can't open $ARGV[0]: $!";
-   open F2, $ARGV[1] or die "Can't open $ARGV[1]: $!";
-}
+} 
+#else {
+#   open F1, $ARGV[0] or die "Can't open $ARGV[0]: $!";
+#   open F2, $ARGV[1] or die "Can't open $ARGV[1]: $!";
+#}
 
 sub max($$) {
    $_[0] < $_[1] ? $_[1] : $_[0];
