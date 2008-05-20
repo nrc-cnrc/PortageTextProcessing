@@ -53,12 +53,14 @@ our %short_stops_hash_en;
 our %short_stops_hash_fr;
 
 our ($apostrophes, $quotes, $hyphens, $splitleft, $splitright);
-$apostrophes = quotemeta("\`\'‘’’‘");
-$quotes = quotemeta("\"“«»");
+# Single quotes: ascii ` and ', cp-1252 145 and 146, cp-1252/iso-8859-1 180
+$apostrophes = quotemeta("\`\'‘’´");
+# Quotes: ascii ", cp-1252 147 and 148, cp-1252/iso-8859-1 171 and 187
+$quotes = quotemeta("\"“”«»");
+# Hyphens: ?, ?, ?, n-dash (cp-1252 150), m-dash (cp-1252 151), ?, ascii -
 $hyphens = quotemeta("‐‑‒–—―-");
-$splitleft = qr/[\"“«\$\#]|[${hyphens}]+|‘‘|‘‘|\'\'?|\`\`?/;
-$splitright = qr/[\"»!,:;\?%.]|[${hyphens}]+|’’|’’|\'\'?|\.{2,4}/;
-
+$splitleft = qr/[\"“«\$\#]|[${hyphens}]+|‘‘?|\'\'?|\`\`?/;
+$splitright = qr/\.{2,4}|[\"”»!,:;\?%.]|[${hyphens}]+|’’?|\'\'?|´´?|…/;
 
 my @known_abbrs_en = qw {
     acad ad adm aka al am apr aug ba bc blvd bsc btw c ca capt cdn ceo cf 
