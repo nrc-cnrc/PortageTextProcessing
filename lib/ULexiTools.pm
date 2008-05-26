@@ -1,5 +1,5 @@
-# Copyright (c) 2004 - 2007, Sa Majeste la Reine du Chef du Canada /
-# Copyright (c) 2004 - 2007, Her Majesty in Right of Canada
+# Copyright (c) 2004 - 2008, Sa Majeste la Reine du Chef du Canada /
+# Copyright (c) 2004 - 2008, Her Majesty in Right of Canada
 #
 # This software is distributed to the GALE project participants under the terms
 # and conditions specified in GALE project agreements, and remains the sole
@@ -15,8 +15,8 @@
 # $Id$
 #
 # LexiTools.pm
-# PROGRAMMER: George Foster / UTF-8 adaptation by Michel Simard
-# 
+# PROGRAMMER: George Foster / UTF-8 adaptation by Michel Simard / Eric Joanis
+#
 # COMMENTS: POD at end of file.
 
 
@@ -47,62 +47,64 @@ our (@ISA, @EXPORT);
 
 # Module global stuff.
 
-our %known_abbr_hash_en;
-our %known_abbr_hash_fr;
-our %short_stops_hash_en;
-our %short_stops_hash_fr;
+my %known_abbr_hash_en;
+my %known_abbr_hash_fr;
+my %short_stops_hash_en;
+my %short_stops_hash_fr;
 
-our ($apostrophes, $quotes, $hyphens, $splitleft, $splitright);
 # Single quotes: ascii ` and ', cp-1252 145 and 146, cp-1252/iso-8859-1 180
-$apostrophes = quotemeta("\`\'‘’´");
+my $apostrophes = quotemeta("\`\'‘’´");
 # Quotes: ascii ", cp-1252 147 and 148, cp-1252/iso-8859-1 171 and 187
-$quotes = quotemeta("\"“”«»");
-# Hyphens: ?, ?, ?, n-dash (cp-1252 150), m-dash (cp-1252 151), ?, ascii -
-$hyphens = quotemeta("‐‑‒–—―-");
-$splitleft = qr/[\"“«\$\#]|[${hyphens}]+|‘‘?|\'\'?|\`\`?/;
-$splitright = qr/\.{2,4}|[\"”»!,:;\?%.]|[${hyphens}]+|’’?|\'\'?|´´?|…/;
+my $quotes = quotemeta("\"“”«»");
+# Hyphens: U+2010, U+2011, figure dash (U+2012), n-dash (cp-1252 150, U+2013),
+# m-dash (cp-1252 151, U+2014), horizontal bar (U+2015), hyphen (ascii -)
+my $hyphens = quotemeta("‐‑‒–—―-");
+my $wide_dashes = quotemeta("‐‑‒–—―");
+my $splitleft = qr/[\"“«\$\#]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
+my $splitright = qr/\.{2,4}|[\"”»!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
 
 my @known_abbrs_en = qw {
-    acad ad adm aka al am apr aug ba bc blvd bsc btw c ca capt cdn ceo cf 
+    acad adm aka al apr aug ba bc blvd bsc btw c ca capt cdn ceo cf
     cm cmdr c/o co col com comdr comdt corp dec deg dept depts desc dir dr
-    drs ed eds edt edu eg eng engr est et etc ext fax feb febr fig figs fri
-    ft fwd fyi g gb/s gmt hon hr hrs i ie ii iii inc info isbn iv ix jan
-    janu jul jun kb/s kg kgs km ko lb lbs lieut lt ltd m ma mar may max meg
+    drs ed eds edt edu eg eng engr est et ext fax feb febr fig figs fri
+    ft fwd fyi g gb/s gmt hon hr hrs i ie ii iii info isbn iv ix jan
+    janu jul jun kb/s kg kgs km ko lb lbs lib lieut lt m ma mar max meg
     messrs mg mhz min mins mlle mlles mme mmes mon mr mrs ms msec msecs msc
-    n/a natl no nov novem oct p phd pls pm pp pps pres prof profs ps pub re
-    rel rep rept rev revd revds rtfm rsvp sat sec secs secy sen sens sep
-    sept sgt st ste sun tbsp tbsps tech tel thu thur thurs tko tsp tsps tue
-    tues txt tv u univ usa v vi vii viii vol vols vs wed wk wks wrt www x
-    xi xii xiii xiv xv xx yr yrs 
+    n/a natl nov novem oct p phd pls pp pps pres prof profs ps pub re
+    rel rep rept rev revd revds rtfm rsvp sec secs secy sen sens sep
+    sept sgt st ste tbsp tbsps tech tel thu thur thurs tko tsp tsps tue
+    tues txt u univ v vi vii viii vol vols vs wed wk wks wrt www x
+    xi xii xiii xiv xv xx yr yrs
     chas
 };
 
 my @known_abbrs_fr = qw {
     acad ad adm aka al am appt ardt av avr ba bc bd blvd bsc cap cdn ceo cf
     c cial cm cmdr c/o co col com comdr comdt corp dec déc deg dept depts
-    desc dim dir dr drs ed eds edt edu eg eng engr est et etc ex ext f fax
-    fév févr fig figs fwd fyi g gb/s gmt ha hon hr hrs i ie ii iii inc ind
-    ing info isbn iv ix jan janv jeu juil kb/s kg kgs km ko lb lbs lieut lt
-    ltd lun m ma mar max me meg merc messrs mg mgr mhz min mins mlle mlles
+    desc dim dir dr drs ed eds edt edu eg eng engr et ex ext f fax
+    fév févr fig figs fwd fyi g gb/s gmt ha hon hr hrs i ie ii iii ind
+    ing isbn iv ix jan janv juil kb/s kg kgs km ko lb lbs lib lieut lt
+    lun m ma mar me meg merc messrs mg mgr mhz min mins mlle mlles
     mm mme mmes mr mrs ms msec msecs msc n/a natl nb no nov novem oct p pm
-    pp pps phd pl pres prés prof profs ps pub r re rech ref rel rep rept
-    rev revd revds rtfm rstp rsvp sam sec secs secy sen sens sep sept sgt
-    st ste sté stp svp tbsp tbsps tech tel tél tko tsp tsps txt tv u univ
-    usa v ven vend vi vii viii vol vols www x xi xii xiii xiv xv xx
+    pp pps phd pl pres prés prof profs ps r re rech ref rel rep rept
+    rev revd revds rtfm rstp rsvp sec secs secy sen sep sept sgt
+    st ste sté stp svp tbsp tbsps tech tél tko tsp tsps txt u univ
+    usa v ven vi vii viii www x xi xii xiii xiv xv xx
     chas
 };
 
-# short stop words that can end a sentence
-my @short_stops_en = qw { 
+# short words and abbreviation-like words that can end a sentence
+my @short_stops_en = qw {
     to in is be on it we as by an at or do my he if no am us so up me go
-    oh ye ox ho ab fa hi
+    oh ye ox ho ab fa hi se of
+    un tv ei ui mp ok cn ad uk cp sr eu pm bp id
 };
 
-my @short_stops_fr = qw { 
+my @short_stops_fr = qw {
     de la le à et du en au un ce ne je il se ou y on si sa me où ma eu va là
     ni pu vu dû lu ça ai an su fi tu né eh te es ta os bu ri ô us nu ci if oh
-    çà pû mû na ès té ah dé
-
+    çà pû mû na ès té ah dé or
+    tv cn cp pm bp pq gm ae ue cd fm al mg ed pc fc dp
 };
 
 # funky hash initializations...
@@ -122,7 +124,7 @@ sub get_para #(\*FILEHANDLE, $one_para_per_line)
 
     my ($line, $para) = ("", "");
     my $line_count = 0;
-    
+
     # skip leading blank lines
 
     while ($line = <$fh>) {
@@ -139,7 +141,7 @@ sub get_para #(\*FILEHANDLE, $one_para_per_line)
 	$para .= $line;
 	if ($line =~ /^[[:space:]]*<[^>]+>[[:space:]]*$/o) {last;}
     }
-    
+
     return $para;
 }
 
@@ -160,7 +162,7 @@ sub tokenize #(paragraph, lang)
 	$matches_known_abbr = \&matches_known_abbr_fr;
     }
     else {die "unknown lang in tokenizer: $lang";}
-    
+
     # break up into whitespace-separated chunks, pull off punc, and break up
     # words (don't switch order of subexps in main match expr!)
 
@@ -173,7 +175,7 @@ sub tokenize #(paragraph, lang)
 	} else {
 	    my @posits = split_punc($2, pos($para) - len($2)); # real token
 	    for (my $i = 0; $i < $#posits; $i += 2) {
-		push (@tok_posits, 
+		push (@tok_posits,
 		      &$split_word(substr($para, $posits[$i], $posits[$i+1]),
 				   $posits[$i]));
 	    }
@@ -213,7 +215,7 @@ sub split_sentences #(para_string, token_positions)
     for (my $i = 0; $i < $#_; $i += 2) {
 	my $tok = get_token($para, $i, @_);
 	if ($end_pending) {
-	    if ($tok !~ /^([${quotes})\]]|[${apostrophes}][${apostrophes}]?)$/o) {
+	    if ($tok !~ /^([$quotes\)\]]|[$apostrophes]{1,2})$/o) {
 		push(@sent_posits, $i);
 		$end_pending = 0;
 	    }
@@ -236,7 +238,7 @@ sub get_tokens #(para_string, token_positions)
     for (my $i = 0; $i < $#_; $i += 2) {
 	push @tokens, get_token($string, $i, @_);
     }
-    
+
     return @tokens;
 }
 
@@ -289,7 +291,7 @@ sub context_says_abbr #($para_string, index_of_dot, token_positions)
     # skip ambig punc
     for ($index += 2; $index < $#_; $index += 2) {
 	if (get_token($string, $index, @_) !~
-	    /^([${quotes}\(\)\[\]\{\}]|[${apostrophes}][${apostrophes}]?|[${hyphens}]{1,3}|[.]{2,4})$/o) {last;}
+	    /^([$quotes\(\)\[\]\{\}]|[$apostrophes]{1,2}|[$hyphens]{1,3}|[.]{2,4}|…)$/o) {last;}
     }
 
     if ($index > $#_) {return 0;} # end of para
@@ -334,7 +336,7 @@ sub looks_like_abbr # (lang, para_string, index_of_abbr, token_positions)
     if ($word !~ /^[[:alpha:]][[:alpha:]]?([.][[:alpha:]])*$/o) {
 	return 0;
     }
-    
+
     # but if it matches one of these, then the context must REALLY look like a
     # sentence boundary
 
@@ -345,28 +347,27 @@ sub looks_like_abbr # (lang, para_string, index_of_abbr, token_positions)
     }
     return 1;
 }
-    
+
 
 # Split a whitespace-bounded token into constituents. Return list of
 # (start,len) atom positions.
 
 sub split_punc #(string, offset[0])
 {
-    # NB: \xAB, \xBB are left and right angle quotes
 
     my $tok = shift;
     my $offset = shift || 0;
     my @atoms;
-    
+
     if (!defined $tok) {return ();}
 
     my $tok_len = len($tok);
     my $first_char = substr($tok, 0, 1);
     my $last_char = substr($tok, $tok_len-1, 1);
 
-    # split internal --- or ....
-    if (($tok =~ /^(.*[^${hyphens}])?([${hyphens}]{2,4})([^${hyphens}].*)?$/o) ||
-        ($tok =~ /^(.*[^\.])?(\.{2,4})([^\.].*)?$/o)) {
+    # split internal --, ---, n-dash, m-dash, .., ..., etc.
+    if (($tok =~ /^(.*[^$hyphens])?([$hyphens]{2,4}|[$wide_dashes])([^$hyphens].*)?$/o) ||
+        ($tok =~ /^(.*[^\.])?(\.{2,4}|…)([^\.].*)?$/o)) {
 	my ($p1, $p2, $p3) = ($1, $2, $3);
 	push(@atoms, split_punc($p1, $offset));
 	push(@atoms, $offset+len($p1), 2);
@@ -397,7 +398,7 @@ sub split_punc #(string, offset[0])
     #                but this: ab(c) -> ab(c)
     #                but this: ab(c)) -> ab(c) )
     #                also, this (a) -> (a) and a) -> a)
-    elsif ($first_char eq "(" && $tok !~ /^(\([[:alnum:]]\)|\([^()]+\).+)$/o) { 
+    elsif ($first_char eq "(" && $tok !~ /^(\([[:alnum:]]\)|\([^()]+\).+)$/o) {
 	push(@atoms, $offset, 1);
 	push(@atoms, split_punc(substr($tok, 1), $offset+1));
     } elsif ($first_char eq "[" && $tok !~ /^(\[[[:alnum:]]\]|\[[^\[\]]+\].+)$/o) {
@@ -428,8 +429,8 @@ sub split_word_en #(word, offset)
     my $word = shift;
     my $os = shift || 0;
     my @atom_positions = ();
-    
-    if ($word !~ /^it[${apostrophes}]s/ && $word =~ /^([[:alpha:]]+)([${apostrophes}][Ss])$/o) {
+
+    if ($word !~ /^it[$apostrophes]s/ && $word =~ /^([[:alpha:]]+)([$apostrophes][Ss])$/o) {
 	push(@atom_positions, $os, len($1), $os+len($1), len($2));
     } else {
 	push(@atom_positions, $os, len($word));
@@ -445,25 +446,25 @@ sub split_word_en #(word, offset)
 
 sub split_word_fr #(word, offset)
 {
-    my $hyph_endings = 
-	"je|tu|ils?|elles?|on|nous|vous|moi|toi|lui|eux|en|y|ci|ce|les?|leurs?|la|l[${apostrophes}]|donc";
+    my $hyph_endings =
+	"je|tu|ils?|elles?|on|nous|vous|moi|toi|lui|eux|en|y|ci|ce|les?|leurs?|la|l[àÀ]|donc";
     my $vowel_hyph_endings = "ils?|elles?|on|eux|en";
-    
+
     my $word = shift;
     my $os = shift || 0;
     my @atom_positions = ();
 
-    if ($word !~ /^(d[${apostrophes}]ailleurs|d[${apostrophes}]abord|d[${apostrophes}]autant|quelqu[${apostrophes}]un(e|s|es)?)$/oi && 
-	$word =~ /^([cdjlmnst][${apostrophes}]|[[:alpha:]]*qu[${apostrophes}]|y[${hyphens}])(.+)/oi) {
+    if ($word !~ /^(d[$apostrophes]ailleurs|d[$apostrophes]abord|d[$apostrophes]autant|quelqu[$apostrophes]un(e|s|es)?)$/oi &&
+	$word =~ /^([cdjlmnst][$apostrophes]|[[:alpha:]]*qu[$apostrophes]|y[$hyphens])(.+)/oi) {
         my $thing = $1;
-	my $l1 = ($thing =~ /^y[${hyphens}]$/i) ? 1 : len($thing);
+	my $l1 = ($thing =~ /^y[$hyphens]$/i) ? 1 : len($thing);
 	push(@atom_positions, $os, $l1);
 	push(@atom_positions, split_word_fr(substr($word, len($thing)),$os+len($thing)));
     } elsif ($word =~ /^(.+)-t-($vowel_hyph_endings)$/oi) {
 	my $l1 = len($1);
 	push(@atom_positions, split_word_fr(substr($word, 0, $l1), $os));
 	push(@atom_positions, $os + $l1 + 3, len($word)-$l1-3);
-    } elsif ($word !~ /rendez[${hyphens}]vous$/ && $word =~ /^(.+)[${hyphens}]($hyph_endings)$/oi) {
+    } elsif ($word !~ /rendez[$hyphens]vous$/ && $word =~ /^(.+)[$hyphens]($hyph_endings)$/oi) {
 	my $l1 = len($1);
 	push(@atom_positions, split_word_fr(substr($word, 0, $l1), $os));
 	push(@atom_positions, $os + $l1 + 1, len($word)-$l1-1);
@@ -486,7 +487,7 @@ sub len #(string)
 # Return a corresponding list of smoothed frequencies. This just wraps a call
 # to the good_turing_estm program.
 
-sub good_turing #(freq-list) 
+sub good_turing #(freq-list)
 {
     my $tmpfile = "/tmp/TMP$$";
     open(TMP, "| good_turing_estm > $tmpfile");
@@ -522,17 +523,17 @@ assumed to be plain iso-latin1, in the following format:
 
 =over
 
-=item * 
+=item *
 
 Paragraphs delimited by one or more blank lines. This doesn't mean that blank
 lines are essential, just that sentences are assumed never to span them.
 
-=item * 
+=item *
 
 Markup is enclosed in angle brackets <> spanning at most one line. Whatever is
 inside the brackets is not interpreted as text.
 
-=item * 
+=item *
 
 A piece of markup that that occupies a complete line is interpreted as a
 paragraph delimiter (just like a blank line).
@@ -541,8 +542,8 @@ paragraph delimiter (just like a blank line).
 
 =head1 LICENSE
 
-Copyright (c) 2004 - 2007, Sa Majeste la Reine du Chef du Canada /
-Copyright (c) 2004 - 2007, Her Majesty in Right of Canada
+Copyright (c) 2004 - 2008, Sa Majeste la Reine du Chef du Canada /
+Copyright (c) 2004 - 2008, Her Majesty in Right of Canada
 
 This software is distributed to the GALE project participants under the terms
 and conditions specified in GALE project agreements, and remains the sole
@@ -556,6 +557,6 @@ property of the National Research Council of Canada.
 
 =head1 AUTHOR
 
-George Foster / Michel Simard
+George Foster / Michel Simard / Eric Joanis
 
 =cut
