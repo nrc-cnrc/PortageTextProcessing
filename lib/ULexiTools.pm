@@ -370,7 +370,7 @@ sub split_punc #(string, offset[0])
         ($tok =~ /^(.*[^\.])?(\.{2,4}|…)([^\.].*)?$/o)) {
 	my ($p1, $p2, $p3) = ($1, $2, $3);
 	push(@atoms, split_punc($p1, $offset));
-	push(@atoms, $offset+len($p1), 2);
+	push(@atoms, $offset+len($p1), length($p2) == 1 ? 1 : 2);
 	push(@atoms, split_punc($p3, $offset+len($p1)+len($p2)));
     }
 
