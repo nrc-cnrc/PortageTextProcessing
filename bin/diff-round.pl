@@ -81,15 +81,20 @@ sub max($$) {
    $_[0] < $_[1] ? $_[1] : $_[0];
 }
 
+# is_num($token) returns whether $token is a valid C number
+# Precondition: $token is already stripped of leading and trailing whitespace
+sub is_num($) {
+   use POSIX;
+   local $! = 0;
+   my ($value, $n_unparsed) = POSIX::strtod($_[0]);
+   return !(($_[0] eq '') || ($n_unparsed != 0) || $!);
+}
+
 # diff_epsilon($a, $b) returns true iff $a and $b differ by more than their
 # $prec'th significant digit.
 sub diff_epsilon ($$) {
    return 0 if $_[0] eq $_[1];
-   {
-      no warnings;
-      return 1 if $_[0] + 0 ne $_[0];
-      return 1 if $_[1] + 0 ne $_[1];
-   }
+   return 1 if (!is_num($_[0]) || !is_num($_[1]));
    my $max = max(abs($_[0]), abs($_[1]));
    if ( $max > 0 ) {
       my $rel_diff = abs($_[0] - $_[1]) / $max;
