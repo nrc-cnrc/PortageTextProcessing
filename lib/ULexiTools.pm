@@ -166,7 +166,8 @@ sub tokenize #(paragraph, lang)
     # break up into whitespace-separated chunks, pull off punc, and break up
     # words (don't switch order of subexps in main match expr!)
 
-    # Replace non-breaking spaces by spaces
+    # Replace non-breaking spaces by spaces (yes, it's \xA0 in Unicode too,
+    # even if it's represented differently in utf-8!)
     $para =~ s/\xA0/ /g;
 
     while ($para =~ /(<[^>]+>)|([[:^space:]]+)/go) {
