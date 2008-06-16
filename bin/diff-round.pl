@@ -144,14 +144,11 @@ if ( ! eof(F2) ) {
    exit 2;
 }
 
-if ( !$quiet ) {
-   print STDERR "Maximum relative numerical difference: $max_diff\n";
-   print STDERR "Threshold used: $pow_prec\n";
-}
-
-if ( $quiet and $found_diff ) {
-   print STDERR "$ARGV[0] and $ARGV[1] differ\n";
-   print STDERR "Maximum relative numerical difference: $max_diff\n";
-}
+print STDERR "$ARGV[0] and $ARGV[1] differ\n"
+   if $quiet and $found_diff;
+print STDERR "Maximum relative numerical difference: $max_diff\n"
+   unless $quiet && !$max_diff;
+print STDERR "Threshold used: $pow_prec\n"
+   unless $quiet;
 
 exit ($found_diff ? 1 : 0);
