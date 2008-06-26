@@ -44,8 +44,10 @@ Notes:
       udetokenize.pl -latin1 -chinesepunc -stripchinese
 ";
 
-my $in=shift || "/dev/stdin";
-my $out=shift || "/dev/stdout";
+my $in=shift || "-";
+my $out=shift || "-";
+$in = "/dev/stdin" if $in eq "-";
+$out = "/dev/stdout" if $out eq "-";
 
 our ($help, $h, $lang, $latin1, $chinesepunc, $stripchinese);
 $lang = "en" unless defined $lang;
