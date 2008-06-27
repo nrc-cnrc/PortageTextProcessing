@@ -445,33 +445,41 @@ sub split_word_en #(word, offset)
 # Split a French word into parts, eg l'amour -> l' amour. Return list of
 # (start,len) atom positions.
 # TODO
-# - look into splitting forms like province-c'etait, ie you can assume the - is a
-#   dash if there's a legit apostr prefix in the middle of it...
+# - look into splitting forms like province-c'etait, ie you can assume the - is
+#   a dash if there's a legit apostr prefix in the middle of it...
+
+# exemples: ce jour-là, vas-y, y-a-t-il, y a-t-il, qu'est-ce
+my ($hyph_endings, $vowel_hyph_endings);
+BEGIN {
+   $hyph_endings =
+      "je|tu|ils?|elles?|on|nous|vous|moi|toi|lui|eux|en|y|ci|ce|les?|leurs?|la|l[àÀ]|donc";
+   $vowel_hyph_endings = "ils?|elles?|on|eux|en";
+}
 
 sub split_word_fr #(word, offset)
 {
-   my $hyph_endings =
-      "je|tu|ils?|elles?|on|nous|vous|moi|toi|lui|eux|en|y|ci|ce|les?|leurs?|la|l[àÀ]|donc";
-   my $vowel_hyph_endings = "ils?|elles?|on|eux|en";
-
    my $word = shift;
    my $os = shift || 0;
    my @atom_positions = ();
 
-   if ( $word !~ /^(d[$apostrophes]ailleurs|d[$apostrophes]abord|d[$apostrophes]autant|quelqu[$apostrophes]un(e|s|es)?)$/oi &&
-        $word =~ /^([cdjlmnst][$apostrophes]|[[:alpha:]]*qu[$apostrophes]|y[$hyphens])(.+)/oi) {
+   if ($word !~ /^(d[$apostrophes]ailleurs|d[$apostrophes]abord|d[$apostrophes]autant|quelqu[$apostrophes]un(e|s|es)?)$/oi &&
+       $word =~ /^([cdjlmnst][$apostrophes]|[[:alpha:]]*qu[$apostrophes]|y[$hyphens])(.+)/oi) {
+      # y-a-t-il is actually wrong, so we replace it by y a-t-il.
       my $thing = $1;
       my $l1 = ($thing =~ /^y[$hyphens]$/i) ? 1 : len($thing);
       push(@atom_positions, $os, $l1);
       push(@atom_positions, split_word_fr(substr($word, len($thing)),$os+len($thing)));
+   } elsif ($word =~ /^(?:a-t-il|est-ce)$/io) {
+      # special case for these very common combinations
+      push(@atom_positions, $os, len($word));
    } elsif ($word =~ /^(.+)-t-($vowel_hyph_endings)$/oi) {
       my $l1 = len($1);
       push(@atom_positions, split_word_fr(substr($word, 0, $l1), $os));
-      push(@atom_positions, $os + $l1 + 3, len($word)-$l1-3);
+      push(@atom_positions, $os + $l1, len($word)-$l1);
    } elsif ($word !~ /rendez[$hyphens]vous$/ && $word =~ /^(.+)[$hyphens]($hyph_endings)$/oi) {
       my $l1 = len($1);
       push(@atom_positions, split_word_fr(substr($word, 0, $l1), $os));
-      push(@atom_positions, $os + $l1 + 1, len($word)-$l1-1);
+      push(@atom_positions, $os + $l1, len($word)-$l1);
    } else {
       push(@atom_positions, $os, len($word));
    }
