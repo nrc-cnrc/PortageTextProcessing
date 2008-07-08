@@ -19,7 +19,6 @@
 
 use strict;
 use utf8;
-use LexiTools;
 
 my $HELP = "
 Usage: udetokenize.pl [-lang=l] [-latin1] [-chinese-punch]
