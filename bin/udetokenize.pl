@@ -21,8 +21,8 @@ use strict;
 use utf8;
 
 my $HELP = "
-Usage: udetokenize.pl [-lang=l] [-latin1] [-chinese-punch]
-       [input file] [output file]
+Usage: udetokenize.pl [-lang=L] [-latin1] [-chinesepunc] [-stripchinese]
+       [INPUT] [OUTPUT]
 
 Detokenize tokenized text encoded in utf-8.
 
@@ -30,7 +30,7 @@ Warning: ASCII quotes are handled assuming there is only one level of quotation.
 
 Options:
 
--lang          Specify two-letter language code: en or fr [en]
+-lang=L        Specify two-letter language code: en or fr [en]
                Works well for English, not bad for French.
 -latin1        Replace characters that map to cp-1252 but not to iso-8859-1 by
                their closest equivalents that do
@@ -372,7 +372,7 @@ sub is_prefix # ch
 {
    my $ch=shift;
    return ($lang eq "fr" &&
-           $ch =~ /^[cdjlmnst]$apos|[a-z]*qu$apos/oi);
+           $ch =~ /^[cdjlmnst]$apos$|^[a-z]*qu$apos$/oi);
 }
 
 # handling plural possessive in English
