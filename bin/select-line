@@ -8,16 +8,24 @@
 # Copyright 2005, Her Majesty in Right of Canada
 
 ##
-## Syntax: select-line n
+## Syntax: select-line n [file1 file2 ...]
 ##
-## Select the nth line from stdin.
+## Select the nth line from the given files, or from stdin if no files are
+## provided.
 ##
 
-if ($#argv != 1) then
+if ($#argv < 1) then
    cat $0 | egrep '^##' | cut -c4-
    exit 1
 endif
 
 set n = $1
+shift
 
-head -$n | tail -1
+if ($#argv == 0) then
+   head -$n | tail -1
+else
+   foreach f ($*)
+      head -$n $f | tail -1
+   end
+endif
