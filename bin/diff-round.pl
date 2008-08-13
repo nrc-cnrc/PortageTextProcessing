@@ -7,7 +7,7 @@
 # PROGRAMMER: Eric Joanis
 #
 # Technologies langagieres interactives / Interactive Language Technologies
-# Institut de technologie de l'information / Institute for Information Technology
+# Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
 # Copyright 2006, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2006, Her Majesty in Right of Canada
@@ -28,11 +28,12 @@ Usage: diff-round.pl [-h(elp)] [-prec P] infile1 infile2
   Compressed files are decompressed automatically as necessary.
 
 Options:
-  -prec P   number of identical digits to required for equality [6]
+  -prec P   number of identical digits required for equality [6]
   -h(elp):  print this help message
   -sort:    sort the files before doing the diff, e.g., to compare two
-            phrase tables or ttables containing the same phrase/word pairs.
+            phrase tables or ttables containing the same phrase/word pairs
   -q:       don't print individual differences, just a global summary
+  -min:     use min(|a|,|b|) instead of max when calculating rel diffs
 
 Exit status:
    0 if no differences were found (within P)
@@ -53,6 +54,7 @@ GetOptions(
                },
    sort     => \my $sort,
    quiet    => \my $quiet,
+   min      => \my $use_min,
 ) or usage;
 my $pow_prec = 1/(10**$prec);
 
@@ -60,6 +62,9 @@ my $pow_prec = 1/(10**$prec);
 
 # Will hold the maximum numerical difference found
 my $max_diff = 0;
+# Will be true if an infinite numerical difference was found (i.e., one value
+# was 0 and the other wasn't)
+my $inf_max_diff = 0;
 
 if ( $sort ) {
    open F1, "gzip -cqfd $ARGV[0] | LC_ALL=C sort |"
@@ -77,9 +82,8 @@ if ( $sort ) {
 #   open F2, $ARGV[1] or die "Can't open $ARGV[1]: $!";
 #}
 
-sub max($$) {
-   $_[0] < $_[1] ? $_[1] : $_[0];
-}
+sub max($$) { $_[0] < $_[1] ? $_[1] : $_[0]; }
+sub min($$) { $_[0] > $_[1] ? $_[1] : $_[0]; }
 
 # is_num($token) returns whether $token is a valid C number
 # Precondition: $token is already stripped of leading and trailing whitespace
@@ -95,11 +99,16 @@ sub is_num($) {
 sub diff_epsilon ($$) {
    return 0 if $_[0] eq $_[1];
    return 1 if (!is_num($_[0]) || !is_num($_[1]));
-   my $max = max(abs($_[0]), abs($_[1]));
-   if ( $max > 0 ) {
-      my $rel_diff = abs($_[0] - $_[1]) / $max;
+   return 0 if $_[0] == $_[1];
+   my $denom = $use_min ? min(abs($_[0]), abs($_[1]))
+                        : max(abs($_[0]), abs($_[1]));
+   if ( $denom > 0 ) {
+      my $rel_diff = abs($_[0] - $_[1]) / $denom;
       $max_diff = $rel_diff if ($rel_diff > $max_diff);
       return ($rel_diff > $pow_prec);
+   } elsif ( $use_min ) {
+      $inf_max_diff = 1;
+      return 1;
    } else {
       return 0;
    }
@@ -135,7 +144,7 @@ while (<F1>) {
       }
    }
 
-   #if ( abs($L1 - $L2) * 10**$prec > max(abs($L1), abs($L2)) ) {
+   #if ( abs($L1 - $L2) * 10**$prec > min(abs($L1), abs($L2)) ) {
    #   print "$.	< $L1	> $L2\n"
    #}
 }
@@ -148,6 +157,8 @@ print STDERR "$ARGV[0] and $ARGV[1] differ\n"
    if $quiet and $found_diff;
 print STDERR "Maximum relative numerical difference: $max_diff\n"
    unless $quiet && !$max_diff;
+print STDERR "At least one infinite (zero vs non-zero) difference\n"
+   if $inf_max_diff;
 print STDERR "Threshold used: $pow_prec\n"
    unless $quiet;
 
