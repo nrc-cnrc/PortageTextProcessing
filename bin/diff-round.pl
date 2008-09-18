@@ -97,10 +97,21 @@ sub is_num($) {
 # display($val) displays $val in reasonably few characters.
 sub display($) {
    my ($val) = @_;
+   if ( $val > 0.999 and $val < 1 ) {
+      my $res = sprintf "%.40g", $val;
+      my ($nines) = $res =~ /(0\.9+)/;
+      if ( defined $nines ) {
+         my $nine_count = length($nines)-2;
+         #print "$res nines $nines nine_count $nine_count\n";
+         return sprintf "%.".($nine_count+3)."g", $val;
+      } else {
+         return sprintf "%7g", $val;
+      }
+   }
    if ( abs($val) >= 0.001 and abs($val) < 1000000 ) {
-      sprintf "%7g", $val;
+      return sprintf "%7g", $val;
    } else {
-      sprintf "%.4g", $val;
+      return sprintf "%.4g", $val;
    }
 }
 
