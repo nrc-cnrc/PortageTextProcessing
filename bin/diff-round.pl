@@ -94,23 +94,33 @@ sub is_num($) {
    return !(($_[0] eq '') || ($n_unparsed != 0) || $!);
 }
 
+# display($val) displays $val in reasonably few characters.
+sub display($) {
+   my ($val) = @_;
+   if ( abs($val) >= 0.001 and abs($val) < 1000000 ) {
+      sprintf "%7g", $val;
+   } else {
+      sprintf "%.4g", $val;
+   }
+}
+
 # diff_epsilon($a, $b) returns true iff $a and $b differ by more than their
 # $prec'th significant digit.
 sub diff_epsilon ($$) {
-   return 0 if $_[0] eq $_[1];
-   return 1 if (!is_num($_[0]) || !is_num($_[1]));
-   return 0 if $_[0] == $_[1];
+   return (0,0) if $_[0] eq $_[1];
+   return (1,"n/a") if (!is_num($_[0]) || !is_num($_[1]));
+   return (0,0) if $_[0] == $_[1];
    my $denom = $use_min ? min(abs($_[0]), abs($_[1]))
                         : max(abs($_[0]), abs($_[1]));
    if ( $denom > 0 ) {
       my $rel_diff = abs($_[0] - $_[1]) / $denom;
       $max_diff = $rel_diff if ($rel_diff > $max_diff);
-      return ($rel_diff > $pow_prec);
+      return (($rel_diff > $pow_prec), display($rel_diff));
    } elsif ( $use_min ) {
       $inf_max_diff = 1;
-      return 1;
+      return (1,"inf");
    } else {
-      return 0;
+      return (0,0);
    }
 }
 
@@ -136,8 +146,9 @@ while (<F1>) {
       $found_diff = 1;
    } else {
       for my $i (0 .. $#L1) {
-         if ( diff_epsilon($L1[$i], $L2[$i]) ) {
-            print $., ($#L1 > 0 ? "($i)" : ""), " < $L1[$i]   > $L2[$i]\n"
+         my ($is_diff, $rel_diff) = diff_epsilon($L1[$i], $L2[$i]);
+         if ( $is_diff ) {
+            print $., ($#L1 > 0 ? "($i)" : ""), " < $L1[$i]   > $L2[$i]   rel diff: $rel_diff\n"
                unless $quiet;
             $found_diff = 1;
          }
