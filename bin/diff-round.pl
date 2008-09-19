@@ -28,13 +28,13 @@ Usage: diff-round.pl [-h(elp)] [-prec P] infile1 infile2
   Compressed files are decompressed automatically as necessary.
 
 Options:
-  -prec P   number of identical digits required for equality [6]
-  -h(elp):  print this help message
-  -sort:    sort the files before doing the diff, e.g., to compare two
-            phrase tables or ttables containing the same phrase/word pairs
-  -pipe:    use diffpipe too handle line insertions and deletions.
-  -q:       don't print individual differences, just a global summary
-  -min:     use min(|a|,|b|) instead of max when calculating rel diffs
+  -prec P    number of identical digits required for equality [6]
+  -h(elp):   print this help message
+  -sort:     sort the files before doing the diff, e.g., to compare two
+             phrase tables or ttables containing the same phrase/word pairs
+  -diffpipe: use diffpipe too handle line insertions and deletions.
+  -q:        don't print individual differences, just a global summary
+  -min:      use min(|a|,|b|) instead of max when calculating rel diffs
 
 Exit status:
    0 if no differences were found (within P)
@@ -54,7 +54,7 @@ GetOptions(
                   "-z no longer required: automatically enabled as needed\n";
                },
    sort     => \my $sort,
-   pipe     => \my $pipe,
+   diffpipe => \my $pipe,
    quiet    => \my $quiet,
    min      => \my $use_min,
 ) or usage;
