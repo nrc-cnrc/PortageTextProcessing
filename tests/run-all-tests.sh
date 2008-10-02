@@ -11,7 +11,9 @@
 
 if [[ "$1" =~ "^-" ]]; then
    echo "Usage: $0 [test-suite [test-suite2 [...]]]
-       Run specified test suites, or all test suites if none are specified"
+       Run the specified test suites, or all test suites if none are specified.
+       Each test suite must contain a script named run-test.sh which returns 0
+       as exit status if the suite passes, non-zero otherwise."
    exit
 fi
 
