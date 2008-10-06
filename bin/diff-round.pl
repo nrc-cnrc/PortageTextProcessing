@@ -74,21 +74,24 @@ my $max_diff = 0;
 # was 0 and the other wasn't)
 my $inf_max_diff = 0;
 
-if ( $sort ) {
-   open F1, "gzip -cqfd $ARGV[0] | LC_ALL=C sort |"
-      or die "Can't create pipe for sorting $ARGV[0]: $!";
-   open F2, "gzip -cqfd $ARGV[1] | LC_ALL=C sort |"
-      or die "Can't create pipe for sorting $ARGV[1]: $!";
-} else {
-   open F1, "gzip -cqfd $ARGV[0] |"
-      or die "Can't create pipe for decompressing $ARGV[0]: $!";
-   open F2, "gzip -cqfd $ARGV[1] |"
-      or die "Can't create pipe for decompressing $ARGV[1]: $!";
-} 
-#else {
-#   open F1, $ARGV[0] or die "Can't open $ARGV[0]: $!";
-#   open F2, $ARGV[1] or die "Can't open $ARGV[1]: $!";
-#}
+# make_open_cmd($file) returns a command to unzip $file, if it is a file, or
+# leaves it alone if it already is a piped command.
+# If $sort is true, also adds a sort command to the pipe.
+sub make_open_cmd($) {
+   my $file = $_[0];
+   if ( $file !~ /\|$/ ) {
+      $file = "gzip -cqdf $file |";
+   }
+   if ( $sort ) {
+      $file = "$file LC_ALL=C sort |";
+   }
+   return $file;
+}
+
+open F1, make_open_cmd($ARGV[0])
+   or die "Can't create pipe for sorting and/or decompressing $ARGV[0]: $!";
+open F2, make_open_cmd($ARGV[1])
+   or die "Can't create pipe for sorting and/or decompressing $ARGV[1]: $!";
 
 sub max($$) { $_[0] < $_[1] ? $_[1] : $_[0]; }
 sub min($$) { $_[0] > $_[1] ? $_[1] : $_[0]; }
