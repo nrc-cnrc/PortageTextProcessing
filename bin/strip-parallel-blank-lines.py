@@ -17,17 +17,17 @@ import sys
 import re
 
 help = """
-strip-parallel-blank-lines.py [-r] file1 file2 [file3...]
+strip-parallel-blank-lines.py [-r] file1 [file2 file3...]
 
-Strip blank lines in parallel from two line-aligned files: strip if EITHER file
-contains a blank line.  Write output to <file1>.no-blanks. If <file3> and subsequent
-files are provided, they are stripped in parallel, but are not themselves checked
-for blank lines.
+Strip blank lines in parallel from one or more line-aligned files: strip if
+EITHER of the first two files contains a blank line.  Write output to
+<file*>.no-blanks. If <file3> and subsequent files are provided, they are
+stripped in parallel, but are not themselves checked for blank lines.
 
 Options:
--r   For any set of parallel lines in which the first (ONLY!) is blank, replace
-     any blank lines with a '.'. NOTE the change of matching criterion with
-     this option! 
+-r   Replace blank lines with a '.' rather than stripping them. This tests ONLY
+     the first file for a blank line, and iff one is found replaces it and any
+     aligned blank lines with a '.'.
 
 """
 
@@ -38,7 +38,7 @@ if len(args) > 1 and args[0] == "-r":
     replace = True
     args = args[1:]
 
-if len(args) < 2:
+if len(args) < 1:
     sys.stderr.write(help);
     sys.exit(1)
     
@@ -49,6 +49,9 @@ ofiles = []
 for file in args:
     ifiles.append(open(file, "r"))
     ofiles.append(open(file+".no-blanks", "w"))
+
+second = 1
+if len(ifiles) < 2: second = 0          # only use file1 if only file1 given
 
 lines = [""] * len(ifiles)
 for lines[0] in ifiles[0]:
@@ -65,7 +68,7 @@ for lines[0] in ifiles[0]:
             if rep and blankline.match(lines[i]): lines[i] = ".\n"
             ofiles[i].write(lines[i])
     else:
-        if not blankline.match(lines[0]) and not blankline.match(lines[1]):
+        if not blankline.match(lines[0]) and not blankline.match(lines[second]):
             for i in range(0,len(ifiles)):
                 ofiles[i].write(lines[i])
 
