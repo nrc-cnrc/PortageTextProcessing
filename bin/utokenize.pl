@@ -7,8 +7,8 @@
 # PROGRAMMER: George Foster, with minor modifications by Aaron Tikuisis
 #             UTF-8 adaptation by Michel Simard.
 #
-# Copyright (c) 2004 - 2007, Sa Majeste la Reine du Chef du Canada /
-# Copyright (c) 2004 - 2007, Her Majesty in Right of Canada
+# Copyright (c) 2004 - 2008, Sa Majeste la Reine du Chef du Canada /
+# Copyright (c) 2004 - 2008, Her Majesty in Right of Canada
 #
 # This software is distributed to the GALE project participants under the terms
 # and conditions specified in GALE project agreements, and remains the sole
