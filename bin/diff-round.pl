@@ -32,7 +32,7 @@ Options:
   -h(elp):   print this help message
   -sort:     sort the files before doing the diff, e.g., to compare two
              phrase tables or ttables containing the same phrase/word pairs
-  -diffpipe: use diffpipe too handle line insertions and deletions.
+  -diffpipe: use diffpipe to handle line insertions and deletions.
   -q:        don't print individual differences, just a global summary
   -min:      use min(|a|,|b|) instead of max when calculating rel diffs
 
