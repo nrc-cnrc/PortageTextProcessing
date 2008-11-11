@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
-# strip-parallel-blank-lines.py
+# @file strip-parallel-blank-lines.py
+# @brief Strip blank lines in parallel from one or more line-aligned files:
+# strip if EITHER of the first two files contains a blank line.
 # 
-# PROGRAMMER: George Foster
+# @author George Foster
 # 
 # COMMENTS: 
 #

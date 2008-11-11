@@ -2,23 +2,17 @@
 
 # $Id$
 #
-# tokenize.pl Tokenize and sent-split text.
+# @file tokenize.pl 
+# @brief Tokenize and sent-split text.
 # 
-# PROGRAMMER: George Foster, with minor modifications by Aaron Tikuisis
+# @author George Foster, with minor modifications by Aaron Tikuisis
 #             UTF-8 adaptation by Michel Simard.
 #
-# Copyright (c) 2004 - 2008, Sa Majeste la Reine du Chef du Canada /
-# Copyright (c) 2004 - 2008, Her Majesty in Right of Canada
-#
-# This software is distributed to the GALE project participants under the terms
-# and conditions specified in GALE project agreements, and remains the sole
-# property of the National Research Council of Canada.
-#
-# For further information, please contact :
 # Technologies langagieres interactives / Interactive Language Technologies
-# Institut de technologie de l'information / Institute for Information Technology
+# Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# See http://iit-iti.nrc-cnrc.gc.ca/locations-bureaux/gatineau_e.html
+# Copyright 2004-2008, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2004-2008, Her Majesty in Right of Canada
 
 use utf8;
 

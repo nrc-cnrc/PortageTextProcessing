@@ -1,17 +1,17 @@
 #!/usr/bin/perl
 # $Id$
 
-# parallel-uniq.pl - Remove duplicate lines from parallel files, where a
-#                    duplicate is a line which is identical to another in
-#                    *both* files at the same time.
+# @file parallel-uniq.pl 
+# @brief Remove duplicate lines from parallel files, where a duplicate is a
+# line which is identical to another in *both* files at the same time.
 #
-# PROGRAMMER: Eric Joanis
+# @author Eric Joanis
 #
 # COMMENTS:
 #
 # Eric Joanis
 # Technologies langagieres interactives / Interactive Language Technologies
-# Institut de technologie de l'information / Institute for Information Technology
+# Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
 # Copyright 2005, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2005, Her Majesty in Right of Canada

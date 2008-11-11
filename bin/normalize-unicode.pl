@@ -1,17 +1,17 @@
 #!/usr/bin/perl
 # $Id$
 
-# normalize-unicode.pl Normalize unicode input into canonical representations.
-#                      Particularly useful in Arabic where the same text can
-#                      be encoded in many ways, which are string-wise different,
-#                      but canonically equivalent.
+# @file normalize-unicode.pl 
+# @brief Normalize unicode input into canonical representations.  Particularly
+# useful in Arabic where the same text can be encoded in many ways, which are
+# string-wise different, but canonically equivalent.
 #
-# PROGRAMMER: Eric Joanis
+# @author Eric Joanis
 #
 # COMMENTS:
 #
 # Technologies langagieres interactives / Interactive Language Technologies
-# Institut de technologie de l'information / Institute for Information Technology
+# Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
 # Copyright 2006, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2006, Her Majesty in Right of Canada

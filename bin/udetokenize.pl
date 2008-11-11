@@ -2,12 +2,13 @@
 
 # $Id$
 #
-# udetokenize.pl - Transform tokenized English back to normal English text,
-#                  with some support of French text too.  This version is
-#                  intended to detokenize utf-8 text from French<->English SMT,
-#                  rather than from Chinese or Arabic -> English SMT.
+# @file udetokenize.pl 
+# @brief Transform tokenized English back to normal English text, with some
+# support of French text too.  This version is intended to detokenize utf-8
+# text from French<->English SMT, rather than from Chinese or Arabic -> English
+# SMT.
 #
-# Programmers: original detokenize.pl: SongQiang Fang and George Foster
+# @author original detokenize.pl: SongQiang Fang and George Foster
 #              UTF-8 adaptation and improved handling of French: Eric Joanis
 #
 # Technologies langagieres interactives / Interactive Language Technologies

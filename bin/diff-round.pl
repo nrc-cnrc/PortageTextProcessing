@@ -1,10 +1,11 @@
 #!/usr/bin/perl
 # $Id$
 #
-# diff-round.pl - diff two ff files, i.e., files of floating point numbers,
-#                 where rounding differences are not real differences
+# @file diff-round.pl 
+# @brief diff two ff files, i.e., files of floating point numbers, where
+# rounding differences are not real differences
 #
-# PROGRAMMER: Eric Joanis
+# @author Eric Joanis
 #
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology

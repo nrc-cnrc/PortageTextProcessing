@@ -1,15 +1,16 @@
 #!/usr/bin/perl 
 # $Id$
 
-# sort-by-length.pl - sort a text file by sentence length
+# @file sort-by-length.pl 
+# @brief sort a text file by sentence length.
 #
-# PROGRAMMER: Eric Joanis
+# @author Eric Joanis
 #
 # COMMENTS:
 #
 # Eric Joanis
 # Technologies langagieres interactives / Interactive Language Technologies
-# Institut de technologie de l'information / Institute for Information Technology
+# Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
 # Copyright 2005, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2005, Her Majesty in Right of Canada
