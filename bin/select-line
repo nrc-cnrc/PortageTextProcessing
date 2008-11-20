@@ -1,10 +1,10 @@
-#!/bin/tcsh -f
+#!/bin/bash
 
 # @file select-line
 # @brief Select the nth line from the given files, or from stdin if no files
 # are provided.
 #
-# @author George Foster
+# @author George Foster / converted to bash by Eric Joanis
 #
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -19,18 +19,18 @@
 ## provided.
 ##
 
-if ($#argv < 1) then
+if [[ $# < 1 || $1 = -help || $1 = -h ]]; then
    cat $0 | egrep '^##' | cut -c4-
    exit 1
-endif
+fi
 
-set n = $1
+n=$1
 shift
 
-if ($#argv == 0) then
+if [[ $# = 0 ]]; then
    head -$n | tail -1
 else
-   foreach f ($*)
+   for f in $*; do
       head -$n $f | tail -1
-   end
-endif
+   done
+fi
