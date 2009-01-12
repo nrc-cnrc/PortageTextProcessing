@@ -12,17 +12,6 @@
 # Copyright 2008, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2008, Her Majesty in Right of Canada
 
-_sh_utils_help() {
-   warn "This is intended to be used as a library not a stand-alone program."
-}
-
-# This file is intended to be a library and not an executable file.
-if [[ $0 == "sh_utils.sh" ]]; then
-   _sh_utils_help
-   exit 1
-fi
-
-
 # error_exit "some error message" "optionnally a second line of error message"
 # will exit with an error status, print the specified error message(s) on
 # STDERR.
@@ -92,3 +81,16 @@ run_cmd() {
       eval $cmd
    fi
 }
+
+# This library's help message.
+_sh_utils_help() {
+   echo "This is intended to be used as a library, not a stand-alone program."
+}
+
+# This file is intended to be a library and not an executable file.
+if [[ $0 == "sh_utils.sh" ]]; then
+   _sh_utils_help
+   exit 1
+fi
+
+
