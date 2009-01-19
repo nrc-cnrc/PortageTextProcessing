@@ -58,8 +58,8 @@ if ($help || $h) {
 
 my $apos = qr/['´’]/;
 
-open IN, "< :encoding(utf8)", $in or die " Can not open $in for reading";
-open OUT,"> :encoding(utf8)", $out or die " Can not open $out for writing";
+open IN, "< :encoding(utf-8)", $in or die " Can not open $in for reading";
+open OUT,"> :encoding(utf-8)", $out or die " Can not open $out for writing";
 my $space=" ";
 my ($word_pre, $word_before, $word_after);
 my @double_quote=();

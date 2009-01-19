@@ -36,7 +36,7 @@ if ($help || $h) {
 $in = shift || "/dev/stdin";
 $out = shift || "/dev/stdout";
  
-if (!open(IN, "< :encoding(utf8)", $in)) {die "Can't open $in for reading";}
-if (!open(OUT, "> :encoding(utf8)", $out)) {die "Can't open $out for writing";}
+if (!open(IN, "< :encoding(utf-8)", $in)) {die "Can't open $in for reading";}
+if (!open(OUT, "> :encoding(utf-8)", $out)) {die "Can't open $out for writing";}
 
 while (<IN>) {print OUT lc;}
