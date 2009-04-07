@@ -19,7 +19,7 @@
 
 
 use strict;
-#use utf8;
+use utf8;
 # This is a utf8 handling script => io should be in utf8 format
 # ref: http://search.cpan.org/~tty/kurila-1.7_0/lib/open.pm
 use open IO => ':encoding(utf-8)';
