@@ -12,10 +12,10 @@
 #              UTF-8 adaptation and improved handling of French: Eric Joanis
 #
 # Technologies langagieres interactives / Interactive Language Technologies
-# Institut de technologie de l'information / Institute for Information Technology
+# Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright (c) 2004 - 2008, Sa Majeste la Reine du Chef du Canada /
-# Copyright (c) 2004 - 2008, Her Majesty in Right of Canada
+# Copyright (c) 2004 - 2009, Sa Majeste la Reine du Chef du Canada /
+# Copyright (c) 2004 - 2009, Her Majesty in Right of Canada
 
 
 use strict;
