@@ -45,6 +45,14 @@ our (@ISA, @EXPORT);
    "good_turing_estm"
 );
 
+# Signatures so the array refs work correctly everywhere
+sub get_token(\$$\@); #(para_string, index, token_positions)
+sub tok_abuts_prev($\@); #(index, token_positions)
+sub tok_is_dot(\$$\@); #(para_string, index, token_positions)
+sub context_says_abbr(\$$\@); #($para_string, index_of_dot, token_positions)
+sub looks_like_abbr($\$$\@); # (lang, para_string, index_of_abbr, token_positions)
+sub len(\$); #(string)
+
 # Module global stuff.
 
 my %known_abbr_hash_en;
@@ -149,6 +157,8 @@ sub get_para #(\*FILEHANDLE, $one_para_per_line)
 
 # Split a paragraph into tokens. Return list of (start,len) token positions.
 
+# EJJ note: can't use the signature (\$$) here, because $para is modified in
+# this method, and we don't want the changes reflected for the caller.
 sub tokenize #(paragraph, lang)
 {
    my $para = shift;
@@ -189,8 +199,8 @@ sub tokenize #(paragraph, lang)
    for (my $i = 0; $i < $#tok_posits; $i += 2) {
       if (tok_is_dot($para, $i, @tok_posits) && tok_abuts_prev($i, @tok_posits)) {
          if (context_says_abbr($para, $i, @tok_posits) ||
-             &$matches_known_abbr(get_token($para, $i-2, @tok_posits)) ||
-             looks_like_abbr($lang, $para, $i-2, @tok_posits)) {
+               &$matches_known_abbr(get_token($para, $i-2, @tok_posits)) ||
+               looks_like_abbr($lang, $para, $i-2, @tok_posits)) {
 
             $tok_posits[$i-1]++;
             splice(@tok_posits, $i, 2);
@@ -206,17 +216,19 @@ sub tokenize #(paragraph, lang)
 # @para_string, giving the start token of successive sentences (except the
 # 1st, incl last+1). This completely relies on the tokenizer for dot
 # disambiguation, and assumes that abbrev-ending dots are never full stops.
-# NB: add handling for "..." & pos "---"
+# TODO: add handling for "..." & pos "---"
 
-sub split_sentences #(para_string, token_positions)
+sub split_sentences(\$\@) #(para_string, token_positions)
 {
    my $para = shift;
+   my $token_positions = shift;
+
    my @sent_posits;
 
    my $end_pending = 0;
 
-   for (my $i = 0; $i < $#_; $i += 2) {
-      my $tok = get_token($para, $i, @_);
+   for (my $i = 0; $i < $#$token_positions; $i += 2) {
+      my $tok = get_token($$para, $i, @$token_positions);
       if ($end_pending) {
          if ($tok !~ /^([$quotes\)\]]|[$apostrophes]{1,2})$/o ||
              $tok =~ /^[$leftquotes]{1,2}/ ) {
@@ -227,20 +239,21 @@ sub split_sentences #(para_string, token_positions)
          if ($tok =~ /^[.!?]$/o) {$end_pending = 1;}
       }
    }
-   push(@sent_posits, $#_+1);
+   push(@sent_posits, $#$token_positions+1);
 
    return @sent_posits;
 }
 
 # Convert token positions into actual tokens. Return a list of strings.
 
-sub get_tokens #(para_string, token_positions)
+sub get_tokens(\$\@) #(para_string, token_positions)
 {
    my $string = shift;
+   my $token_positions = shift;
    my @tokens;
 
-   for (my $i = 0; $i < $#_; $i += 2) {
-      push @tokens, get_token($string, $i, @_);
+   for (my $i = 0; $i < $#$token_positions; $i += 2) {
+      push @tokens, get_token($$string, $i, @$token_positions);
    }
 
    return @tokens;
@@ -249,30 +262,36 @@ sub get_tokens #(para_string, token_positions)
 # Get the token corresponding to a given index value (0, 2, 4, ...). Return a
 # string.
 
-sub get_token #(para_string, index, token_positions)
+sub get_token(\$$\@) #(para_string, index, token_positions)
 {
    my $string = shift;
    my $index = shift;
-   return $index >= 0 && $index+1 <= $#_ ?
-      substr($string, $_[$index], $_[$index+1]) : "";
+   my $token_positions = shift;
+   return $index >= 0 && $index+1 <= $#$token_positions ?
+      substr($$string, $token_positions->[$index], $token_positions->[$index+1]) : "";
 }
 
 # Does token at given index immediately follow the preceding one (without
 # intervening chars)?
 
-sub tok_abuts_prev #(index, token_positions)
+sub tok_abuts_prev($\@) #(index, token_positions)
 {
    my $index = shift;
-   return $index >= 2 && $_[$index-2] + $_[$index-1] == $_[$index];
+   my $token_positions = shift;
+   return $index >= 2 && 
+          $token_positions->[$index-2] + $token_positions->[$index-1]
+            == $token_positions->[$index];
 }
 
 # Is token at current index a plain dot?
 
-sub tok_is_dot #($para_string, index, token_positions)
+sub tok_is_dot(\$$\@) #($para_string, index, token_positions)
 {
    my $string = shift;
    my $index = shift;
-   return $_[$index+1] == 1 && get_token($string, $index, @_) eq ".";
+   my $token_positions = shift;
+   return $token_positions->[$index+1] == 1 &&
+          get_token($$string, $index, @$token_positions) eq ".";
 }
 
 # Is there hard evidence from upcoming tokens (ignoring the current one), that
@@ -287,20 +306,21 @@ sub tok_is_dot #($para_string, index, token_positions)
 # All of these examples work the same if there is intervening punctuation whose
 # status is ambiguous, eg ('Born in the US.'...), -> "US.", comma is what counts.
 
-sub context_says_abbr #($para_string, index_of_dot, token_positions)
+sub context_says_abbr(\$$\@) #($para_string, index_of_dot, token_positions)
 {
    my $string = shift;
    my $index = shift;
+   my $token_positions = shift;
 
    # skip ambig punc
-   for ($index += 2; $index < $#_; $index += 2) {
-      if (get_token($string, $index, @_) !~
+   for ($index += 2; $index < $#$token_positions; $index += 2) {
+      if (get_token($$string, $index, @$token_positions) !~
             /^([$quotes\(\)\[\]\{\}…]|[$apostrophes]{1,2}|[$hyphens]{1,3}|[.]{2,4})$/o) {last;}
    }
 
-   if ($index > $#_) {return 0;} # end of para
+   if ($index > $#$token_positions) {return 0;} # end of para
 
-   my $tok = get_token($string, $index, @_);
+   my $tok = get_token($$string, $index, @$token_positions);
    if ($tok =~ /^[,:;]$/o) {
       return 1;         # never begins a sentence
    } elsif ($tok =~ /^[.!?]/) {
@@ -330,11 +350,13 @@ sub matches_known_abbr_fr #(word)
 
 # Does the current token look like it is an abbreviation?
 
-sub looks_like_abbr # (lang, para_string, index_of_abbr, token_positions)
+sub looks_like_abbr($\$$\@) # (lang, para_string, index_of_abbr, token_positions)
 {
    my $lang = shift;
-   my $p = $_[1]+2;
-   my $word = substr($_[0], $_[$p], $_[$p+1]);
+   my $para = shift;
+   my $p = shift;
+   my $token_positions = shift;
+   my $word = substr($$para, $token_positions->[$p], $token_positions->[$p+1]);
 
    # abbr must match this pattern..
    if ($word !~ /^[[:alpha:]][[:alpha:]]?([.][[:alpha:]])*$/o) {
@@ -489,10 +511,10 @@ sub split_word_fr #(word, offset)
 
 # Return length of a possibly-undefined string.
 
-sub len #(string)
+sub len(\$) #(string)
 {
    my $string = shift;
-   return defined $string ? length($string) : 0;
+   return defined $$string ? length($$string) : 0;
 }
 
 # Do good-turing smoothing on a list of word frequencies.
