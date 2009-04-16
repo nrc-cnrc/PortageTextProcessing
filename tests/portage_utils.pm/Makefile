@@ -8,7 +8,7 @@ define test_function
 ${LIB} perl -e 'use portage_utils; $$portage_utils::DEBUG=1; portage_utils::zout(*VOC, "delme") or die "BAD plain file"; print VOC "test"'
 endef
 
-.NOT_PARALLEL:
+.NOTPARALLEL:
 
 all: plain
 all: gzip
