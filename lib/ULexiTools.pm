@@ -491,8 +491,8 @@ sub split_word_fr #(word, offset)
       my $l1 = ($thing =~ /^y[$hyphens]$/i) ? 1 : len($thing);
       push(@atom_positions, $os, $l1);
       push(@atom_positions, split_word_fr(substr($word, len($thing)),$os+len($thing)));
-   } elsif ($word =~ /^(?:a-t-il|est-ce)$/io) {
-      # special case for these very common combinations
+   } elsif ($word =~ /^(?:est-ce)$/io) {
+      # special case for this very common combination
       push(@atom_positions, $os, len($word));
    } elsif ($word =~ /^(.+)-t-($vowel_hyph_endings)$/oi) {
       my $l1 = len($1);
