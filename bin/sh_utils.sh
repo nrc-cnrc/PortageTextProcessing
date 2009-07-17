@@ -25,9 +25,9 @@ error_exit() {
 
 # Verify that enough args remain on the command line
 # syntax: one_arg_check <args needed> $# <arg name>
-# Note that this function expects to be in a while/case structure for
-# handling parameters, so that $# still includes the option itself.
-# exits with error message if the check fails.
+# Note that the syntax show above is meant to be part of a while/case structure
+# for handling parameters, so that $# still includes the option itself.  exits
+# with error message if the check fails.
 arg_check() {
    if [ $2 -le $1 ]; then
       error_exit "Missing argument to $3 option."
