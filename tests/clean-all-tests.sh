@@ -29,7 +29,7 @@ for TEST_SUITE in $TEST_SUITES; do
    echo =======================================
    echo Cleaning $TEST_SUITE
    if cd -- $TEST_SUITE; then
-      if [[ ! -x ./Makefile ]]; then
+      if [[ ! -r ./Makefile ]]; then
          echo FAILED $TEST_SUITE: can\'t find or execute ./Makefile
          FAIL="$FAIL $TEST_SUITE"
       else
