@@ -42,7 +42,7 @@ our (@ISA, @EXPORT);
    "get_para", "tokenize", "split_sentences",
    "get_tokens", "get_token",
    "matches_known_abbr_en", "matches_known_abbr_fr",
-   "good_turing_estm"
+   "good_turing_estm", "get_sentence"
 );
 
 # Signatures so the array refs work correctly everywhere
@@ -269,6 +269,18 @@ sub get_token(\$$\@) #(para_string, index, token_positions)
    my $token_positions = shift;
    return $index >= 0 && $index+1 <= $#$token_positions ?
       substr($$string, $token_positions->[$index], $token_positions->[$index+1]) : "";
+}
+
+# Get the sentence corresponding to a given index value (0, 2, 4, ...). Return a
+# string.
+
+sub get_sentence(\$$$) #(para_string, start, end)
+{
+   my $string = shift;
+   my $start = shift;
+   my $end = shift;
+   return ($start >= 0 and $end >=0)
+        ? substr($$string, $start, $end - $start) : "";
 }
 
 # Does token at given index immediately follow the preceding one (without
