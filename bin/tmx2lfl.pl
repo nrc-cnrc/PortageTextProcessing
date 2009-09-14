@@ -18,6 +18,7 @@ use Data::Dumper;
 $Data::Dumper::Indent=1;
 
 binmode STDERR, ":encoding(utf-8)";
+binmode STDOUT, ":encoding(utf-8)";
 
 my $TEXT_ONLY = ".text_only";
 
@@ -57,7 +58,7 @@ $extra = 0 unless defined $extra;
 
 my @filename = @ARGV;
 
-my $parser = XML::Twig->new( twig_handlers=> { tu => \&processTU }, ignore_elts => { header => 1 } );
+my $parser = XML::Twig->new( twig_handlers=> { tu => \&processTU, ph => \&processPH }, ignore_elts => { header => 1 } );
 $parser->{tu_count} = 0;
 $parser->{outfile_prefix} = $output;
 $parser->{outfile} = {};
@@ -82,6 +83,20 @@ closeOutfiles($parser);
 # $parser->flush;
 
 exit 0;
+
+sub processPH {
+   my ($parser, $ph) = @_;
+   my $string = join(" ", map(normalize($_->text_only), $ph));
+   #print "PH: $string\n";
+   #print STDERR "PH: " . Dumper($ph);
+   #$ph->print(\*STDERR, 1);
+
+   # Special treatment for \- \_ in compounded words.
+   if ($string =~ /\\[-_]/) {
+      $ph->set_text($string);
+      $ph->erase();
+   }
+}
 
 sub processTU {
    my ($parser, $tu) = @_;
