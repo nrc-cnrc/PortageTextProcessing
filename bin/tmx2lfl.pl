@@ -40,6 +40,7 @@ Options:
   -tgt=T        Specify target language [fr]
   -extra        Add an extra line space between pairs of TU's
   -verbose      Verbose mode
+  -d            debugging mode.
   -help,-h      Print this thing and exit
 ";
 
@@ -84,19 +85,23 @@ closeOutfiles($parser);
 
 exit 0;
 
+
+# Callback to process ph tages.
+# Here, we only extract the dashes for example like assurance-emploi.
 sub processPH {
    my ($parser, $ph) = @_;
    my $string = join(" ", map(normalize($_->text_only), $ph));
-   #print "PH: $string\n";
+   print STDERR "PH: $string\n" if ($d);
    #print STDERR "PH: " . Dumper($ph);
    #$ph->print(\*STDERR, 1);
 
    # Special treatment for \- \_ in compounded words.
-   if ($string =~ /\\[-_]/) {
-      $ph->set_text($string);
+   if ($string =~ /\\([-_])/) {
+      $ph->set_text($1);
       $ph->erase();
    }
 }
+
 
 sub processTU {
    my ($parser, $tu) = @_;
@@ -153,6 +158,7 @@ sub processTU {
       $segs =~ s/\s+$//;   # Trim white spaces at the end of each line.
       print { $parser->{outfile}->{$lang} } $segs, "\n";
       print { $parser->{outfile}->{$lang} } "\n" if $extra;
+      print STDERR "SEG: $segs\n" if ($d);
    }
    $parser->{tu_count} = $n + 1;
 
