@@ -19,17 +19,59 @@ my $isLzma = qr/\.lzma\s*$/;
 our $DEBUG;
 
 
+# ================= zopen ====================#
+
+=head1 SUB
+
+B< =============================================
+ ====== zopen                             ======
+ =============================================>
+
+=over 4
+
+=item B<DESCRIPTION>
+
+ Portage's perl magicstream.  Tries to deduce if the stream is input or output,
+ if it is compressed (.gz,z,Z,bz2,bzip2,bz,lzma), piped or just a normal file,
+ and does the proper thing to open the stream.
+
+=item B<SYNOPSIS>
+
+ portage_utils::zopen($STREAM, $stream_name);
+ portage_utils::zopen(*STREAM, $stream_name);
+ portage_utils::zopen(*STREAM, "plain-text-input-file");
+ portage_utils::zopen(*STREAM, "< plain-text-input-file");
+ portage_utils::zopen(*STREAM, "compressed-input-file.gz");
+ portage_utils::zopen(*STREAM, "< compressed-input-file.gz");
+ portage_utils::zopen(*STREAM, "input pipe |");
+ portage_utils::zopen(*STREAM, "> plain-text-output-file");
+ portage_utils::zopen(*STREAM, "> compressed-output-file.gz");
+ portage_utils::zopen(*STREAM, "| output pipe ");
+
+ @PARAM $STREAM
+ @PARAM $stream_name
+
+ @RETURN Returns 0 if the stream was opened.
+
+=item B<SEE ALSO>
+
+ zout()
+
+=back
+
+=cut
+
 sub zopen($$) {
    # if no argument is sent in
    if(not @_) {
-      die "\n!!! ERROR: portage_utils::zin requires input arguments! \taborting...\n";
+      die "\n!!! ERROR: portage_utils::zopen requires input arguments! \taborting...\n";
    }
    # if we are called as a module then skip the our reference name
    elsif($_[0] and $_[0] =~ /^portage_utils/) {
       shift;
       # if no argument is sent in
       if(not @_) {
-         die "\n!!! ERROR: portage_utils::zin requires input arguments! \taborting...\n";
+         die "\n!!! ERROR: portage_utils::zopen requires input arguments! \taborting...\n";
       }
    }
 
@@ -62,6 +104,11 @@ B< =============================================
 
  portage_utils::zin($STREAM, $stream_name)
  portage_utils::zin(*STREAM, $stream_name)
+ portage_utils::zin(*STREAM, "plain-text-input-file");
+ portage_utils::zin(*STREAM, "< plain-text-input-file");
+ portage_utils::zin(*STREAM, "compressed-input-file.gz");
+ portage_utils::zin(*STREAM, "< compressed-input-file.gz");
+ portage_utils::zin(*STREAM, "input pipe |");
 
  @PARAM $STREAM
  @PARAM $stream_name
@@ -97,6 +144,7 @@ sub zin($$) {
 
    die "Don't use zin to open an output stream!!\n" if ($stream_name =~ /^\s*>/);
 
+   # remove leading < if present
    $stream_name =~ s/^\s*<//;
 
    # Is this a pipe.
@@ -133,7 +181,7 @@ sub zin($$) {
 =head1 SUB
 
 B< =============================================
- ====== zin                             ======
+ ====== zout                             ======
  =============================================>
 
 =over 4
@@ -147,6 +195,9 @@ B< =============================================
 
  portage_utils::zout($STREAM, $stream_name)
  portage_utils::zout(*STREAM, $stream_name)
+ portage_utils::zout(*STREAM, "> plain-text-output-file");
+ portage_utils::zout(*STREAM, "> compressed-output-file.gz");
+ portage_utils::zout(*STREAM, "| output pipe ");
 
  @PARAM $STREAM
  @PARAM $stream_name
@@ -180,7 +231,7 @@ sub zout($$) {
 
    print "DEBUG zout with $stream_name.\n" if ($DEBUG);
 
-   die "Don't use zin to open an output stream!!\n" if ($stream_name =~ /^\s*</);
+   die "Don't use zout to open an input stream!!\n" if ($stream_name =~ /^\s*</);
 
    # Remove one redir.
    $stream_name =~ s/^\s*>//;
