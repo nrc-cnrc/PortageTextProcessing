@@ -1,6 +1,22 @@
 #!/usr/bin/perl -w
 
+# $Id$
+
+# @file portage_utils.pm
+# @brief Library to transparently use compress formats.
+#
+# @author Samuel Larkin
+#
+# Technologies langagieres interactives / Interactive Language Technologies
+# Inst. de technologie de l'information / Institute for Information Technology
+# Conseil national de recherches Canada / National Research Council Canada
+# Copyright 2009, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2009, Her Majesty in Right of Canada
+
 package portage_utils;
+require Exporter;
+@ISA = qw(Exporter);
+@EXPORT = qw(zopen);  # symbols to export on request
 
 use strict;
 use warnings;
@@ -267,4 +283,4 @@ sub zout($$) {
 }
 
 # The library was properly loaded.
-return 1
+1;
