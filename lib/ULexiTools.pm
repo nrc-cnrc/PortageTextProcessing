@@ -279,7 +279,7 @@ sub get_sentence(\$$$) #(para_string, start, end)
    my $string = shift;
    my $start = shift;
    my $end = shift;
-   return ($start >= 0 and $end >=0)
+   return ($start >= 0 and $end > $start)
         ? substr($$string, $start, $end - $start) : "";
 }
 
