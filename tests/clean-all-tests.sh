@@ -11,14 +11,14 @@
 
 if [[ "$1" =~ "^-" ]]; then
    echo "Usage: $0 [test-suite [test-suite2 [...]]]
-       Run the clean Makefile target for the specified test suites, 
-       or all test suites if none are specified."
+       Run clean.sh or the clean Makefile target for the specified test suites,
+       or for all test suites if none are specified."
    exit
 fi
 
 TEST_SUITES=$*
 if [[ ! $TEST_SUITES ]]; then
-   TEST_SUITES=`echo */Makefile | sed 's/\/Makefile//g'`
+   TEST_SUITES=`echo */Makefile */clean.sh | sed 's/\/[^ \/]*//g' | tr ' ' '\n' | sort -u`
 fi
 
 echo ""
@@ -29,23 +29,20 @@ for TEST_SUITE in $TEST_SUITES; do
    echo =======================================
    echo Cleaning $TEST_SUITE
    if cd -- $TEST_SUITE; then
-      if [[ ! -r ./Makefile ]]; then
-         echo FAILED $TEST_SUITE: can\'t find or execute ./Makefile
+      if [[ -x ./clean.sh ]]; then
+         echo ./clean.sh
+         if ! ./clean.sh; then
+            echo FAILED to clean $TEST_SUITE: clean.sh returned $?
+            FAIL="$FAIL $TEST_SUITE"
+         fi
+      elif [[ ! -r ./Makefile ]]; then
+         echo FAILED to clean $TEST_SUITE: can\'t find or execute ./Makefile
          FAIL="$FAIL $TEST_SUITE"
       else
-         TARGET=clean
-      	 if [[ $TEST_SUITE == "canoe.compress.output" ]]; then
-      	 	TARGET=distclean
-      	 elif [[ $TEST_SUITE == "filter_models" ]]; then
-      	 	TARGET=distclean
-      	    if ! make -C histogram clean; then
-         	   echo FAILED $TEST_SUITE/histogram: make returned $?
-         	   FAIL="$FAIL $TEST_SUITE/histogram"
-            fi
-      	 fi
-      	 if ! make $TARGET; then
-         	echo FAILED $TEST_SUITE: make returned $?
-         	FAIL="$FAIL $TEST_SUITE"
+         echo make clean
+         if ! make clean; then
+            echo FAILED to clean $TEST_SUITE: make returned $?
+            FAIL="$FAIL $TEST_SUITE"
          fi
       fi
 
@@ -53,21 +50,7 @@ for TEST_SUITE in $TEST_SUITES; do
       rm -f log.run-test run-parallel-logs-*
       cd ..
    else
-      echo FAILED $TEST_SUITE: could not cd into $TEST_SUITE
-      FAIL="$FAIL $TEST_SUITE"
-   fi
-done
-
-for TEST_SUITE in align.posteriors run-parallel.sh; do
-   echo ""
-   echo =======================================
-   echo Cleaning $TEST_SUITE
-   if cd -- $TEST_SUITE; then
-      echo "rm -f log.run-test run-parallel-logs-*"
-      rm -f log.run-test run-parallel-logs-*
-      cd ..
-   else
-      echo FAILED $TEST_SUITE: could not cd into $TEST_SUITE
+      echo FAILED to clean $TEST_SUITE: could not cd into $TEST_SUITE
       FAIL="$FAIL $TEST_SUITE"
    fi
 done
