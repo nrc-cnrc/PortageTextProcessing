@@ -20,7 +20,7 @@ $Data::Dumper::Indent=1;
 binmode STDERR, ":encoding(utf-8)";
 binmode STDOUT, ":encoding(utf-8)";
 
-my $TEXT_ONLY = ".text_only";
+my $txt = undef;
 
 # command-line
 my $HELP = 
@@ -47,13 +47,14 @@ Options:
   -output=P     Set output file prefix [lfl-output]
   -src=S        Specify source language [en]
   -tgt=T        Specify target language [fr]
+  -txt=X        Specify and trigger outputing a text-only parallel corpus []
   -extra        Add an extra line space between pairs of TU's
   -verbose      Verbose mode
   -d            debugging mode.
   -help,-h      Print this thing and exit
 ";
 
-our ($h, $help, $v, $d, $verbose, $output, $src, $tgt, $extra);
+our ($h, $help, $v, $d, $verbose, $output, $src, $tgt, $extra, $txt);
 
 if (defined($h) or defined($help)) {
     print STDERR $HELP;
@@ -74,8 +75,12 @@ $parser->{outfile_prefix} = $output;
 $parser->{outfile} = {};
 openOutfile($parser, $src);
 openOutfile($parser, $tgt);
-openOutfile($parser, "$src$TEXT_ONLY");
-openOutfile($parser, "$tgt$TEXT_ONLY");
+
+# If the user specifies a TEXT_ONLY extension, lets add two streams for those.
+if ( defined($txt) ) {
+   openOutfile($parser, "$src$txt");
+   openOutfile($parser, "$tgt$txt");
+}
 
 # We will also keep track of the docids.
 open(ID, ">:encoding(utf-8)", "$output.id") || die "Unable to open doc id file!";
@@ -159,8 +164,11 @@ sub processTU {
       # Get content WITH the rtf markings.
       push @{$variants{$lang}}, join(" ", map(normalize($_->text), @segs));
       # Get content WITHOUT the rtf markings.
-      push @{$variants{"$lang$TEXT_ONLY"}}, join(" ", map(normalize($_->text_only), @segs));
+      if ( defined($txt) ) {
+         push @{$variants{"$lang$txt"}}, join(" ", map(normalize($_->text_only), @segs));
+      }
    }
+
    foreach my $lang (keys(%{$parser->{outfile}})) {
       my $segs = exists($variants{$lang}) ? join(" ", @{$variants{$lang}}) : "EMPTY_\n";
       $segs =~ s/^\s+//;   # Trim white spaces at the beginning of each line.
