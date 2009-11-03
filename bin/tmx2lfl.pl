@@ -34,6 +34,15 @@ en and fr), and output goes to pair of files <output>.<src> and
 (default is lfl-output) and <src> and <tgt> correspond to language
 names given with -src and -tgt.
 
+Note:
+  The input should be a \"Well-Formed\" tmx and can be in either UCS-2 or UTF-8
+  but the output will be in UTF-8.
+  You can validate your tmx file by:
+    # To obtain tmx14.dtd
+    curl -o tmx14.dtd http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt
+    # Valid that the tms is \"Well-Formed\"
+    xmlwf Zfseries.tmx
+
 Options:
   -output=P     Set output file prefix [lfl-output]
   -src=S        Specify source language [en]
