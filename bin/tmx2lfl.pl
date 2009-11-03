@@ -41,7 +41,7 @@ Note:
     # To obtain tmx14.dtd
     curl -o tmx14.dtd http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt
     # Valid that the tms is \"Well-Formed\"
-    xmlwf Zfseries.tmx
+    xmllint --noout --valid YourFile.tmx
 
 Options:
   -output=P     Set output file prefix [lfl-output]
