@@ -69,6 +69,18 @@ $extra = 0 unless defined $extra;
 
 my @filename = @ARGV;
 
+
+# Validate input files.
+die "You don't have xmllint on your system!" if (system("which-test.sh xmllint") != 0);
+
+foreach my $file (@filename) {
+   verbose("[Checking XML well-formness of $file]");
+   die " [BAD]\nFix $file to be XML well-formed." if (system("xmllint --noout $file") != 0);
+   verbose("\r[Checking XML well-formness of $file] [OK]]\n");
+}
+
+
+# Start processing input files.
 my $parser = XML::Twig->new( twig_handlers=> { tu => \&processTU, ph => \&processPH }, ignore_elts => { header => 1 } );
 $parser->{tu_count} = 0;
 $parser->{outfile_prefix} = $output;
