@@ -76,7 +76,7 @@ die "You don't have xmllint on your system!" if (system("which-test.sh xmllint")
 
 foreach my $file (@filename) {
    verbose("[Checking XML well-formness of $file]");
-   die " [BAD]\nFix $file to be XML well-formed." if (system("xmllint --noout $file") != 0);
+   die " [BAD]\nFix $file to be XML well-formed." if (system("xmllint --stream --noout $file") != 0);
    verbose("\r[Checking XML well-formness of $file] [OK]]\n");
 }
 
