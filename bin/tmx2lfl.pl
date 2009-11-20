@@ -46,8 +46,8 @@ Note:
 
 Options:
   -output=P     Set output file prefix [lfl-output]
-  -src=S        Specify source language [en]
-  -tgt=T        Specify target language [fr]
+  -src=S        Specify source language [auto-detect]
+  -tgt=T        Specify target language [auto-detect]
   -txt=X        Specify and trigger outputing a text-only parallel corpus []
   -extra        Add an extra line space between pairs of TU's
   -verbose      Verbose mode
@@ -63,10 +63,8 @@ if (defined($h) or defined($help)) {
 }
 
 $verbose = 0 unless defined $verbose;
-$output = "lfl-output" unless defined $output;
-$src = "en" unless defined $src;
-$tgt = "fr" unless defined $tgt;
-$extra = 0 unless defined $extra;
+$output  = "lfl-output" unless defined $output;
+$extra   = 0 unless defined $extra;
 
 my @filename = @ARGV;
 
@@ -74,11 +72,41 @@ my @filename = @ARGV;
 # Validate input files.
 die "You don't have xmllint on your system!" if (system("which-test.sh xmllint") != 0);
 
+my @lang_specifiers;
 foreach my $file (@filename) {
    verbose("[Checking XML well-formness of $file]");
    die " [BAD]\nFix $file to be XML well-formed." if (system("xmllint --stream --noout $file") != 0);
    verbose("\r[Checking XML well-formness of $file] [OK]]\n");
+   
+   my $spec;
+   my $cmd = "head -1 $file | egrep -qam1 \$'\\x{fffe}'";
+   debug("$cmd\n");
+   if (system($cmd) == 0) {
+      debug("UCS-2 $file language specifier detection.\n");
+      $spec .= `iconv -f UTF-16 -t UTF-8 $file | grep -m5 "xml:lang" | sort | uniq`;
+   }
+   else {
+      debug("UTF-8 $file language specifier detection.\n");
+      $spec .= `grep -m5 "xml:lang" $file | sort | uniq`;
+   }
+   while ($spec =~ /"([^\"]+)"/g) {
+      push(@lang_specifiers, $1);
+   }
 }
+# Remove duplicate language identifiers.
+@lang_specifiers = keys %{{ map { $_ => 1 } @lang_specifiers }};
+die "Too many language specifiers in your input tmx." unless (scalar(@lang_specifiers) == 2);
+
+# No language specifiers given by the user, let's auto-detect them.
+if (not defined($src) and not defined($tgt)) {
+   $src = $lang_specifiers[0];
+   $tgt = $lang_specifiers[1];
+}
+
+# Make sure we have language specifiers for src and tgt
+die "No source language specifier" unless(defined($src));
+die "No target language specifier" unless(defined($tgt));
+debug("src:$src tgt:$tgt\n");
 
 
 # Start processing input files.
