@@ -104,6 +104,7 @@ foreach my $file (@filename) {
    }
    verbose("\r[Checking XML well-formness of $file] [OK]]\n");
    
+   # Quickly grab language specifiers from the tmx.
    my $spec;
    my $cmd = "head -1 $file | egrep -qam1 \$'\\x{fffe}'";
    debug("$cmd\n");
@@ -119,15 +120,16 @@ foreach my $file (@filename) {
       push(@lang_specifiers, $1);
    }
 }
-# Remove duplicate language identifiers.
-@lang_specifiers = keys %{{ map { $_ => 1 } @lang_specifiers }};
-unless (scalar(@lang_specifiers) == 2) {
-   print join(":", @lang_specifiers) . "\n" if ($debug);
-   die "Too many language specifiers in your input tmx.";
-}
 
 # No language specifiers given by the user, let's auto-detect them.
 if (not defined($src) and not defined($tgt)) {
+   # Remove duplicate language identifiers.
+   @lang_specifiers = keys %{{ map { $_ => 1 } @lang_specifiers }};
+   unless (scalar(@lang_specifiers) == 2) {
+      print "Language identifiers found are: " . join(":", @lang_specifiers) . "\n";
+      die "Too many language specifiers in your input tmx.";
+   }
+
    $src = $lang_specifiers[0];
    $tgt = $lang_specifiers[1];
 }
@@ -150,7 +152,6 @@ if ( $debug ) {
 
 ";
 }
-exit;
 
 
 # Start processing input files.
