@@ -1,16 +1,18 @@
-#!/usr/bin/perl -sw
+#!/usr/bin/perl
+# $Id$
 
-# tmx2lfl.pl
+# @file tmx2lfl.pl
+# @brief Extract a parallel corpus from tmx files.
 # 
-# PROGRAMMER: Michel Simard
+# @author Samuel Larkin based on Michel Simard's work.
 # 
 # COMMENTS:
 # 
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright 2006, Conseil national de recherches du Canada /
-# Copyright 2006, National Research Council of Canada
+# Copyright 2009, Conseil national de recherches du Canada /
+# Copyright 2009, National Research Council of Canada
 
 use strict;
 use warnings;
@@ -21,11 +23,14 @@ $Data::Dumper::Indent=1;
 binmode STDERR, ":encoding(utf-8)";
 binmode STDOUT, ":encoding(utf-8)";
 
-my $txt = undef;
 
 # command-line
-my $HELP = 
-"Usage tmx2lfl.pl {options} [ tmx-file... ]
+sub usage {
+   local $, = "\n";
+   print STDERR @_, "";
+   $0 =~ s#.*/##;
+   print STDERR "
+Usage $0 {options} [ tmx-file... ]
 
 Convert TMX (Translation Memory Exchange) files into a LFL
 (line-for-line) aligned pair of text files.  Only the languages
@@ -54,17 +59,31 @@ Options:
   -d            debugging mode.
   -help,-h      Print this thing and exit
 ";
-
-our ($h, $help, $v, $d, $verbose, $output, $src, $tgt, $extra, $txt);
-
-if (defined($h) or defined($help)) {
-    print STDERR $HELP;
-    exit 0;
+   exit 1;
 }
 
-$verbose = 0 unless defined $verbose;
-$output  = "lfl-output" unless defined $output;
-$extra   = 0 unless defined $extra;
+use Getopt::Long;
+# Note to programmer: Getopt::Long automatically accepts unambiguous
+# abbreviations for all options.
+my $debug = undef;
+my $verbose = 0;
+my $output  = "lfl-output";
+my $extra   = undef;
+my $src = undef;
+my $tgt = undef;
+my $txt = undef;
+GetOptions(
+   extra       => \$extra,
+   "output=s"  => \$output,
+   "src=s"     => \$src,
+   "tgt=s"     => \$tgt,
+   "txt=s"     => \$txt,
+
+   help        => sub { usage },
+   verbose     => sub { ++$verbose },
+   quiet       => sub { $verbose = 0 },
+   debug       => \$debug,
+) or usage;
 
 my @filename = @ARGV;
 
@@ -75,7 +94,14 @@ die "You don't have xmllint on your system!" if (system("which-test.sh xmllint")
 my @lang_specifiers;
 foreach my $file (@filename) {
    verbose("[Checking XML well-formness of $file]");
-   die " [BAD]\nFix $file to be XML well-formed." if (system("xmllint --stream --noout $file") != 0);
+   if (system("xmllint --stream --noout $file 2> /dev/null") != 0) {
+      # YES, we rerun the command.  The first xmllint call would complain if
+      # there is no dtd accessible but would still return that the tmx is valid
+      # if so.  It is simpler to run it once muted and if there are errors, to
+      # rerun xmllint this time showing the user what xmllint found.
+      system("xmllint --stream --noout $file");
+      die " [BAD]\nFix $file to be XML well-formed.";
+   }
    verbose("\r[Checking XML well-formness of $file] [OK]]\n");
    
    my $spec;
@@ -95,7 +121,10 @@ foreach my $file (@filename) {
 }
 # Remove duplicate language identifiers.
 @lang_specifiers = keys %{{ map { $_ => 1 } @lang_specifiers }};
-die "Too many language specifiers in your input tmx." unless (scalar(@lang_specifiers) == 2);
+unless (scalar(@lang_specifiers) == 2) {
+   print join(":", @lang_specifiers) . "\n" if ($debug);
+   die "Too many language specifiers in your input tmx.";
+}
 
 # No language specifiers given by the user, let's auto-detect them.
 if (not defined($src) and not defined($tgt)) {
@@ -106,7 +135,22 @@ if (not defined($src) and not defined($tgt)) {
 # Make sure we have language specifiers for src and tgt
 die "No source language specifier" unless(defined($src));
 die "No target language specifier" unless(defined($tgt));
-debug("src:$src tgt:$tgt\n");
+
+if ( $debug ) {
+   no warnings;
+   print STDERR "
+   files     = @filename
+   extra     = $extra
+   output    = $output
+   src       = $src
+   tgt       = $tgt
+   txt       = $txt
+   verbose   = $verbose
+   debug     = $debug
+
+";
+}
+exit;
 
 
 # Start processing input files.
@@ -146,7 +190,7 @@ exit 0;
 sub processPH {
    my ($parser, $ph) = @_;
    my $string = join(" ", map(normalize($_->text_only), $ph));
-   print STDERR "PH: $string\n" if ($d);
+   print STDERR "PH: $string\n" if ($debug);
    #print STDERR "PH: " . Dumper($ph);
    #$ph->print(\*STDERR, 1);
 
@@ -179,7 +223,7 @@ sub processTU {
       }
    }
    print ID "$docid\n";
-   if (defined($d) and $docid eq "UNKNOWN") {
+   if (defined($debug) and $docid eq "UNKNOWN") {
       print STDERR "no docid for tuid: $tuid\n";
       #print STDERR "TU: " . Dumper($tu);
       $tu->print(\*STDERR, 1);
@@ -216,7 +260,7 @@ sub processTU {
       $segs =~ s/\s+$//;   # Trim white spaces at the end of each line.
       print { $parser->{outfile}->{$lang} } $segs, "\n";
       print { $parser->{outfile}->{$lang} } "\n" if $extra;
-      print STDERR "SEG: $segs\n" if ($d);
+      print STDERR "SEG: $segs\n" if ($debug);
    }
    $parser->{tu_count} = $n + 1;
 
@@ -226,7 +270,7 @@ sub processTU {
 
 sub verbose { printf STDERR (@_) if $verbose; }
 
-sub debug { printf STDERR (@_) if (defined($d)); }
+sub debug { printf STDERR (@_) if (defined($debug)); }
 
 sub normalize {
     my ($text) = @_;
