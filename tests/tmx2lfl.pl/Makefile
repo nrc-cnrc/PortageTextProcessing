@@ -38,6 +38,15 @@ test.utf8.tmx: test.tmx
 	iconv -f UCS-2 -t UTF-8 < $< > $@
 
 
+# Extract parallel corpus from a UCS-2 tmx.
+# Note cannot be PHONY.
+corpus1: test.tmx
+
+
+# Extract parallel corpus from a UTF-8 tmx.
+# Note cannot be PHONY.
+corpus2: test.utf8.tmx
+
 # Generic target/commands for corpus1 corpus2.
 corpus%:
 	tmx2lfl.pl -output=$@ -txt=.txt $<
@@ -46,16 +55,6 @@ corpus%:
 	diff -q $@.${L2}     ref/ref.${L2}
 	diff -q $@.${L2}.txt ref/ref.${L2}.txt
 	diff -q $@.id        ref/ref.id
-
-
-# Extract parallel corpus from a UCS-2 tmx.
-.PHONY: corpus1
-corpus1: test.tmx
-
-
-# Extract parallel corpus from a UTF-8 tmx.
-.PHONY: corpus2
-corpus2: test.utf8.tmx
 
 
 # Create a tmx with three language specifiers on the utf-8 tmx.
