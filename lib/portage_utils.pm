@@ -185,7 +185,7 @@ sub zin($$) {
    }
    # Assume it is a normal file.
    else {
-      print "DEBUG zin is plain.\n" if ($DEBUG);
+      print STDERR "DEBUG zin is plain.\n" if ($DEBUG);
       return open($STREAM, "<$stream_name");
    }
 }
