@@ -156,7 +156,7 @@ sub zin($$) {
 
    my($STREAM, $stream_name) = @_;
 
-   print "DEBUG zin with $stream_name.\n" if ($DEBUG);
+   print STDERR "DEBUG zin with $stream_name.\n" if ($DEBUG);
 
    die "Don't use zin to open an output stream!!\n" if ($stream_name =~ /^\s*>/);
 
@@ -165,22 +165,22 @@ sub zin($$) {
 
    # Is this a pipe.
    if ($stream_name =~ /\|\s*$/) {
-      print "DEBUG zin is a pipe.\n" if ($DEBUG);
+      print STDERR "DEBUG zin is a pipe.\n" if ($DEBUG);
       return open($STREAM, "$stream_name");
    }
    # Is this a bzipped 2 stream.
    elsif ($stream_name =~ /$isBzip2/) {
-      print "DEBUG zin is bzip2.\n" if ($DEBUG);
+      print STDERR "DEBUG zin is bzip2.\n" if ($DEBUG);
       return open($STREAM, "bzip2 -cqfd $stream_name |");
    }
    # Is this a gzipped stream.
    elsif ($stream_name =~ /$isZip/) {
-      print "DEBUG zin is zip.\n" if (defined $DEBUG);
+      print STDERR "DEBUG zin is zip.\n" if (defined $DEBUG);
       return open($STREAM, "gzip -cqfd $stream_name |");
    }
    # Is this a lzma stream.
    elsif ($stream_name =~ /$isLzma/) {
-      print "DEBUG zin is lzma.\n" if ($DEBUG);
+      print STDERR "DEBUG zin is lzma.\n" if ($DEBUG);
       return open($STREAM, "lzma -4 -cqfd $stream_name |");
    }
    # Assume it is a normal file.
@@ -245,7 +245,7 @@ sub zout($$) {
 
    my($STREAM, $stream_name) = @_;
 
-   print "DEBUG zout with $stream_name.\n" if ($DEBUG);
+   print STDERR "DEBUG zout with $stream_name.\n" if ($DEBUG);
 
    die "Don't use zout to open an input stream!!\n" if ($stream_name =~ /^\s*</);
 
@@ -254,29 +254,29 @@ sub zout($$) {
 
    # Is this a pipe.
    if ($stream_name =~ /^\s*\|/) {
-      print "DEBUG zout is a pipe.\n" if ($DEBUG);
+      print STDERR "DEBUG zout is a pipe.\n" if ($DEBUG);
       die "Can't append to a pipe." if ($stream_name =~ /^\s*>/);
       return open($STREAM, "$stream_name");
    }
    # Is this a bzipped stream.
    elsif ($stream_name =~ /$isBzip2/) {
-      print "DEBUG zout is bzip2.\n" if ($DEBUG);
+      print STDERR "DEBUG zout is bzip2.\n" if ($DEBUG);
       return open($STREAM, "| bzip2 -cqf >$stream_name");
    }
    # Is this a gzipped stream.
    elsif ($stream_name =~ /$isZip/) {
-      print "DEBUG zout is zip.\n" if ($DEBUG);
+      print STDERR "DEBUG zout is zip.\n" if ($DEBUG);
       return open($STREAM, "| gzip -cqf >$stream_name");
    }
    # Is this a lzma stream.
    elsif ($stream_name =~ /$isLzma/) {
-      print "DEBUG zout is lzma.\n" if ($DEBUG);
+      print STDERR "DEBUG zout is lzma.\n" if ($DEBUG);
       die "Can't append to a lzma file." if ($stream_name =~ /^\s*>/);
       return open($STREAM, "| lzma -cqf >$stream_name");
    }
    # Assume it is a normal file.
    else {
-      print "DEBUG zout is plain.\n" if ($DEBUG);
+      print STDERR "DEBUG zout is plain.\n" if ($DEBUG);
       $stream_name =~ s/^\s*>\s*-\s*$/-/;
       return open($STREAM, ">$stream_name");
    }
