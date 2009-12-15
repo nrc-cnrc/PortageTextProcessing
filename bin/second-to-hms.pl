@@ -35,7 +35,24 @@ Options:
    exit 1;
 }
 
+
+use Getopt::Long;
+# Note to programmer: Getopt::Long automatically accepts unambiguous
+# abbreviations for all options.
+my $verbose = 1;
+my $debug = undef;
+GetOptions(
+   reverse     => \my $hmsToSeconds,
+
+   help        => sub { usage },
+   verbose     => sub { ++$verbose },
+   quiet       => sub { $verbose = 0 },
+   debug       => \$debug,
+) or usage;
+
 sub seconds2DHMS {
+   print STDERR "$1\n" if ($debug);
+
    my @parts = gmtime($1);
    my $r = "";
    my $f = undef; # Use to skip printing zeros.
@@ -74,20 +91,6 @@ sub DHMS2Seconds($$$$) {
 }
 
 
-
-use Getopt::Long;
-# Note to programmer: Getopt::Long automatically accepts unambiguous
-# abbreviations for all options.
-my $verbose = 1;
-GetOptions(
-   reverse     => \my $hmsToSeconds,
-
-   help        => sub { usage },
-   verbose     => sub { ++$verbose },
-   quiet       => sub { $verbose = 0 },
-   debug       => \my $debug,
-) or usage;
-
 #perl -ple 'BEGIN{sub pod {@parts = gmtime($1); return sprintf("%dd%dh%dm%ds",@parts[7,2,1,0]);}}; s/([0-9.]+)s/&pod($1)/e' < LOG.timing
 
 my $in = shift || "-";
@@ -100,10 +103,12 @@ open(OUT, ">$out") or die "Can't open $out for writing: $!\n";
 
 while (<IN>) {
    if ($hmsToSeconds) {
-      s/(?:([0-9]+)d)?(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9.]+)s)/&DHMS2Seconds($1, $2, $3, $4)/eg;
+      s/(?:([0-9]+)d)?(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+(?:.[0-9]*)?)s)/&DHMS2Seconds($1, $2, $3, $4)/eg;
    }
    else {
-      s/(?!m)([0-9.]+)s/&seconds2DHMS($1)/eg;
+      if (s/(?!m)([0-9]+(?:.[0-9]*)?)s/&seconds2DHMS($1)/eg) {
+         print STDERR "$_" if ($debug);
+      }
    }
 
    print OUT;
