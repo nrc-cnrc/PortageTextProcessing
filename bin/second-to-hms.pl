@@ -68,9 +68,8 @@ sub seconds2DHMS {
       $r .= sprintf("%dm", $parts[1]);
       $f = 1;
    }
-   if ($f or $parts[0] > 0) {
-      $r .= sprintf("%ds", $parts[0]);
-   }
+   # Always print the seconds.
+   $r .= sprintf("%ds", $parts[0]);
 
    return $r;
 }
