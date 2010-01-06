@@ -32,21 +32,21 @@ sub usage {
    print STDERR "
 Usage $0 {options} [ tmx-file... ]
 
-Convert TMX (Translation Memory Exchange) files into a LFL
-(line-for-line) aligned pair of text files.  Only the languages
-specified with the -src and -tgt arguments are extracted (default is
-en and fr), and output goes to pair of files <output>.<src> and
-<output>.<tgt>, where <output> is specified with the -output option
-(default is lfl-output) and <src> and <tgt> correspond to language
-names given with -src and -tgt.
+Convert TMX (Translation Memory Exchange) files into a LFL (line-for-line)
+aligned pair of text files.  The languages specified with the -src and -tgt
+arguments are extracted (if the TMX contains exactly two languages, the default
+is to extract them both), and output goes to pair of files <output>.<src> and
+<output>.<tgt>, where <output> is specified with the -output option (default is
+lfl-output) and <src> and <tgt> correspond to language names given with -src
+and -tgt.
 
 Note:
-  The input should be a \"Well-Formed\" tmx and can be in either UCS-2 or UTF-8
-  but the output will be in UTF-8.
-  You can validate your tmx file by:
+  The input should be a \"Well-Formed\" tmx in ASCII, UTF-16 or UTF-8;
+  the output will always be in UTF-8.
+  You can validate your tmx file by doing the following:
     # To obtain tmx14.dtd
     curl -o tmx14.dtd http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt
-    # Valid that the tms is \"Well-Formed\"
+    # Validate that the tmx is \"Well-Formed\"
     xmllint --noout --valid YourFile.tmx
 
 Options:
@@ -54,10 +54,10 @@ Options:
   -src=S        Specify source language [auto-detect]
   -tgt=T        Specify target language [auto-detect]
   -txt=X        Specify and trigger outputing a text-only parallel corpus []
-  -extra        Add an extra line space between pairs of TU's
+  -extra        Add an extra empty line between pairs of TU's [don't]
   -verbose      Verbose mode
   -d            debugging mode.
-  -help,-h      Print this thing and exit
+  -help,-h      Print this help message and exit
 ";
    exit 1;
 }
@@ -93,11 +93,11 @@ die "You don't have xmllint on your system!" if (system("which-test.sh xmllint")
 
 my @lang_specifiers;
 foreach my $file (@filename) {
-   verbose("[Checking XML well-formness of $file]");
+   verbose("[Checking XML well-formedness of $file]");
    if (system("xmllint --stream --noout $file 2> /dev/null") != 0) {
       # YES, we rerun the command.  The first xmllint call would complain if
       # there is no dtd accessible but would still return that the tmx is valid
-      # if so.  It is simpler to run it once muted and if there are errors, to
+      # if so.  It is simpler to run it once muted and, if there are errors, to
       # rerun xmllint this time showing the user what xmllint found.
       system("xmllint --stream --noout $file");
       die " [BAD]\nFix $file to be XML well-formed.";
@@ -109,7 +109,7 @@ foreach my $file (@filename) {
    my $cmd = "head -1 $file | egrep -qam1 \$'\\x{fffe}'";
    debug("$cmd\n");
    if (system($cmd) == 0) {
-      debug("UCS-2 $file language specifier detection.\n");
+      debug("UTF-16 $file language specifier detection.\n");
       $spec .= `iconv -f UTF-16 -t UTF-8 $file | grep -m5 "xml:lang" | sort | uniq`;
    }
    else {
@@ -126,8 +126,8 @@ if (not defined($src) and not defined($tgt)) {
    # Remove duplicate language identifiers.
    @lang_specifiers = keys %{{ map { $_ => 1 } @lang_specifiers }};
    unless (scalar(@lang_specifiers) == 2) {
-      print "Language identifiers found are: " . join(":", @lang_specifiers) . "\n";
-      die "Too many language specifiers in your input tmx.";
+      print STDERR "Language identifiers found are: " . join(":", @lang_specifiers) . "\n";
+      die "Too many or too few language specifiers in your input tmx.";
    }
 
    $src = $lang_specifiers[0];
