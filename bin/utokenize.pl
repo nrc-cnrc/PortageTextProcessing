@@ -74,8 +74,8 @@ LICENSE:
 our ($help, $h, $lang, $v, $p, $noss, $paraline, $notok);
 
 if ($help || $h) {
-    print $HELP;
-    exit 0;
+   print $HELP;
+   exit 0;
 }
 $lang = "en" unless defined $lang;
 $v = 0 unless defined $v;
@@ -91,6 +91,10 @@ my $psep = $p ? "\n\n" : "\n";
 
 open(IN, "<$in") || die "Can't open $in for reading";
 open(OUT, ">$out") || die "Can't open $out for writing";
+
+if ( $noss && $notok ) {
+   warn "Just copying the input since -noss and -notok are both specified.\n";
+}
 
 # Enable immediate flush when piping
 select(OUT); $| = 1;
@@ -117,11 +121,11 @@ while (1)
 
    if ($notok) {
       if ($noss) {
-         # A bit weird, but the user ask not to split nor tokenize.
+         # A bit weird, but the user asked to neither split nor tokenize.
          print OUT $para;
       }
       else {
-         # User ask for sentence splitting only, no tokenization.
+         # User asked for sentence splitting only, no tokenization.
          my $sentence_start = 0;
          for (my $i = 0; $i < $#sent_positions+1; ++$i) {
             # sent_position indicate the beginning of the next sentence, since
@@ -131,6 +135,7 @@ while (1)
 
             my $sentence_end = $token_positions[$index] + $token_positions[$index+1];
             my $sentence = get_sentence($para, $sentence_start, $sentence_end);
+            $sentence =~ s/\s*\n\s*/ /g; # remove sentence-internal newlines
             print OUT $sentence;
             print OUT " $sentence_start,$sentence_end" if ($v);
             print OUT ($v ? "<sent>" : "");
