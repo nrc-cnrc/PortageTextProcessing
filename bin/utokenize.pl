@@ -25,7 +25,7 @@ use open IO => ':encoding(utf-8)';
 use open ':std';  # <= indicates that STDIN and STDOUT are utf8
 
 my $HELP = "
-Usage: tokenize.pl [-v] [-p] [-noss] [-notok] [-lang=l] [in [out]]
+Usage: tokenize.pl [-v] [-p] [-noss|-ss] [-notok] [-lang=l] [in [out]]
 
   Tokenize and sentence-split text in UTF-8.
 
@@ -35,8 +35,9 @@ Options:
       the start of its paragraph, <sent> markers after sentences, and <para>
       markers after each paragraph.
 -p    Print an extra newline after each paragraph (has no effect if -v)
--noss Don't do sentence-splitting. [do]
--notok Don't do tokenization. [do]
+-ss   Perform sentence-splitting.
+-noss Don't perform sentence-splitting. [do]
+-notok Don't perform tokenization. [do]
 -lang Specify two-letter language code: en or fr [en]
 -paraline
       File is in one-paragraph-per-line format [no]
@@ -71,7 +72,7 @@ LICENSE:
 
 ";
 
-our ($help, $h, $lang, $v, $p, $noss, $paraline, $notok);
+our ($help, $h, $lang, $v, $p, $ss, $noss, $paraline, $notok);
 
 if ($help || $h) {
    print $HELP;
@@ -80,6 +81,7 @@ if ($help || $h) {
 $lang = "en" unless defined $lang;
 $v = 0 unless defined $v;
 $p = 0 unless defined $p;
+$ss = 0 unless defined $ss;
 $noss = 0 unless defined $noss;
 $notok = 0 unless defined $notok;
 $paraline = 0 unless defined $paraline;
@@ -92,6 +94,9 @@ my $psep = $p ? "\n\n" : "\n";
 open(IN, "<$in") || die "Can't open $in for reading";
 open(OUT, ">$out") || die "Can't open $out for writing";
 
+if ( $ss && $noss ) {
+   die "Specify only one of -ss or -noss.\n";
+}
 if ( $noss && $notok ) {
    warn "Just copying the input since -noss and -notok are both specified.\n";
 }
