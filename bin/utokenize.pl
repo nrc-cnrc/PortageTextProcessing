@@ -25,7 +25,7 @@ use open IO => ':encoding(utf-8)';
 use open ':std';  # <= indicates that STDIN and STDOUT are utf8
 
 my $HELP = "
-Usage: tokenize.pl [-v] [-p] [-noss|-ss] [-notok] [-lang=l] [in [out]]
+Usage: tokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
 
   Tokenize and sentence-split text in UTF-8.
 
@@ -36,7 +36,9 @@ Options:
       markers after each paragraph.
 -p    Print an extra newline after each paragraph (has no effect if -v)
 -ss   Perform sentence-splitting.
--noss Don't perform sentence-splitting. [do]
+-noss Don't perform sentence-splitting.
+      Note: one of -ss or -noss is now required, because the old default (-ss)
+      often caused unexpected behaviour.
 -notok Don't perform tokenization. [do]
 -lang Specify two-letter language code: en or fr [en]
 -paraline
@@ -44,12 +46,11 @@ Options:
 
 Caveat:
 
-  The default behaviour is to consider consecutive non-blank lines as a
-  paragraph: newlines within the paragraph are removed and sentence splitting
-  is performed.  To increase sentence splitting accuracy, make sure you
-  preserve existing paragraph boundaries in your text, separating them with a
-  blank line (i.e., two newlines), or using -paraline if your input contains
-  one paragraph per line.
+  With -ss, consecutive non-blank lines are considered as a paragraph: newlines
+  within the paragraph are removed and sentence splitting is performed.  To
+  increase sentence splitting accuracy, try to preserve existing paragraph
+  boundaries in your text, separating them with a blank line (i.e., two
+  newlines), or using -paraline if your input contains one paragraph per line.
 
   To preserve existing line breaks, e.g., if your input is already
   one-sentence-per-line, use -noss, otherwise your sentence breaks will be
@@ -94,6 +95,9 @@ my $psep = $p ? "\n\n" : "\n";
 open(IN, "<$in") || die "Can't open $in for reading";
 open(OUT, ">$out") || die "Can't open $out for writing";
 
+if ( !$ss && !$noss ) {
+   die "One of -ss and -noss is now required.\n";
+}
 if ( $ss && $noss ) {
    die "Specify only one of -ss or -noss.\n";
 }
