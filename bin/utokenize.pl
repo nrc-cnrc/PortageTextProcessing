@@ -96,10 +96,10 @@ open(IN, "<$in") || die "Can't open $in for reading";
 open(OUT, ">$out") || die "Can't open $out for writing";
 
 if ( !$ss && !$noss ) {
-   die "One of -ss and -noss is now required.\n";
+   die "utokenize.pl: One of -ss and -noss is now required.\n";
 }
 if ( $ss && $noss ) {
-   die "Specify only one of -ss or -noss.\n";
+   die "utokenize.pl: Specify only one of -ss or -noss.\n";
 }
 if ( $noss && $notok ) {
    warn "Just copying the input since -noss and -notok are both specified.\n";

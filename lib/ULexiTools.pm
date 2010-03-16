@@ -468,7 +468,7 @@ sub split_word_en #(word, offset)
    my $os = shift || 0;
    my @atom_positions = ();
 
-   if ($word !~ /^it[$apostrophes]s/ && $word =~ /^([[:alpha:]]+)([$apostrophes][Ss])$/o) {
+   if ($word !~ /^it[$apostrophes]s/i && $word =~ /^([[:alpha:]]+)([$apostrophes][Ss])$/o) {
       push(@atom_positions, $os, len($1), $os+len($1), len($2));
    } else {
       push(@atom_positions, $os, len($word));
@@ -597,7 +597,7 @@ property of the National Research Council of Canada.
 
  For further information, please contact :
  Technologies langagieres interactives / Interactive Language Technologies
- Institut de technologie de l'information / Institute for Information Technology
+ Inst. de technologie de l'information / Institute for Information Technology
  Conseil national de recherches Canada / National Research Council Canada
  See http://iit-iti.nrc-cnrc.gc.ca/locations-bureaux/gatineau_e.html
 
