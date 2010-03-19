@@ -290,7 +290,7 @@ sub tok_abuts_prev($\@) #(index, token_positions)
 {
    my $index = shift;
    my $token_positions = shift;
-   return $index >= 2 && 
+   return $index >= 2 &&
           $token_positions->[$index-2] + $token_positions->[$index-1]
             == $token_positions->[$index];
 }
