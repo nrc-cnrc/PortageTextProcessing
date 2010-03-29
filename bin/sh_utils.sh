@@ -16,10 +16,14 @@
 # will exit with an error status, print the specified error message(s) on
 # STDERR.
 error_exit() {
-   for msg in "$@"; do
-      echo $msg >&2
-   done
-   echo "Use -h for help." >&2
+   {
+      PROG_NAME=`basename $0`
+      echo -n "$PROG_NAME fatal error: "
+      for msg in "$@"; do
+         echo $msg
+      done
+      echo "Use -h for help."
+   } >&2
    exit 1
 }
 
@@ -82,13 +86,21 @@ run_cmd() {
    fi
 }
 
+# Print the standard NRC Copyright notice
+# Usage: print_nrc_copyright(program_name, year)
+print_nrc_copyright() {
+   prog_name=$1
+   year=$2
+   # In Portage, we don't bother with the Copyright
+}
+
 # This library's help message.
 _sh_utils_help() {
-   echo "This is intended to be used as a library, not a stand-alone program."
+   echo "sh_utils.sh is intended to be used as a library, not as a stand-alone program." >&2
 }
 
 # This file is intended to be a library and not an executable file.
-if [[ $0 == "sh_utils.sh" ]]; then
+if [[ `basename $0` == "sh_utils.sh" ]]; then
    _sh_utils_help
    exit 1
 fi
