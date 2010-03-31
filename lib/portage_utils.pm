@@ -3,7 +3,7 @@
 # $Id$
 
 # @file portage_utils.pm
-# @brief Library to transparently use compress formats.
+# @brief Library to transparently use compressed file formats, plus some other common perl methods.
 #
 # @author Samuel Larkin
 #
@@ -16,11 +16,54 @@
 package portage_utils;
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw(zopen);  # symbols to export on request
+@EXPORT = qw(zopen printCopyright);  # symbols to export on request
 
 use strict;
 use warnings;
 
+=head1 protage_utils.pm
+
+B< >
+
+ This Perl module is intended to contain common utility functions for all Perl
+ scripts in the Portage project.
+
+B< >
+
+=cut
+
+
+# ================ printCopyright =================#
+
+=head1 SUB
+
+B< =============================================
+ ====== printCopyright                  ======
+ =============================================>
+
+=over 4
+
+=item B<DESCRIPTION>
+
+ Print the standard NRC Copyright notice
+
+=item B<SYNOPSIS>
+
+ printCopyright("PROGRAM_NAME", START_YEAR);
+
+ START_YEAR should be the first year of Copyright for PROGRAM_NAME;
+ the Crown Copyright will be asserted for START_YEAR to latest release year.
+ 
+=back
+
+=cut
+
+my $current_year = 2010;
+
+sub printCopyright($$) {
+   # Just like in sh_utils.sh, we don't actually bother with the Copyright
+   # statement within Portage.
+}
 
 
 # How to detect that a file was gzipped.
@@ -40,7 +83,7 @@ our $DEBUG;
 =head1 SUB
 
 B< =============================================
- ====== zopen                             ======
+ ====== zopen                           ======
  =============================================>
 
 =over 4
@@ -53,16 +96,16 @@ B< =============================================
 
 =item B<SYNOPSIS>
 
- portage_utils::zopen($STREAM, $stream_name);
- portage_utils::zopen(*STREAM, $stream_name);
- portage_utils::zopen(*STREAM, "plain-text-input-file");
- portage_utils::zopen(*STREAM, "< plain-text-input-file");
- portage_utils::zopen(*STREAM, "compressed-input-file.gz");
- portage_utils::zopen(*STREAM, "< compressed-input-file.gz");
- portage_utils::zopen(*STREAM, "input pipe |");
- portage_utils::zopen(*STREAM, "> plain-text-output-file");
- portage_utils::zopen(*STREAM, "> compressed-output-file.gz");
- portage_utils::zopen(*STREAM, "| output pipe ");
+ zopen($STREAM, $stream_name);
+ zopen(*STREAM, $stream_name);
+ zopen(*STREAM, "plain-text-input-file");
+ zopen(*STREAM, "< plain-text-input-file");
+ zopen(*STREAM, "compressed-input-file.gz");
+ zopen(*STREAM, "< compressed-input-file.gz");
+ zopen(*STREAM, "input pipe |");
+ zopen(*STREAM, "> plain-text-output-file");
+ zopen(*STREAM, "> compressed-output-file.gz");
+ zopen(*STREAM, "| output pipe ");
 
  @PARAM $STREAM
  @PARAM $stream_name
@@ -197,7 +240,7 @@ sub zin($$) {
 =head1 SUB
 
 B< =============================================
- ====== zout                             ======
+ ====== zout                            ======
  =============================================>
 
 =over 4
