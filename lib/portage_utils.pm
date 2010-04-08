@@ -16,12 +16,12 @@
 package portage_utils;
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw(zopen printCopyright);  # symbols to export on request
+@EXPORT = qw(zopen printCopyright explainSystemRC);  # symbols to export on request
 
 use strict;
 use warnings;
 
-=head1 protage_utils.pm
+=head1 portage_utils.pm
 
 B< >
 
@@ -76,6 +76,69 @@ my $isBzip2 = qr/\.(bz2|bzip2|bz)\s*$/;
 my $isLzma = qr/\.lzma\s*$/;
 
 our $DEBUG;
+
+
+# ================ explainSystemRC =================#
+
+=head1 SUB
+
+B< =============================================
+ ====== explainSystemRC                 ======
+ =============================================>
+
+=over 4
+
+=item B<DESCRIPTION>
+
+ When calling system(), the return code requires a 3-way contidional to
+ reliably provide the user with a correct error message, as documentated in
+ perldoc -f system.  This function encapsulates that logic, returning a string
+ that looks like one of these three
+    Command "$cmd" failed to execute: [system error message]
+    Command "$cmd" died with signal 15, without coredump
+    Command "$cmd" exited with value 1
+
+=item B<SYNOPSIS>
+
+ system($cmd)==0 or die "prog.pl: " . explainSystemRC($?, $cmd) . ".\n";
+ system($cmd)==0 or die explainSystemRC($?, $cmd);
+
+ The return value does not end in a newline, so die will print a script and
+ line number if you don't add one, such as in the second example.  The first
+ example, however, will usually produce an error message that is more
+ meaningful to the user.
+
+ system($cmd)==0 or die explainSystemRC($?, $cmd, $0);
+
+ If you provide the optional program name argument, the basename of your
+ program is prepended to the message, and a newline is added at the end.
+
+=back
+
+=cut
+
+sub explainSystemRC($$;$) {
+   my $rc = shift;
+   my $cmd = shift;
+   my $prog = shift;
+   my $explanation;
+   if ($rc == -1) {
+      $explanation = "failed to execute: $!";
+   } elsif ($rc & 127) {
+      $explanation =
+         sprintf "died with signal %d, %s coredump",
+                 ($rc & 127),  ($rc & 128) ? 'with' : 'without';
+   } else {
+      $explanation = sprintf "exited with value %d", $rc >> 8;
+   }
+
+   if ( defined $prog ) {
+      $prog =~ s#.*/##;
+      return "$prog: Command \"$cmd\" $explanation.\n";
+   } else {
+      return "Command \"$cmd\" $explanation";
+   }
+}
 
 
 # ================= zopen ====================#
