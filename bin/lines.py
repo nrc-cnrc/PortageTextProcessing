@@ -45,17 +45,21 @@ nums.sort()
 n1 = 1
 n2 = nums.pop(0)
 line = txtFile.readline()
-while (line!="") & (len(nums)>0):
+done = False
+while (line!="") & (not done):
     #print "%",n1,n2
-    while (n1 == n2) & (len(nums)>0):
+    while (n1 == n2):
         #sys.stderr.write("Line %i: %s\n" % (n2,line))
         print line,
+        if (len(nums) == 0):
+            done = True
+            break
         n2 = nums.pop(0)
     #print "#",n1,line,
     n1 = n1+1
     line = txtFile.readline()
 
-while (line!="") & (n1<n2):
-    line = txtFile.readline()
-    n1 = n1+1
-print line,
+#while (line!="") & (n1<n2):
+#    line = txtFile.readline()
+#    n1 = n1+1
+#print line,
