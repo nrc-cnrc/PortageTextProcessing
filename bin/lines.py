@@ -58,8 +58,3 @@ while (line!="") & (not done):
     #print "#",n1,line,
     n1 = n1+1
     line = txtFile.readline()
-
-#while (line!="") & (n1<n2):
-#    line = txtFile.readline()
-#    n1 = n1+1
-#print line,
