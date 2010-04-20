@@ -10,12 +10,20 @@
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright 2006, Sa Majeste la Reine du Chef du Canada / 
-# Copyright 2006, Her Majesty in Right of Canada
+# Copyright 2007, Sa Majeste la Reine du Chef du Canada / 
+# Copyright 2007, Her Majesty in Right of Canada
+
+# Include NRC's bash library.
+source `dirname $0`/sh_utils.sh
+
+[[ $PORTAGE_INTERNAL_CALL ]] ||
+print_nrc_copyright "li-sort.sh" 2007
+export PORTAGE_INTERNAL_CALL=1
 
 if [ $# -gt 0 ] && [ "$1" == "-h" ]; then
 
 cat <<==EOF== >&2
+
 li-sort.sh [-h] [sort args]
 
 Call Unix sort on the given arguments, in a locale-independent way.
