@@ -22,7 +22,7 @@ sub usage {
    print STDERR "
 Usage: $0 [options] [IN [OUT]]
 
-  Briefly describe what your program does here
+  Convert from seconds to HH:MM:SS or vice-versa.
 
 Options:
 
@@ -102,10 +102,10 @@ open(OUT, ">$out") or die "Can't open $out for writing: $!\n";
 
 while (<IN>) {
    if ($hmsToSeconds) {
-      s/(?:([0-9]+)d)?(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+(?:.[0-9]*)?)s)/&DHMS2Seconds($1, $2, $3, $4)/eg;
+      s/(?:([0-9]+)d)?(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+(?:\.[0-9]*)?)s)/&DHMS2Seconds($1, $2, $3, $4)/eg;
    }
    else {
-      if (s/(?!m)([0-9]+(?:.[0-9]*)?)s/&seconds2DHMS($1)/eg) {
+      if (s/(?!m)([0-9]+(?:\.[0-9]*)?)s/&seconds2DHMS($1)/eg) {
          print STDERR "$_" if ($debug);
       }
    }
