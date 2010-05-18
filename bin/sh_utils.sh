@@ -77,11 +77,14 @@ verbose() {
    fi
 }
 
-# evaluates a command but also prints the command if verbose is on.
+# Normally, evaluate a command, also echoing it to STDERR if verbose is on.
+# However, if NOTREALLY is set, just echo the command to STDOUT.
 run_cmd() {
    cmd=$*
-   verbose 1 $cmd
-   if [[ ! $NOTREALLY ]]; then
+   if [[ $NOTREALLY ]]; then
+      echo "$cmd"
+   else
+      verbose 1 $cmd
       eval $cmd
    fi
 }
