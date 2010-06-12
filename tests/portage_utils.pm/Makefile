@@ -36,7 +36,7 @@ plain:
 	${LIB} perl -e 'use portage_utils; $$portage_utils::DEBUG=1; portage_utils::zopen(*VOC, ">${F_PREFIX}") or die "BAD plain file"; print VOC "test\n"'
 	echo test | diff - ${F_PREFIX}
 	${LIB} perl -e 'use portage_utils; $$portage_utils::DEBUG=1; portage_utils::zopen(*VOC, ">>${F_PREFIX}") or die "BAD plain file"; print VOC "test\n"'
-	echo test | tee - | diff - ${F_PREFIX}
+	echo test | tee /dev/stdout | diff - ${F_PREFIX}
 	${LIB} perl -e 'use portage_utils; $$portage_utils::DEBUG=1; portage_utils::zopen(*VOC, "${F_PREFIX}") or die "BAD plain file"; print <VOC>;' | diff - ${F_PREFIX}
 	${LIB} perl -e 'use portage_utils; $$portage_utils::DEBUG=1; portage_utils::zopen(*VOC, "<${F_PREFIX}") or die "BAD plain file"; print <VOC>;' | diff - ${F_PREFIX}
 
