@@ -19,6 +19,8 @@ SHELL=bash
 .PHONY: all
 all: testsuite
 
+clean:
+	@:
 
 
 .PHONY: testsuite
