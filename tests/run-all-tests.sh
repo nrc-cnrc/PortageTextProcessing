@@ -25,6 +25,10 @@ fi
 echo ""
 echo Test suites to run: $TEST_SUITES
 
+run_test() {
+   { time-mem ./run-test.sh; } >& log.run-test
+}
+
 for TEST_SUITE in $TEST_SUITES; do
    echo ""
    echo =======================================
@@ -33,7 +37,7 @@ for TEST_SUITE in $TEST_SUITES; do
       if [[ ! -x ./run-test.sh ]]; then
          echo FAILED $TEST_SUITE: can\'t find or execute ./run-test.sh
          FAIL="$FAIL $TEST_SUITE"
-      elif ./run-test.sh >& log.run-test; then
+      elif run_test; then
          echo PASSED $TEST_SUITE
       else
          echo FAILED $TEST_SUITE: ./run-test.sh returned $?
