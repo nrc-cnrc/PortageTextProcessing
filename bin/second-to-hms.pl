@@ -26,7 +26,9 @@ Usage: $0 [options] [IN [OUT]]
 
 Options:
 
-  -r(everse)    Convert to seconds.
+  -r(everse)    Convert to seconds
+  -m(inutes)    Convert to minutes
+  -ho(urs)      Convert to hours
 
   -h(elp)       print this help message
   -v(erbose)    increment the verbosity level by 1 (may be repeated)
@@ -43,8 +45,11 @@ my $verbose = 1;
 my $debug = undef;
 GetOptions(
    reverse     => \my $hmsToSeconds,
+   minutes     => \my $minutes,
+   hours       => \my $hours,
 
    help        => sub { usage },
+   h           => sub { usage }, # disambiguate -h to mean -help, not -hours
    verbose     => sub { ++$verbose },
    quiet       => sub { $verbose = 0 },
    debug       => \$debug,
@@ -86,7 +91,13 @@ sub DHMS2Seconds($$$$) {
    $r += $h * 3600 if (defined($h));
    $r += $m * 60 if (defined($m));
    $r += $s if (defined($s));
-   return "${r}s";
+   if ( $minutes ) {
+      return sprintf("%.1f", ${r} / 60) . "m";
+   } elsif ( $hours ) {
+      return sprintf("%.1f", ${r} / 3600) . "h";
+   } else {
+      return "${r}s";
+   }
 }
 
 
@@ -100,9 +111,13 @@ my $out = shift || "-";
 open(IN, "<$in") or die "Can't open $in for reading: $!\n";
 open(OUT, ">$out") or die "Can't open $out for writing: $!\n";
 
+
 while (<IN>) {
    if ($hmsToSeconds) {
       s/(?:([0-9]+)d)?(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+(?:\.[0-9]*)?)s)/&DHMS2Seconds($1, $2, $3, $4)/eg;
+   }
+   elsif ( $minutes || $hours ) {
+      s/(?!m)([0-9]+(?:\.[0-9]*)?)s/&DHMS2Seconds(0,0,0,$1)/eg;
    }
    else {
       if (s/(?!m)([0-9]+(?:\.[0-9]*)?)s/&seconds2DHMS($1)/eg) {
