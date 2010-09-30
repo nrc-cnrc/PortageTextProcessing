@@ -20,6 +20,21 @@
 
 use strict;
 use utf8;
+
+BEGIN {
+   # If this script is run from within src/ rather than being properly
+   # installed, we need to add utils/ to the Perl library include path (@INC).
+   if ( $0 !~ m#/bin/[^/]*$# ) {
+      my $bin_path = $0;
+      $bin_path =~ s#/[^/]*$##;
+      unshift @INC, "$bin_path/../utils";
+   }
+}
+use portage_utils;
+printCopyright("udetokenize.pl", 2004);
+$ENV{PORTAGE_INTERNAL_CALL} = 1;
+
+
 # This is a utf8 handling script => io should be in utf8 format
 # ref: http://search.cpan.org/~tty/kurila-1.7_0/lib/open.pm
 use open IO => ':encoding(utf-8)';
@@ -168,6 +183,9 @@ sub process_word #ch1, ch2
 {
    my( $ch_pre, $ch_before)= @_;
    if( ($ch_pre eq "%") ){ # take care of (%)
+      if ( $lang eq "fr" ) {
+         push ( @out_sentence, $space );
+      }
       push ( @out_sentence, $ch_pre);
    }
    elsif( is_en_price($ch_pre, $ch_before)) {

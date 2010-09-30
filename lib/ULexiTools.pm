@@ -1,10 +1,6 @@
 # Copyright (c) 2004 - 2009, Sa Majeste la Reine du Chef du Canada /
 # Copyright (c) 2004 - 2009, Her Majesty in Right of Canada
 #
-# This software is distributed to the GALE project participants under the terms
-# and conditions specified in GALE project agreements, and remains the sole
-# property of the National Research Council of Canada.
-#
 # For further information, please contact :
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -404,7 +400,7 @@ sub split_punc #(string, offset[0])
 
    # split internal --, ---, n-dash, m-dash, .., ..., etc.
    if (($tok =~ /^(.*[^$hyphens])?([$hyphens]{2,4}|[$wide_dashes])([^$hyphens].*)?$/o) ||
-         ($tok =~ /^(.*[^\.])?(\.{2,4}|…)([^\.].*)?$/o)) {
+       ($tok =~ /^(.*[^\.])?(\.{2,4}|…)([^\.].*)?$/o)) {
       my ($p1, $p2, $p3) = ($1, $2, $3);
       push(@atoms, split_punc($p1, $offset));
       push(@atoms, $offset+len($p1), length($p2) == 1 ? 1 : 2);
@@ -589,10 +585,6 @@ paragraph delimiter (just like a blank line).
 
 Copyright (c) 2004 - 2009, Sa Majeste la Reine du Chef du Canada /
 Copyright (c) 2004 - 2009, Her Majesty in Right of Canada
-
-This software is distributed to the GALE project participants under the terms
-and conditions specified in GALE project agreements, and remains the sole
-property of the National Research Council of Canada.
 
  For further information, please contact :
  Technologies langagieres interactives / Interactive Language Technologies

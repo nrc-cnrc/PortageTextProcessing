@@ -17,7 +17,23 @@
 use utf8;
 
 use strict;
+
+
+BEGIN {
+   # If this script is run from within src/ rather than being properly
+   # installed, we need to add utils/ to the Perl library include path (@INC).
+   if ( $0 !~ m#/bin/[^/]*$# ) {
+      my $bin_path = $0;
+      $bin_path =~ s#/[^/]*$##;
+      unshift @INC, "$bin_path/../utils", $bin_path;
+   }
+}
+use portage_utils;
+printCopyright("utokenize.pl", 2004);
+$ENV{PORTAGE_INTERNAL_CALL} = 1;
+
 use ULexiTools;
+
 #use locale;
 # This is a utf8 handling script => io should be in utf8 format
 # ref: http://search.cpan.org/~tty/kurila-1.7_0/lib/open.pm
@@ -55,21 +71,6 @@ Caveat:
   To preserve existing line breaks, e.g., if your input is already
   one-sentence-per-line, use -noss, otherwise your sentence breaks will be
   modified in ways that are almost certainly undesirable.
-
-LICENSE:
-
-  Copyright (c) 2004 - 2009, Sa Majeste la Reine du Chef du Canada /
-  Copyright (c) 2004 - 2009, Her Majesty in Right of Canada
-
-  This software is distributed to the GALE project participants under the terms
-  and conditions specified in GALE project agreements, and remains the sole
-  property of the National Research Council of Canada.
-
-  For further information, please contact :
-  Technologies langagieres interactives / Interactive Language Technologies
-  Institut de technologie de l'information / Institute for Information Technology
-  Conseil national de recherches Canada / National Research Council Canada
-  See http://iit-iti.nrc-cnrc.gc.ca/locations-bureaux/gatineau_e.html
 
 ";
 
