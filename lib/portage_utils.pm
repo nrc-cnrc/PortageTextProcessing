@@ -420,7 +420,7 @@ B< =============================================
 sub seconds2DHMS($) {
    print STDERR "$_[0]\n" if ($DEBUG);
 
-   my @parts = gmtime($_[0]);
+   my @parts = gmtime($_[0]+.5); # +.5 so we round instead of flooring
    my $r = "";
    my $f = undef; # Use to skip printing zeros.
    if ($parts[7] > 0) {

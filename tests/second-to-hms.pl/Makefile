@@ -80,6 +80,11 @@ seconds2HMS: seconds2HMS_8
 seconds2HMS_8:
 	echo "439209s 439209s" | second-to-hms.pl | diff -q - <(echo "5d2h0m9s 5d2h0m9s")
 
+# Rounding
+.PHONY: round_1
+seconds2HMS: round_1
+round_1:
+	echo "123.234s 321.654s 3.5s 45.0s" | second-to-hms.pl | diff -q - <(echo "2m3s 5m22s 4s 45s")
 
 
 ################################################################################
