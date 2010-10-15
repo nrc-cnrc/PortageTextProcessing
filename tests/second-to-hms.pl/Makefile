@@ -18,6 +18,7 @@ SHELL=bash
 
 .PHONY: all
 all: testsuite
+	@echo All tests PASSED.
 
 clean:
 	@:
