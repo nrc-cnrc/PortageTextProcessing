@@ -16,7 +16,8 @@
 package portage_utils;
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw(zopen printCopyright explainSystemRC);  # symbols to export on request
+# symbols to export on request
+@EXPORT = qw(zopen printCopyright explainSystemRC seconds2DHMS DHMS2Seconds DHMSString2Seconds);
 
 use strict;
 use warnings;
@@ -385,6 +386,113 @@ sub zout($$) {
       print STDERR "DEBUG zout is plain.\n" if ($DEBUG);
       $stream_name =~ s/^\s*>\s*-\s*$/-/;
       return open($STREAM, ">$stream_name");
+   }
+}
+
+
+=head1 SUB
+
+B< =============================================
+ ====== seconds2DHMS                    ======
+ =============================================>
+
+=over 4
+
+=item B<DESCRIPTION>
+
+ Convert a number of seconds into days/hours/minutes/seconds such as 1d20h25m12s.
+
+=item B<SYNOPSIS>
+
+ $dhms = portage_utils::seconds2DHMS($seconds)
+
+ @PARAM $seconds  Duration to convert, as a number of seconds.
+
+ @RETURN A string representing the same duration in DHMS format.
+
+=item B<SEE ALSO>
+
+ DHMS2Seconds()
+
+=back
+
+=cut
+sub seconds2DHMS($) {
+   print STDERR "$_[0]\n" if ($DEBUG);
+
+   my @parts = gmtime($_[0]);
+   my $r = "";
+   my $f = undef; # Use to skip printing zeros.
+   if ($parts[7] > 0) {
+      $r .= sprintf("%dd", $parts[7]);
+      $f = 1;
+   }
+   if ($f or $parts[2] > 0) {
+      $r .= sprintf("%dh", $parts[2]);
+      $f = 1;
+   }
+   if ($f or $parts[1] > 0) {
+      $r .= sprintf("%dm", $parts[1]);
+      $f = 1;
+   }
+   # Always print the seconds.
+   $r .= sprintf("%ds", $parts[0]);
+
+   return $r;
+}
+
+=head1 SUB
+
+B< =============================================
+ ====== DHMS2Seconds                    ======
+ =============================================>
+
+=over 4
+
+=item B<DESCRIPTION>
+
+ Convert DHMS into seconds.
+ If $portage_utils::DHMS_hours is true, return hours instead of seconds.
+ If $portage_utils::DHMS_minutes is true, return minutes instead of seconds.
+
+=item B<SYNOPSIS>
+
+ $seconds = portage_utils::DHMS2Seconds($days, $hours, $minutes, $seconds);
+ $seconds = portage_utils::DHMSString2Seconds($dhms_string);
+
+ @RETURN The total time in seconds (or minutes or hours).
+
+=item B<SEE ALSO>
+
+ seconds2DHMS()
+
+=back
+
+=cut
+our $DHMS_hours;
+our $DHMS_minutes;
+sub DHMS2Seconds($$$$) {
+   my ($d, $h, $m, $s) = @_;
+   my $r = 0;
+   $r += $d * 86400 if (defined($d));
+   $r += $h * 3600 if (defined($h));
+   $r += $m * 60 if (defined($m));
+   $r += $s if (defined($s));
+   if ( $DHMS_minutes ) {
+      return sprintf("%.1f", ${r} / 60) . "m";
+   } elsif ( $DHMS_hours ) {
+      return sprintf("%.1f", ${r} / 3600) . "h";
+   } else {
+      return $r;
+   }
+}
+
+sub DHMSString2Seconds($) {
+   my $time = $_[0];
+   if ( $time =~ /(?:([0-9]+)d)?(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+(?:\.[0-9]*)?)s)/ ) {
+      return DHMS2Seconds($1, $2, $3, $4);
+   } else {
+      return 0;
    }
 }
 
