@@ -14,7 +14,13 @@
 # Copyright 2007, Her Majesty in Right of Canada
 
 # Include NRC's bash library.
-source `dirname $0`/sh_utils.sh
+BIN=`dirname $0`
+if [[ ! -r $BIN/sh_utils.sh ]]; then
+   # assume executing from src/* directory
+   BIN="$BIN/../utils"
+fi
+source $BIN/sh_utils.sh
+
 
 [[ $PORTAGE_INTERNAL_CALL ]] ||
 print_nrc_copyright "li-sort.sh" 2007

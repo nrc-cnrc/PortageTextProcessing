@@ -12,6 +12,13 @@
 # Copyright 2008, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2008, Her Majesty in Right of Canada
 
+# Portage is developed with bash 3, and uses the bash 3.1 RE syntax, which
+# changed from version 3.2.  Set "compat31" if we're using bash 3.2, 4 or more
+# recent, to preserve the expected syntax.  We used to test the version of bash
+# explicitly, but it's simpler to always run the command and ignore its return
+# code: if it fails, we're running a version of bash that doesn't need it.
+shopt -s compat31 >& /dev/null || true
+
 # error_exit "some error message" "optionnally a second line of error message"
 # will exit with an error status, print the specified error message(s) on
 # STDERR.
@@ -90,7 +97,7 @@ run_cmd() {
 }
 
 # Print the standard NRC Copyright notice
-# Usage: print_nrc_copyright(program_name, year)
+# Usage: print_nrc_copyright program_name year
 print_nrc_copyright() {
    prog_name=$1
    year=$2
@@ -99,7 +106,29 @@ print_nrc_copyright() {
 
 # This library's help message.
 _sh_utils_help() {
-   echo "sh_utils.sh is intended to be used as a library, not as a stand-alone program." >&2
+   print_nrc_copyright sh_utils.sh 2008
+   {
+   echo '
+sh_utils.sh is a library of useful bash functions for other bash scripts.
+
+   Include sh_utils.sh in your bash script using the following snippet of code:
+
+   BIN=`dirname $0`
+   if [[ ! -r $BIN/sh_utils.sh ]]; then
+      # assume executing from src/* directory
+      BIN="$BIN/../utils"
+   fi
+   source $BIN/sh_utils.sh
+
+Functions available:
+'
+
+   grep -o '^[a-z][a-z_]*()' $0 | sed 's/^/   /'
+
+   echo "
+Documentation for these functions is found within $0
+"
+   } >&2
 }
 
 # This file is intended to be a library and not an executable file.
