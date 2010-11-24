@@ -13,8 +13,19 @@
 # Copyright 2009, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2009, Her Majesty in Right of Canada
 
+HOSTNAME:=$(shell uname -n)
+ifeq (${HOSTNAME},iitgatsrv0575)
+# On Leclerc, where we run autobuild, the default Perl can't handle XML::Twig
+export PERL5LIB:=/home/portage/i686-g4.2/lib/site_perl/5.8.9:${PERL5LIB}
+export PATH:=/home/portage/pkgs/perl-5.8.9-x86_64/bin:${PATH}
+TMX2LFL:=perl $(shell which tmx2lfl.pl)
+else
+TMX2LFL:=tmx2lfl.pl
+endif
+
 L1 ?= lang1
 L2 ?= lang2
+
 
 .PHONY: all
 all: corpus
@@ -49,7 +60,7 @@ corpus2: test.utf8.tmx
 
 # Generic target/commands for corpus1 corpus2.
 corpus%:
-	tmx2lfl.pl -output=$@ -txt=.txt $<
+	${TMX2LFL} -output=$@ -txt=.txt $<
 	diff -q $@.${L1}     ref/ref.${L1}
 	diff -q $@.${L1}.txt ref/ref.${L1}.txt
 	diff -q $@.${L2}     ref/ref.${L2}
@@ -64,13 +75,13 @@ test3.utf8.tmx: test.utf8.tmx
 # There should be three language specifiers.
 .PHONY: corpus3
 corpus3: test3.utf8.tmx
-	tmx2lfl.pl -output=$@ -txt=.txt $< 2>&1 | grep -q 'Language identifiers found are: lang2:lang1:lang3' 
+	${TMX2LFL} -output=$@ -txt=.txt $< 2>&1 | grep -q 'Language identifiers found are: lang2:lang1:lang3' 
 
 
 # Using the 3 language specifiers and there should be 10 EMPTY_ tags.
 .PHONY: corpus4
 corpus4: test3.utf8.tmx	
-	tmx2lfl.pl -output=$@ -txt=.txt -src=lang1 -tgt=lang3 $<
+	${TMX2LFL} -output=$@ -txt=.txt -src=lang1 -tgt=lang3 $<
 	@[[ `cat $@* | grep -c 'EMPTY_'` == 10 ]]
 
 
@@ -81,13 +92,13 @@ test5.utf8.tmx: test.utf8.tmx
 # We should find exactly 3 parse errors.
 .PHONY: corpus5
 corpus5: test5.utf8.tmx
-	[[ `tmx2lfl.pl -output=$@ -txt=.txt $< 2>&1 | grep -c "parser error"` == 3 ]]
+	[[ `${TMX2LFL} -output=$@ -txt=.txt $< 2>&1 | grep -c "parser error"` == 3 ]]
 
 
 # Multiple tmx extraction.
 .PHONY: corpus6
 corpus6: test.tmx test.utf8.tmx
-	tmx2lfl.pl -output=$@ $+
+	${TMX2LFL} -output=$@ $+
 	cat ref/ref.${L1} ref/ref.${L1} | diff -q - $@.${L1}
 	cat ref/ref.${L2} ref/ref.${L2} | diff -q - $@.${L2}
 	cat ref/ref.id    ref/ref.id    | diff -q - $@.id
