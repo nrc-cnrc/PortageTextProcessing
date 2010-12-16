@@ -200,7 +200,7 @@ closeOutfiles($parser);
 exit 0;
 
 
-# Callback to process ph tages.
+# Callback to process ph tags.
 # Here, we only extract the dashes for example like assurance-emploi.
 sub processPH {
    my ($parser, $ph) = @_;
