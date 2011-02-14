@@ -19,7 +19,7 @@ if [[ ! -r $BIN/sh_utils.sh ]]; then
    # assume executing from src/* directory
    BIN="$BIN/../utils"
 fi
-source $BIN/sh_utils.sh
+source $BIN/sh_utils.sh || { echo "Error: Unable to source sh_utils.sh" >&2; exit 1; }
 
 
 [[ $PORTAGE_INTERNAL_CALL ]] ||
