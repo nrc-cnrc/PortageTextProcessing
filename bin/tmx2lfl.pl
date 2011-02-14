@@ -254,18 +254,21 @@ sub processTU {
       #$tuv->print(\*STDERR);
 
       my $lang = $tuv->{att}->{'xml:lang'};
+      $lang = $tuv->{att}->{'lang'} unless $lang; # for TMX 1.1 compatibility
       warn("Missing language attribute in TU $tuid") unless $lang;
 
       my @segs = $tuv->children('seg');
       warn("No segs in TUV (TU $tuid)") unless @segs;
       #print "SEG: " . Dumper(@segs);
 
-      $variants{$lang} = [] if not exists $variants{$lang};
-      # Get content WITH the rtf markings.
-      push @{$variants{$lang}}, join(" ", map(normalize($_->text), @segs));
-      # Get content WITHOUT the rtf markings.
-      if ( defined($txt) ) {
-         push @{$variants{"$lang$txt"}}, join(" ", map(normalize($_->text_only), @segs));
+      if ($lang) {
+         $variants{$lang} = [] if not exists $variants{$lang};
+         # Get content WITH the rtf markings.
+         push @{$variants{$lang}}, join(" ", map(normalize($_->text), @segs));
+         # Get content WITHOUT the rtf markings.
+         if ( defined($txt) ) {
+            push @{$variants{"$lang$txt"}}, join(" ", map(normalize($_->text_only), @segs));
+         }  
       }
    }
 
