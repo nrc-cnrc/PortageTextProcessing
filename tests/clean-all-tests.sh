@@ -46,8 +46,8 @@ for TEST_SUITE in $TEST_SUITES; do
          fi
       fi
 
-      echo "rm -f log.run-test run-parallel-logs-*"
-      rm -f log.run-test run-parallel-logs-*
+      echo "rm -f _log.run-test run-parallel-logs-*"
+      rm -f _log.run-test log.run-test run-parallel-logs-*
       cd ..
    else
       echo FAILED to clean $TEST_SUITE: could not cd into $TEST_SUITE

@@ -26,7 +26,7 @@ echo ""
 echo Test suites to run: $TEST_SUITES
 
 run_test() {
-   { time-mem ./run-test.sh; } >& log.run-test
+   { time-mem ./run-test.sh; } >& _log.run-test
 }
 
 for TEST_SUITE in $TEST_SUITES; do
