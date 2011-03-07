@@ -1,4 +1,4 @@
-#!/usr/bin/perl -sw
+#!/usr/bin/perl
 # $Id$
 
 # @file lfl2tmx.pl
@@ -15,9 +15,58 @@
 
 
 use strict;
+use warnings;
+use encoding "UTF-8";
 use XML::Writer;
 
-our ($x, $v);
+BEGIN {
+   # If this script is run from within src/ rather than being properly
+   # installed, we need to add utils/ to the Perl library include path (@INC).
+   if ( $0 !~ m#/bin/[^/]*$# ) {
+      my $bin_path = $0;
+      $bin_path =~ s#/[^/]*$##;
+      unshift @INC, "$bin_path/../utils";
+   }
+}
+use portage_utils;
+printCopyright "lfl2tmx.pl", 2011;
+$ENV{PORTAGE_INTERNAL_CALL} = 1;
+
+
+sub usage {
+   local $, = "\n";
+   print STDERR @_, "";
+   $0 =~ s#.*/##;
+   print STDERR "
+Usage: $0 [options] {paths | files.id}
+
+  Creates a tmx from a structure of parallel file pairsi and outputs it to stdout.
+  Looks for X.id and creates TUs from X_en.al & X_fr.al.
+
+CAVEAT:
+  This is still Hansard-HOC hardcoded/oriented.
+
+Options:
+
+  -x            remove xml markup [don't]
+  -c(opyright)  copyright notice prefix.
+  -h(elp)       print this help message
+  -v(erbose)    increment the verbosity level by 1 (may be repeated)
+  -d(ebug)      print debugging information
+";
+   exit 1;
+}
+
+use Getopt::Long;
+# Note to programmer: Getopt::Long automatically accepts unambiguous
+# abbreviations for all options.
+GetOptions(
+   help        => sub { usage },
+   verbose     => \my $verbose,
+   debug       => \my $debug,
+   x           => \my $strip_xml,
+   "copyright=s"  => \my $copyright,
+) or usage;
 
 # Prototype declaration for recursive function.
 sub process(@);
@@ -25,7 +74,7 @@ sub process(@);
 my $writer = new XML::Writer( DATA_MODE => 'true', DATA_INDENT => 2 );
 
 sub process(@) {
-   print STDERR join(":", @_)."\n\n" if ($v);
+   print STDERR join(":", @_)."\n\n" if ($verbose);
    foreach my $item (@_) {
       # Clean up what will also become the id.
       $item =~ s#^\./##o;
@@ -35,7 +84,7 @@ sub process(@) {
          my @sessions = (  );
          opendir( DIR, $item );
          my @files = grep( /\.id$/, readdir( DIR ));
-         print STDERR join(":", @files) if ($v);
+         print STDERR join(":", @files) if ($verbose);
          foreach my $s (@files ) {
             next if( $s eq '.' or $s eq '..' );
             $s =~ s/\.id$//;
@@ -54,7 +103,7 @@ sub process(@) {
          while (defined(my $e = <E>) and defined(my $f = <F>)) {
             chomp $e;
             chomp $f;
-            if ($x) {
+            if ($strip_xml) {
                # Strip xml markup.
                $e =~ s#</?[^>]+>##go;
                $f =~ s#</?[^>]+>##go;
@@ -97,12 +146,25 @@ $writer->startTag( 'header',
         'srclang'=>'EN',
         'datatype'=>'PlainText',
         );
-$writer->dataElement('note', 
-   "Cette TMX est distribuée par le Conseil national de recherches Canada. Contact: Samuel Larkin (samuel.larkin\@cnrc-nrc.gc.ca).\nPrière de lire les restrictions légales dans http://www.parl.gc.ca/information/about/copyright/permission_hoc.asp?Language=F. (permission_hoc_fr.txt est une copie de cette information en date du 7 mars 2011).\nLe CNRC désire remercier Francis Morin et ses collègues des Services d’information de la Chambre des communes pour leur aide à la production de ce corpus.",
-   'xml:lang'=>'FR-CA');
-$writer->dataElement('note',
-   "This TMX is distributed by the National Research Council Canada. Contact: Samuel Larkin (samuel.larkin\@cnrc-nrc.gc.ca).\nSee http://www.parl.gc.ca/information/about/copyright/permission_hoc.asp?Language=E for legal restrictions. (permission_hoc_en.txt is a copy of this information as of 7 March 2011).\nNRC wishes to thank Francis Morin and his colleagues from the House of Commons Information Services for their help in producing this corpus.",
-   'xml:lang'=>'EN-CA');
+if ($copyright and $copyright ne "") {
+   my @copyright;
+
+   open(C, "${copyright}_fr.txt") or die "Unable to open the English copyright file.";
+   binmode(C, ":encoding(UTF-8)");
+   @copyright = <C>;
+   close C;
+   $writer->dataElement('note', 
+      "\n" . join("", @copyright),
+      'xml:lang'=>'FR-CA');
+
+   open(C, "${copyright}_en.txt") or die "Unable to open the English copyright file.";
+   binmode(C, ":encoding(UTF-8)");
+   @copyright = <C>;
+   close C;
+   $writer->dataElement('note',
+      "\n" . join("", @copyright),
+      'xml:lang'=>'EN-CA');
+}
 $writer->endTag(  );  # ends header
 $writer->startTag( 'body' );
 
