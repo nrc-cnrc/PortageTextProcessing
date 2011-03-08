@@ -108,11 +108,11 @@ sub process(@) {
             $file_en .= " udetokenize.pl -lang=en |" if ($detokenize);
 
             $file_fr = "perl -ple 's#</?[^>]+>##go' $file_fr |";
-            $file_fr .= " udetokenize.pl -lang=en |" if ($detokenize);
+            $file_fr .= " udetokenize.pl -lang=fr |" if ($detokenize);
          }
          else {
             $file_en = "udetokenize.pl -lang=en $file_en |" if ($detokenize);
-            $file_fr = "udetokenize.pl -lang=en $file_fr |" if ($detokenize);
+            $file_fr = "udetokenize.pl -lang=fr $file_fr |" if ($detokenize);
          }
 
          print STDERR "E: $file_en  F: $file_fr\n" if ($debug);
