@@ -48,7 +48,8 @@ CAVEAT:
 
 Options:
 
-  -x            remove xml markup [don't]
+  -x            remove xml markup. [don't]
+  -t            detokenize sentences. [don't]
   -c(opyright)  copyright notice prefix.
   -h(elp)       print this help message
   -v(erbose)    increment the verbosity level by 1 (may be repeated)
@@ -65,6 +66,7 @@ GetOptions(
    verbose     => \my $verbose,
    debug       => \my $debug,
    x           => \my $strip_xml,
+   t           => \my $detokenize,
    "copyright=s"  => \my $copyright,
 ) or usage;
 
@@ -74,7 +76,7 @@ sub process(@);
 my $writer = new XML::Writer( DATA_MODE => 'true', DATA_INDENT => 2 );
 
 sub process(@) {
-   print STDERR join(":", @_)."\n\n" if ($verbose);
+   print STDERR join(":", @_) . "\n\n" if ($verbose);
    foreach my $item (@_) {
       # Clean up what will also become the id.
       $item =~ s#^\./##o;
@@ -84,7 +86,7 @@ sub process(@) {
          my @sessions = (  );
          opendir( DIR, $item );
          my @files = grep( /\.id$/, readdir( DIR ));
-         print STDERR join(":", @files) if ($verbose);
+         print STDERR join(":", @files) . "\n" if ($verbose);
          foreach my $s (@files ) {
             next if( $s eq '.' or $s eq '..' );
             $s =~ s/\.id$//;
@@ -98,8 +100,24 @@ sub process(@) {
          }
       }
       else {
-         open (E, "${item}_en.al") or die "Unable to open ${item}_en.al";
-         open (F, "${item}_fr.al") or die "Unable to open ${item}_fr.al";
+         my ($file_en, $file_fr);
+         $file_en = "${item}_en.al";
+         $file_fr = "${item}_fr.al";
+         if ($strip_xml) {
+            $file_en = "perl -ple 's#</?[^>]+>##go' $file_en |";
+            $file_en .= " udetokenize.pl -lang=en |" if ($detokenize);
+
+            $file_fr = "perl -ple 's#</?[^>]+>##go' $file_fr |";
+            $file_fr .= " udetokenize.pl -lang=en |" if ($detokenize);
+         }
+         else {
+            $file_en = "udetokenize.pl -lang=en $file_en |" if ($detokenize);
+            $file_fr = "udetokenize.pl -lang=en $file_fr |" if ($detokenize);
+         }
+
+         print STDERR "E: $file_en  F: $file_fr\n" if ($debug);
+         open (E, "$file_en") or die "Unable to open ${item}_en.al";
+         open (F, "$file_fr") or die "Unable to open ${item}_fr.al";
          while (defined(my $e = <E>) and defined(my $f = <F>)) {
             chomp $e;
             chomp $f;
