@@ -105,13 +105,18 @@ my @known_abbrs_fr = qw {
 };
 
 
-#sr.     146145  26895   112
-#op.     499     832     104
-#co.     442     232     696
-#st.     717     269     142
-#dr.     1617    423     43
-#km.     148     267     1048
-#mm.     39      126     700
+# The following stop-words were mined from the WMT-ACL10 es corpora.
+# f(word.[^$]) => frequency of word that ends witn a dot but are not at the end of a sentence (may be abbreviations)
+# f(word.$) => frequency of word that ends with a dot and are at the end of a sentence.
+# f(word) => frequency of word
+# word     f(word.[^$])  f(word.$)  f(word)
+# sr.      146145        26895      112
+# op.      499           832        104
+# co.      442           232        696
+# st.      717           269        142
+# dr.      1617          423        43
+# km.      148           267        1048
+# mm.      39            126        700
 my @known_abbrs_es = qw {
    av avda c d da dr dra esq gob gral ing lic prof profa sr sra srta st
 };
@@ -130,51 +135,51 @@ my @short_stops_fr = qw {
    tv cn cp pm bp pq gm ae ue cd fm al mg ed pc fc dp
 };
 
-#   # The following stop-words were mined from the WMT-ACL10 es corpora.
-#   # f(word.[^$]) => frequency of word that ends witn a dot but are not at the end of a sentence (may be abbreviations)
-#   # f(word.$) => frequency of word that ends with a dot and are at the end of a sentence.
-#   # f(word) => frequency of word
-#   # word     f(word.[^$])  f(word.$)  f(word)
-#   al   #     82            338        1923410
-#   ap   #     4             178        438
-#   at   #     8             150        11289
-#   cc   #     22            233        1036
-#   ce   #     3             369        1900
-#   cp   #     6             167        1765
-#   da   #     12            137        41583
-#   ed   #     82            303        244
-#   ee   #     23            316        6573
-#   ep   #     1             1296       371
-#   es   #     32            1337       1445279
-#   eu   #     0             130        943
-#   fe   #     14            982        8188
-#   ff   #     27            116        77
-#   gm   #     1             187        2162
-#   ii   #     101           2402       17399
-#   ir   #     6             224        20960
-#   iu   #     3             316        2621
-#   iv   #     16            566        6026
-#   mw   #     2             248        1162
-#   mí   #     57            927        11077
-#   no   #     2151          24012      1919963
-#   pc   #     2             104        617
-#   pp   #     265           3103       27447
-#   se   #     0             106        3780348
-#   si   #     3             93         403658
-#   ss   #     96            249        151
-#   sé   #     8             321        11155
-#   sí   #     79            4967       62292
-#   ti   #     7             2102       619
-#   tv   #     7             207        1329
-#   ue   #     69            11471      41734
-#   uu   #     202           1038       3703
-#   va   #     6             207        65371
-#   ve   #     6             102        15142
-#   vi   #     16            463        6302
-#   xx   #     7             949        1790
-#   ya   #     17            675        318626
-#   yo   #     37            726        49211
-#   él   #     134           8626       42908
+# The following stop-words were mined from the WMT-ACL10 es corpora.
+# f(word.[^$]) => frequency of word that ends witn a dot but are not at the end of a sentence (may be abbreviations)
+# f(word.$) => frequency of word that ends with a dot and are at the end of a sentence.
+# f(word) => frequency of word
+# word     f(word.[^$])  f(word.$)  f(word)
+#   al     82            338        1923410
+#   ap     4             178        438
+#   at     8             150        11289
+#   cc     22            233        1036
+#   ce     3             369        1900
+#   cp     6             167        1765
+#   da     12            137        41583
+#   ed     82            303        244
+#   ee     23            316        6573
+#   ep     1             1296       371
+#   es     32            1337       1445279
+#   eu     0             130        943
+#   fe     14            982        8188
+#   ff     27            116        77
+#   gm     1             187        2162
+#   ii     101           2402       17399
+#   ir     6             224        20960
+#   iu     3             316        2621
+#   iv     16            566        6026
+#   mw     2             248        1162
+#   mí     57            927        11077
+#   no     2151          24012      1919963
+#   pc     2             104        617
+#   pp     265           3103       27447
+#   se     0             106        3780348
+#   si     3             93         403658
+#   ss     96            249        151
+#   sé     8             321        11155
+#   sí     79            4967       62292
+#   ti     7             2102       619
+#   tv     7             207        1329
+#   ue     69            11471      41734
+#   uu     202           1038       3703
+#   va     6             207        65371
+#   ve     6             102        15142
+#   vi     16            463        6302
+#   xx     7             949        1790
+#   ya     17            675        318626
+#   yo     37            726        49211
+#   él     134           8626       42908
 my @short_stops_es = qw {
    al ap at cc ce cp da ed ee ep es eu fe ff gm ii ir iu iv mw mí no pc pp se
    si ss sé sí ti tv ue uu va ve vi xx ya yo él 
