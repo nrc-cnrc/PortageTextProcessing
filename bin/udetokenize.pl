@@ -10,6 +10,7 @@
 #
 # @author original detokenize.pl: SongQiang Fang and George Foster
 #              UTF-8 adaptation and improved handling of French: Eric Joanis
+#              Spanish handling by Samuel Larkin
 #
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -52,7 +53,7 @@ Warning: ASCII quotes are handled assuming there is only one level of quotation.
 
 Options:
 
--lang=L        Specify two-letter language code: en or fr [en]
+-lang=L        Specify two-letter language code: en or es or fr [en]
                Works well for English, not bad for French.
 -latin1        Replace characters that map to cp-1252 but not to iso-8859-1 by
                their closest equivalents that do
@@ -86,42 +87,42 @@ while(<IN>)
    my $sentence = $_;
    chomp $sentence;
 
-   if ( $chinesepunc ) {
-      # Normalize Chinese brackets and punctuation
-      # Note: this section is hard to read because of the encoding - to
-      # inspect code point by code point, you can run:
-      # iconv -f utf-8 -t ascii --unicode-subst '[[[U%x]]]' udetokenize.pl
+      if ( $chinesepunc ) {
+         # Normalize Chinese brackets and punctuation
+         # Note: this section is hard to read because of the encoding - to
+         # inspect code point by code point, you can run:
+         # iconv -f utf-8 -t ascii --unicode-subst '[[[U%x]]]' udetokenize.pl
       foreach ($sentence) {
-         tr/〔〕【】『』〖〗︶︻︼/()[]“”[])[]/;
-         tr/﹝﹞﹙﹚﹛﹜/()(){}/;
-         tr/。、《》〈〉「」/.,«»‹›“”/;
-         tr/﹃﹄〃﹁﹂/“””“”/;
-         tr/‵′‶″〝〞‵/`´“”“”`/;
-         tr/﹖﹗︰﹪﹡﹟〜/?!:%*#~/;
-         tr/―﹣‾/—\-\-/;
-         tr/･·・/•••/;
-         tr/﹑﹒﹕､﹔﹐/, :,;,/;
-         tr/※¿¡‖//d;
-      }
-      # Changed from Howard's script - we use the cp-1252 characters instead,
-      # unless -latin1 is specified:
-      #   tr/‵′″―《》〈〉「」『』〝〞﹁﹂﹃﹄〃‵/''"-"""""""""""""""'/g;
-      # Not in Howard's script, but done here: tr/‶/“/g;
+            tr/〔〕【】『』〖〗︶︻︼/()[]“”[])[]/;
+            tr/﹝﹞﹙﹚﹛﹜/()(){}/;
+            tr/。、《》〈〉「」/.,«»‹›“”/;
+            tr/﹃﹄〃﹁﹂/“””“”/;
+            tr/‵′‶″〝〞‵/`´“”“”`/;
+            tr/﹖﹗︰﹪﹡﹟〜/?!:%*#~/;
+            tr/―﹣‾/—\-\-/;
+            tr/･·・/•••/;
+            tr/﹑﹒﹕､﹔﹐/, :,;,/;
+            tr/※¿¡‖//d;
+         }
+         # Changed from Howard's script - we use the cp-1252 characters instead,
+         # unless -latin1 is specified:
+         #   tr/‵′″―《》〈〉「」『』〝〞﹁﹂﹃﹄〃‵/''"-"""""""""""""""'/g;
+         # Not in Howard's script, but done here: tr/‶/“/g;
 
-      # The following things from Howard's script are not done here, but
-      # are done below if the -latin1 switch is specified.
-      # Not done from Howard's script because we want to preserve right
-      # French and English punctuation: tr/«»“”·‘’—–‰/"""" ''--%/g;
-      # Also not done: s/[•･·]//g; # we use • (\xb7) for all three
-      # Not done to preserve rich punctuation in F/E: $line =~ s/…/ ... /g;
-   }
+         # The following things from Howard's script are not done here, but
+         # are done below if the -latin1 switch is specified.
+         # Not done from Howard's script because we want to preserve right
+         # French and English punctuation: tr/«»“”·‘’—–‰/"""" ''--%/g;
+         # Also not done: s/[•･·]//g; # we use • (\xb7) for all three
+         # Not done to preserve rich punctuation in F/E: $line =~ s/…/ ... /g;
+      }
 
    my $out_sentence = detokenize($sentence);
 
    if ( $chinesepunc ) {
       foreach ($out_sentence) {
          s/‥/../g;
-      }
+         }
    }
 
    if ( $latin1 ) {

@@ -5,8 +5,9 @@
 # @file utokenize.pl
 # @brief Tokenize and sentence split UTF-8 text.
 #
-# @author George Foster, with minor modifications by Aaron Tikuisis
-#             UTF-8 adaptation by Michel Simard.
+# @author George Foster, with minor modifications by Aaron Tikuisis,
+#             UTF-8 adaptation by Michel Simard,
+#             Spanish handling by Samuel Larkin
 #
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -56,7 +57,7 @@ Options:
       Note: one of -ss or -noss is now required, because the old default (-ss)
       often caused unexpected behaviour.
 -notok Don't perform tokenization. [do]
--lang Specify two-letter language code: en or fr [en]
+-lang Specify two-letter language code: en or es or fr [en]
 -paraline
       File is in one-paragraph-per-line format [no]
 

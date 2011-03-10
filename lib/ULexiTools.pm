@@ -12,6 +12,7 @@
 #
 # LexiTools.pm
 # PROGRAMMER: George Foster / UTF-8 adaptation by Michel Simard / Eric Joanis
+#             / Adding Spanish Samuel Larkin
 #
 # COMMENTS: POD at end of file.
 
@@ -37,7 +38,7 @@ our (@ISA, @EXPORT);
 @EXPORT = (
    "get_para", "tokenize", "split_sentences",
    "get_tokens", "get_token",
-   "matches_known_abbr_en", "matches_known_abbr_fr",
+   "matches_known_abbr_en", "matches_known_abbr_fr", "matches_known_abbr_es",
    "good_turing_estm", "get_sentence",
    "setDetokenizationLang", "detokenize", "detokenize_array"
 );
@@ -54,8 +55,10 @@ sub len(\$); #(string)
 
 my %known_abbr_hash_en;
 my %known_abbr_hash_fr;
+my %known_abbr_hash_es;
 my %short_stops_hash_en;
 my %short_stops_hash_fr;
+my %short_stops_hash_es;
 
 # Single quotes: ascii ` and ', cp-1252 145 and 146, cp-1252/iso-8859-1 180
 my $apostrophes = quotemeta("\`\'‘’´");
@@ -68,7 +71,7 @@ my $rightquotes = quotemeta("’»”´");
 # m-dash (cp-1252 151, U+2014), horizontal bar (U+2015), hyphen (ascii -)
 my $hyphens = quotemeta("‐‑‒–—―-");
 my $wide_dashes = quotemeta("‐‑‒–—―");
-my $splitleft = qr/[\"“«\$\#]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
+my $splitleft = qr/[\"“«\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
 my $splitright = qr/\.{2,4}|[\"”»!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
 
 my @known_abbrs_en = qw {
@@ -101,6 +104,18 @@ my @known_abbrs_fr = qw {
    chas
 };
 
+
+#sr.     146145  26895   112
+#op.     499     832     104
+#co.     442     232     696
+#st.     717     269     142
+#dr.     1617    423     43
+#km.     148     267     1048
+#mm.     39      126     700
+my @known_abbrs_es = qw {
+   av avda c d da dr dra esq gob gral ing lic prof profa sr sra srta st
+};
+
 # short words and abbreviation-like words that can end a sentence
 my @short_stops_en = qw {
    to in is be on it we as by an at or do my he if no am us so up me go
@@ -115,11 +130,63 @@ my @short_stops_fr = qw {
    tv cn cp pm bp pq gm ae ue cd fm al mg ed pc fc dp
 };
 
+#   # The following stop-words were mined from the WMT-ACL10 es corpora.
+#   # f(word.[^$]) => frequency of word that ends witn a dot but are not at the end of a sentence (may be abbreviations)
+#   # f(word.$) => frequency of word that ends with a dot and are at the end of a sentence.
+#   # f(word) => frequency of word
+#   # word     f(word.[^$])  f(word.$)  f(word)
+#   al   #     82            338        1923410
+#   ap   #     4             178        438
+#   at   #     8             150        11289
+#   cc   #     22            233        1036
+#   ce   #     3             369        1900
+#   cp   #     6             167        1765
+#   da   #     12            137        41583
+#   ed   #     82            303        244
+#   ee   #     23            316        6573
+#   ep   #     1             1296       371
+#   es   #     32            1337       1445279
+#   eu   #     0             130        943
+#   fe   #     14            982        8188
+#   ff   #     27            116        77
+#   gm   #     1             187        2162
+#   ii   #     101           2402       17399
+#   ir   #     6             224        20960
+#   iu   #     3             316        2621
+#   iv   #     16            566        6026
+#   mw   #     2             248        1162
+#   mí   #     57            927        11077
+#   no   #     2151          24012      1919963
+#   pc   #     2             104        617
+#   pp   #     265           3103       27447
+#   se   #     0             106        3780348
+#   si   #     3             93         403658
+#   ss   #     96            249        151
+#   sé   #     8             321        11155
+#   sí   #     79            4967       62292
+#   ti   #     7             2102       619
+#   tv   #     7             207        1329
+#   ue   #     69            11471      41734
+#   uu   #     202           1038       3703
+#   va   #     6             207        65371
+#   ve   #     6             102        15142
+#   vi   #     16            463        6302
+#   xx   #     7             949        1790
+#   ya   #     17            675        318626
+#   yo   #     37            726        49211
+#   él   #     134           8626       42908
+my @short_stops_es = qw {
+   al ap at cc ce cp da ed ee ep es eu fe ff gm ii ir iu iv mw mí no pc pp se
+   si ss sé sí ti tv ue uu va ve vi xx ya yo él 
+};
+
 # funky hash initializations...
 @known_abbr_hash_en{@known_abbrs_en} = (1) x @known_abbrs_en;
 @known_abbr_hash_fr{@known_abbrs_fr} = (1) x @known_abbrs_fr;
+@known_abbr_hash_es{@known_abbrs_es} = (1) x @known_abbrs_es;
 @short_stops_hash_en{@short_stops_en} = (1) x @short_stops_en;
 @short_stops_hash_fr{@short_stops_fr} = (1) x @short_stops_fr;
+@short_stops_hash_es{@short_stops_es} = (1) x @short_stops_es;
 
 # Get the next paragraph from a file. Return: text in para (including trailing
 # markup, if any)
@@ -169,6 +236,9 @@ sub tokenize #(paragraph, lang)
    } elsif ($lang eq "fr") {
       $split_word = \&split_word_fr;
       $matches_known_abbr = \&matches_known_abbr_fr;
+   } elsif ($lang eq "es") {
+      $split_word = \&split_word_es;
+      $matches_known_abbr = \&matches_known_abbr_es;
    }
    else {die "unknown lang in tokenizer: $lang";}
 
@@ -226,8 +296,10 @@ sub split_sentences(\$\@) #(para_string, token_positions)
    for (my $i = 0; $i < $#$token_positions; $i += 2) {
       my $tok = get_token($$para, $i, @$token_positions);
       if ($end_pending) {
+         next if ( $tok =~ /^[!?]$/ );  # Spanish cases where [!?]{2,} => i.e. !!! but also .!!??
          if ($tok !~ /^([$quotes\)\]]|[$apostrophes]{1,2}|<\/[^>]+>)$/o ||
-             $tok =~ /^[$leftquotes]{1,2}/ ) {
+             $tok =~ /^[$leftquotes]{1,2}/ ||
+             $tok =~ /^[¡¿]$/) {
             push(@sent_posits, $i);
             $end_pending = 0;
          }
@@ -333,6 +405,10 @@ sub context_says_abbr(\$$\@) #($para_string, index_of_dot, token_positions)
       return 1;         # never begins a sentence
    } elsif ($tok =~ /^[.!?]/) {
       return 1;         # always ends a sentence
+   } elsif ($tok =~ /^[¡¿]$/) {
+      # TODO: what if UU.EE. ¿a question?
+      # Let's assume that this is not a mid sentence question even if it is allowed in spanish.
+      return 0;  
    } else {
       return $tok !~ /^[[:upper:]]/o;   # next real word not cap'd
    }
@@ -354,6 +430,15 @@ sub matches_known_abbr_fr #(word)
    my $word = shift;
    $word =~ s/[.]//go;
    return $known_abbr_hash_fr{lc($word)} ? 1 : 0;
+}
+
+# Determine if a word matches a Spanish known abbreviation.
+
+sub matches_known_abbr_es #(word)
+{
+   my $word = shift;
+   $word =~ s/[.]//go;
+   return $known_abbr_hash_es{lc($word)} ? 1 : 0;
 }
 
 # Does the current token look like it is an abbreviation?
@@ -378,7 +463,10 @@ sub looks_like_abbr($\$$\@) # (lang, para_string, index_of_abbr, token_positions
       if (exists($short_stops_hash_en{lc($word)})) {return 0;}
    } elsif ($lang eq "fr") {
       if (exists($short_stops_hash_fr{lc($word)})) {return 0;}
+   } elsif ($lang eq "es") {
+      if (exists($short_stops_hash_es{lc($word)})) {return 0;}
    }
+   else {die "unknown lang in tokenizer: $lang";}
    return 1;
 }
 
@@ -517,6 +605,20 @@ sub split_word_fr #(word, offset)
    return @atom_positions;
 }
 
+# Split an Spanish word into parts, eg ?????
+# Return list of (start,len) atom positions.
+
+sub split_word_es #(word, offset)
+{
+   my $word = shift;
+   my $os = shift || 0;
+   my @atom_positions = ();
+
+   push(@atom_positions, $os, len($word));
+
+   return @atom_positions;
+}
+
 # Return length of a possibly-undefined string.
 
 sub len(\$) #(string)
@@ -596,6 +698,10 @@ sub detokenize_array(\@) # Ref Array containing words of sentence to be detokeni
          if( is_punctuation($word_pre) ){ # don't add space before the word
             push ( @out_sentence, $word_pre);
          }
+         elsif ( $detokenizationLang eq "es" and $word_pre =~ /[¡¿]/ ) {
+            push ( @out_sentence, $space) unless ( $word_before =~ /[¡¿]/ );
+            push ( @out_sentence, $word_pre);
+         }
          elsif( is_quote( $word_pre) ){ # process quote according it is start or end
             process_quote($word_pre, $word_before);
          }
@@ -626,7 +732,7 @@ sub process_word #ch1, ch2
       }
       push ( @out_sentence, $ch_pre);
    }
-   elsif( is_en_price($ch_pre, $ch_before)) {
+   elsif( is_price_abut_left($ch_pre, $ch_before) ) {
       push ( @out_sentence, $ch_pre);
    }
    elsif( is_punctuation($ch_before) || is_right_bracket($ch_before)){
@@ -650,7 +756,6 @@ sub process_word #ch1, ch2
 
 sub process_bracket #ch1, ch2
 {
-
    my $ch_pre=shift;
    my $ch_before=shift;
    if( is_right_bracket($ch_pre)){
@@ -661,7 +766,7 @@ sub process_bracket #ch1, ch2
 #        push ( @out_sentence, $ch_pre);
 #     }
       if( is_quote($ch_before)){
-         process_quote_before($ch_pre,$ch_before);
+         process_quote_before($ch_pre, $ch_before);
       }
       else{
          push ( @out_sentence, $space);
@@ -704,7 +809,7 @@ sub process_quote #ch1 ,ch2
          pop @double_quote;
       }
       else{# in start place, push a space first (changed on Dec 13 2004)
-         push (@double_quote, $ch_pre);
+         push ( @double_quote, $ch_pre);
          push ( @out_sentence, $space);
          push ( @out_sentence, $ch_pre);
       }
@@ -730,7 +835,7 @@ sub process_quote #ch1 ,ch2
             pop @single_quote;
          }
          else{# in start place, push a space first (changed on Dec 13 2004)
-            push (@single_quote, $ch_pre);
+            push ( @single_quote, $ch_pre);
             push ( @out_sentence, $space);
             push ( @out_sentence, $ch_pre);
          }
@@ -779,7 +884,14 @@ sub is_double_quote # $ch
    # they are not glued to the text in French.
    # “ and ” (English angled double quotes) also left out: we
    # treat them as brackets instead, since they are left/right specific
-   return ((defined $ch_pre)&&($ch_pre eq "\""));
+   if ($detokenizationLang eq "es") {
+   # they are not glued to the text in French.
+      #return ((defined $ch_pre) && ($ch_pre eq "\"" or $ch_pre eq "«" or $ch_pre eq "»"));
+      return ((defined $ch_pre) && ($ch_pre =~ /[\"«»]/));
+   }
+   else {
+      return ((defined $ch_pre)&&($ch_pre eq "\""));
+   }
 }
 
 sub is_single_quote # $ch
@@ -806,8 +918,16 @@ sub is_special # $var1
 sub is_punctuation # $var1
 {
    my $ch_pre=shift;
-   return ( $detokenizationLang eq "fr" ? ($ch_pre =~ m/^(?:[,.!?;…]|\.\.\.)$/)
-                          : ($ch_pre =~ m/^[,.:!?;]$/));
+   if ( $detokenizationLang eq "fr" ) {
+      return $ch_pre =~ m/^(?:[,.!?;…]|\.\.\.)$/;
+   }
+   elsif ( $detokenizationLang eq "es" ) {
+      return $ch_pre =~ m/^[,.:;]$/;
+   }
+   # Default behaves like English.
+   else {
+      return $ch_pre =~ m/^[,.:!?;]$/;
+   }
 }
 sub is_bracket # $ch
 {
@@ -820,7 +940,7 @@ sub is_left_bracket # $ch
    # Includes left double and single quotes, since they require the same
    # treatment as brackets
    # Excludes < and ‹ since we don't split them in utokenize.pl
-   return ( $ch =~ m/^[[({“‘`]$/);
+   return ( $detokenizationLang eq "es" ? ($ch =~ m/^[[({“‘`¡¿]$/) : ($ch =~ m/^[[({“‘`]$/) );
 }
 sub is_right_bracket #ch
 {
@@ -828,7 +948,7 @@ sub is_right_bracket #ch
    # Includes right double and single quotes, since they require the same
    # treatment as brackets
    # Excludes > and › since we don't split them in utokenize.pl
-   return ( $ch =~ m/^[])}”’´]$/);
+   return ( $detokenizationLang eq "es" ? ($ch =~ m/^[])}”’´!?]$/) : ($ch =~ m/^[])}”’´]$/) );
 }
 
 sub is_prefix # ch
@@ -867,11 +987,11 @@ sub is_fr_hyph_ending #ch
            $ch =~ /^-(?:t-)?(?:je|tu|ils?|elles?|on|nous|vous|moi|toi|lui|eux|en|y|ci|ce|les?|leurs?|la|l[àÀ]|donc)/oi);
 }
 
-sub is_en_price # ch1, ch2
+sub is_price_abut_left # ch1, ch2
 {
    my $ch_pre=shift;
    my $ch_before=shift;
-   return ($detokenizationLang eq "en" && $ch_before eq "\$" && $ch_pre =~ /^\.?\d/oi);
+   return (($detokenizationLang eq "en" or $detokenizationLang eq "es") && $ch_before eq "\$" && $ch_pre =~ /^\.?\d/oi);
 }
 
 
@@ -927,6 +1047,6 @@ Copyright (c) 2004 - 2009, Her Majesty in Right of Canada
 
 =head1 AUTHOR
 
-George Foster / Michel Simard / Eric Joanis
+George Foster / Michel Simard / Eric Joanis / Samuel Larkin
 
 =cut
