@@ -122,7 +122,7 @@ while(<IN>)
    if ( $chinesepunc ) {
       foreach ($out_sentence) {
          s/‥/../g;
-         }
+      }
    }
 
    if ( $latin1 ) {
