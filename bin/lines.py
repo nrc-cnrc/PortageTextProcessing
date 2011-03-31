@@ -30,6 +30,8 @@ numFile = open(sys.argv[1])
 txtFileName = sys.argv[2]
 if txtFileName[-3:] == '.gz':
     txtFile = gzip.open(txtFileName)
+elif txtFileName == "-":
+    txtFile = sys.stdin
 else:
     txtFile = open(txtFileName)
 
