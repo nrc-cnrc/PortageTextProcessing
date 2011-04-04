@@ -1,15 +1,13 @@
-cow.sh, NRC-CNRC, (c) 2004 - 2010, Her Majesty in Right of Canada
-Please run "portage_info -notice" for Copyright notices of 3rd party libraries.
-
 
 Usage: cow.sh [-v] [-Z] [-nbest-list-size N] [-maxiter MAX]
        [-filt] [-ttable-limit T] [-filt-no-ttable-limit] [-lb|-no-lb]
        [-floor index|-nofloor] [-model MODEL] [-mad SEED] [-e] [-path P]
-       [-s SEED] [-nr] [-micro M] [-microsm S] [-micropar N]
-       [-wacc N] [-win WIN]
-       [-f CFILE] [-canoe-options OPTS] [-rescore-options OPTS]
+       [-s SEED] [-nr] [-wr PER] [-micro M] [-microsm S] [-micropar N]
+       [-wacc N] [-win WIN] [-rf LIST] [-chw a:b:c] [-chwn n] [-reg n]
+       [-f CFILE|-F CONFIGMAP] [-canoe-options OPTS] [-rescore-options OPTS]
        [-parallel[:"PARALLEL_OPTS"]]
        [-bleu | -per | -wer]
+       [-ref ref_CFILE [-ref-nbest-size RN]] [-doc DOC_ID_FILE]
        -workdir WORKDIR SFILE RFILE1 RFILE2 .. RFILEn
 
 cow.sh: Canoe Optimize Weights
@@ -72,9 +70,11 @@ Options:
          SEED*10k+1, SEED*10k+2, ..., for successive cow iterations. [0]
 -nr      Don't re-randomize: use a fixed seed for all iterations [use a
          different seed as described above]
+-wr      Increment the value for the -wr flag to rescore_train every PER
+         iterations, starting at 0. [0 -> don't use -wr with rescore_train]
 -micro   Do at most the first M iterations in micro mode (tuning weights
          for each sentence separately). [0]
-         Not compatible with -mad.
+         Not compatible with -F, -ref, and -mad options.
 -microsm The value of the -sm switch for rescore_train in micro mode [1]
 -micropar The number of sentence-level rescore_trains to run in parallel
          in micro mode [3]
@@ -82,20 +82,45 @@ Options:
          before the current one. [1]
 -win     Use the WIN best weights from the previous iteration(s) as starting 
          points for Powell's algorithm. [3] 
+-rf      A colon-separated list of values for the rescore_train -r flag
+         (max Powell iters) to use on each iteration. If the list is too
+         short, the last value will be used for all subsequent iters. [use
+         -r 0 for all iters]
+-chw     Use -chw switch with rescore_train, with params iter:a:b:c, where
+         iter is the current cow iter, and a, b, and c are remaining params.
+-chwn    Use the decoder weights from the most recent n iterations as 
+         reference weights in the -chw calculation. Use all if n = 0.
+-chws    Use weight-selection strategy above to choose Powell starts,
+         according to -wacc and -win settings [choose only by best score]
+-reg     Regularize BLEU post-Powell using <n> weight perturbations.
 -f       The configuration file to pass to the decoder. [canoe.ini]
+-F       A configmap file to pass to the decoder. [none] See
+         canoe-parallel.sh (-f option) for info on configmaps. Note that
+         loglinear weights in individual configfiles are ignored. This
+         option is not compatible with -f.
 -canoe-options  Provide additional options to the decoder. []
 -rescore-options  Provide additional options to the rescore_train. []
 -parallel or -parallel:"PARALLEL_OPTIONS":  Use canoe-parallel.sh to
          parallelize decoding.  Any option to canoe-parallel.sh, such as
-         -n <N> if you want to specify the number of parallel jobs to
-         use, -nolowpri to get more memory, -highmem to really get more
-         memory, should be specified after the : and must be in quotes,
-         e.g.:   -parallel:"-n 4".
-                 -parallel:"-n 4 -nolowpri".
-                 -parallel:"-n 4 -highmem".
+         -n <N> or -psub <PSUB_OPT> should be specified after the : and must
+         be in quotes.
+         e.g.: decode with 4 workers:  -parallel:"-n 4".
+         e.g.: use 4 CUs for cow.sh and rescore_train, but only 1 CU for
+               each of 16 decoding workers:
+                  psub -4 cowlat.sh -parallel:"-n 16 -psub -1"
 -bleu    Perform training using BLEU as the metric [do]
 -per     Perform training using PER as the metric [don't]
 -wer     Perform training using WER as the metric [don't]
+-ref ref_CFILE Run in "ref cow" mode: do an initial decoding pass using 
+         ref_CFILE as the config file to generate a set of initial nbest
+         hypotheses having minimal Levenshtein distance to the references.
+         ref_CFILE normally contains optimized wts from a previous cow run,
+         and MUST contain the [weight-lev] option. Once the nbest lists are
+         initialized, cow proceeds as usual, using the config file specified
+         by -f (ref_CFILE is only used for the first pass).
+-ref-nbest-size RN  The initial nbest list size for ref cow mode. [10]
+-doc     File containing document ID for each source sentence. Format: one line
+         per sentence, document name has to be first column.
 -workdir Store large temporary files in WORKDIR.  WORKDIR should ideally be
          on a medium which is not backed up, as these files tend to be
          enormous.
@@ -122,3 +147,4 @@ Convenient cut and paste commands:
     echo PARALLEL=-n 4 > COW_DYNAMIC_OPTIONS
     echo STOP_AFTER=0 > COW_DYNAMIC_OPTIONS
 
+ Replace marker <src> by source file name

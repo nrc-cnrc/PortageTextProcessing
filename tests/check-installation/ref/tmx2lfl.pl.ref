@@ -1,8 +1,4 @@
 
-tmx2lfl.pl, NRC-CNRC, (c) 2009 - 2010, Her Majesty in Right of Canada
-Please run "portage_info -notice" for Copyright notices of 3rd party libraries.
-
-
 Usage tmx2lfl.pl {options} [ tmx-file... ]
 
 Convert TMX (Translation Memory Exchange) files into a LFL (line-for-line)

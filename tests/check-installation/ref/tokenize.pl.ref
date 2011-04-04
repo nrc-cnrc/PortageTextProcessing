@@ -1,8 +1,4 @@
 
-tokenize.pl, NRC-CNRC, (c) 2004 - 2010, Her Majesty in Right of Canada
-Please run "portage_info -notice" for Copyright notices of 3rd party libraries.
-
-
 Usage: tokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
 
   Tokenize and sentence-split text in ISO-8859-1 (iso latin 1).
