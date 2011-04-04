@@ -42,5 +42,5 @@ tokenize.pl: EXPLAIN:=Check your PERL5LIB.
 # We simply make sure we can invoke the help message to trigger the dependencies.
 cow.sh tokenize.pl canoe ce.pl tmx2lfl.pl:
 	@which $@ &> /dev/null || echo "Can't locate $@ in your PATH!" >&2
-	@$@ -h 2>&1 | diff -q - ref/$@.ref || echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
+	@$@ -h 2>&1 | cmp --quiet - ref/$@.ref || echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
 
