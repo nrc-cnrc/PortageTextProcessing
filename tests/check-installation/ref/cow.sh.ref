@@ -1,0 +1,124 @@
+cow.sh, NRC-CNRC, (c) 2004 - 2010, Her Majesty in Right of Canada
+Please run "portage_info -notice" for Copyright notices of 3rd party libraries.
+
+
+Usage: cow.sh [-v] [-Z] [-nbest-list-size N] [-maxiter MAX]
+       [-filt] [-ttable-limit T] [-filt-no-ttable-limit] [-lb|-no-lb]
+       [-floor index|-nofloor] [-model MODEL] [-mad SEED] [-e] [-path P]
+       [-s SEED] [-nr] [-micro M] [-microsm S] [-micropar N]
+       [-wacc N] [-win WIN]
+       [-f CFILE] [-canoe-options OPTS] [-rescore-options OPTS]
+       [-parallel[:"PARALLEL_OPTS"]]
+       [-bleu | -per | -wer]
+       -workdir WORKDIR SFILE RFILE1 RFILE2 .. RFILEn
+
+cow.sh: Canoe Optimize Weights
+
+Does "outer-loop" learning of decoder parameters.  That is, it iteratively
+runs the canoe decoder to generate n-best lists with feature function
+output, then finds weights to optimize the BLEU score on the given n-best
+lists.  This continues until no new sentences are produced at the decoder
+stage. The results (BLEU scores and weights) are appended to the file
+"rescore-results" after each iteration.
+
+Note: cow.sh always does a fresh start: any existing n-best lists, models
+      and results files are deleted or renamed.
+
+Options:
+-v       Verbose output from canoe (verbose level 1) and rescore_train.
+-Z       Do not compress the large temporary files in WORKDIR [do].
+-nbest-list-size The size of the n-best lists to create.  [200]
+-maxiter Do at most MAX iterations.
+-filt    Filter the phrase tables and lexicalized distortion models based on 
+         SFILE for faster operation. This should not change your results in 
+         a significant way (some changes may be observed due to rounding 
+         differences). Creates a single multi-prob table containing only 
+         entries from the phrase tables that match SFILE and meet the 
+         ttable-limit criterion in CFILE, if any. Also, filters the
+         distortion model files based on the filtered phrase tables.
+         Uses the filtered phrase tables and filtered distortion models 
+         afterwards in place of the original tables.
+         (Recommended option) [don't filter]
+-ttable-limit Use T as the ttable-limit for -filt, instead of the value 
+         specified in CFILE. T is not written back to filtered versions of
+         CFILE.
+-filt-no-ttable-limit  Similar to -filt, with a somewhat faster filtering
+         phase but less effective filtering for canoe.  Creates individual
+         filtered tables containing only entries that match SFILE (without
+         applying any ttable-limit) and uses them afterwards in place of
+         the original tables.  Unlike -filt, this option does not introduce
+         rounding differences, the output should therefore be identical to
+         that obtained with unfiltered tables.  [don't filter]
+-lb      Run canoe-parallel.sh in load balancing mode to help even out the 
+         translation's load distribution [do].
+-no-lb   Disable load-balancing [don't].
+-floor   Index of parameter at which to start zero-flooring. (0 means all)
+         NB, this is NOT the floor threshold and cannot be used with nofloor.
+-nofloor None of the decoder features are floored.  Cannot be used with floor.
+         One of -floor or -nofloor is required, as there is no good default.
+-model   The name of the model file to use.  If this model file already
+         exists, it should have only entries FileFF:allffvalsNUM, where
+         NUM = 1, .. , number of base ff + number of tms + number of lms.
+         To avoid accidental reuse of an old model file, an existing model
+         file with the default name will only be reused if the -model option
+         was explicitly specified. [curmodel]
+-mad     "Mad cow mode": Call canoe with -random-weights -seed SEED
+         when doing the initial translation of the training corpus;
+         this uses a different random set of weights for each
+         sentence. [don't; note that SEED=0 also means don't]
+-e       Use expectation to determine rescore_train stopping point [don't]
+-path    Prepend path P to existing path for locating programs []
+-s       Use SEED to derive random seeds for rescore_train: SEED*10k,
+         SEED*10k+1, SEED*10k+2, ..., for successive cow iterations. [0]
+-nr      Don't re-randomize: use a fixed seed for all iterations [use a
+         different seed as described above]
+-micro   Do at most the first M iterations in micro mode (tuning weights
+         for each sentence separately). [0]
+         Not compatible with -mad.
+-microsm The value of the -sm switch for rescore_train in micro mode [1]
+-micropar The number of sentence-level rescore_trains to run in parallel
+         in micro mode [3]
+-wacc    Start Powell with the WIN best weights from each of the N iterations
+         before the current one. [1]
+-win     Use the WIN best weights from the previous iteration(s) as starting 
+         points for Powell's algorithm. [3] 
+-f       The configuration file to pass to the decoder. [canoe.ini]
+-canoe-options  Provide additional options to the decoder. []
+-rescore-options  Provide additional options to the rescore_train. []
+-parallel or -parallel:"PARALLEL_OPTIONS":  Use canoe-parallel.sh to
+         parallelize decoding.  Any option to canoe-parallel.sh, such as
+         -n <N> if you want to specify the number of parallel jobs to
+         use, -nolowpri to get more memory, -highmem to really get more
+         memory, should be specified after the : and must be in quotes,
+         e.g.:   -parallel:"-n 4".
+                 -parallel:"-n 4 -nolowpri".
+                 -parallel:"-n 4 -highmem".
+-bleu    Perform training using BLEU as the metric [do]
+-per     Perform training using PER as the metric [don't]
+-wer     Perform training using WER as the metric [don't]
+-workdir Store large temporary files in WORKDIR.  WORKDIR should ideally be
+         on a medium which is not backed up, as these files tend to be
+         enormous.
+SFILE    The name of the file containing source text (required).
+RFILE1..n The names of the files containing reference translations (required).
+         The format should be as required by rescore_train; that is, in each
+         ref file, there must be one reference translation for each source
+         sentence in SFILE.  For backwards compatibility reasons, a single
+         combined RFILE created with combine.pl is also still accepted
+
+Dynamic options:
+While COW is running, you can alter some of the running parameters by
+creating a file called COW_DYNAMIC_OPTIONS in the directory where COW
+is running.  When the file is read, the parameters it contains will be
+processed and then the file will be deleted.
+Dynamic options list:
+STOP_AFTER=MAX     Do at most MAX more interations and then stop.
+                   Use 0 to stop at the end of the current iteration.
+PARALLEL=OFF       Revert to non-parallel processing at the next iteration
+PARALLEL=<options> At the next iteration, change the canoe-parallel.sh
+                   options to <options>.  Quotes are optional.
+Note that spaces are not allowed around the = sign.
+Convenient cut and paste commands:
+    echo PARALLEL=-n 4 > COW_DYNAMIC_OPTIONS
+    echo STOP_AFTER=0 > COW_DYNAMIC_OPTIONS
+

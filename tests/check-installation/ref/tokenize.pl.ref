@@ -1,0 +1,36 @@
+
+tokenize.pl, NRC-CNRC, (c) 2004 - 2010, Her Majesty in Right of Canada
+Please run "portage_info -notice" for Copyright notices of 3rd party libraries.
+
+
+Usage: tokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
+
+  Tokenize and sentence-split text in ISO-8859-1 (iso latin 1).
+
+Options:
+
+-v    Write vertical output, with each token followed by its index relative to
+      the start of its paragraph, <sent> markers after sentences, and <para>
+      markers after each paragraph.
+-p    Print an extra newline after each paragraph (has no effect if -v)
+-ss   Perform sentence-splitting.
+-noss Don't perform sentence-splitting.
+      Note: one of -ss or -noss is now required, because the old default (-ss)
+      often caused unexpected behaviour.
+-notok Don't perform tokenization. [do]
+-lang Specify two-letter language code: en or fr [en]
+-paraline
+      File is in one-paragraph-per-line format [no]
+
+Caveat:
+
+  With -ss, consecutive non-blank lines are considered as a paragraph: newlines
+  within the paragraph are removed and sentence splitting is performed.  To
+  increase sentence splitting accuracy, try to preserve existing paragraph
+  boundaries in your text, separating them with a blank line (i.e., two
+  newlines), or using -paraline if your input contains one paragraph per line.
+
+  To preserve existing line breaks, e.g., if your input is already
+  one-sentence-per-line, use -noss, otherwise your sentence breaks will be
+  modified in ways that are almost certainly undesirable.
+
