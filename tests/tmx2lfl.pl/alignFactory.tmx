@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="1.4">
+<header
+  creationtool="AlignFactory"
+  creationtoolversion="2.2 Build 7"
+  datatype="PlainText"
+  segtype="sentence"
+  adminlang="EN-US"
+  srclang="EN"
+  o-tmf="LogiTermBT"
+>
+</header>
+<body>
+<tu>
+  <tuv lang="EN" creationid="ALIGN!">
+    <seg>Skip to page content (Access Key: 1) | Skip to sidebar links (Access Key: 2)</seg>
+  </tuv>
+  <tuv lang="FR" creationid="ALIGN!">
+    <seg>Passer au contenu de la page (touche directe : 1) | Passer aux liens de l'encadré latéral (touche directe : 2)</seg>
+  </tuv>
+</tu>
+<tu>
+  <tuv xml:lang="EN" creationid="ALIGN!">
+    <seg>Français</seg>
+  </tuv>
+  <tuv xml:lang="FR" creationid="ALIGN!">
+    <seg>English</seg>
+  </tuv>
+</tu>
+<tu>
+  <tuv xml:lang="EN" creationid="ALIGN!">
+    <seg></seg>
+  </tuv>
+  <tuv xml:lang="FR" creationid="ALIGN!">
+    <seg>À titre de coordonnateur des projets régionaux de baguage des Bernaches du Canada et des canards du SCF, Norm a acquis une vaste expérience sur le terrain ainsi qu’une bonne expertise technique. Il est membre du North American Banding Council, organisme qui préconise des principes et techniques de baguage rigoureux et éthiques, au sein duquel il participe à la production d’un manuel sur le baguage de la sauvagine. Ce travail viendra compléter le vidéo (1996) auquel Norm a contribué et où l’on décrit les techniques et les exigences du baguage de la sauvagine. Norm a également participé à d’autres projets, dont des études sur le Cygne siffleur, la Tourterelle triste et un oiseau gibier terrestre, la Bécasse d’Amérique. Il a également entrepris des relevés aériens et au sol des couples nicheurs d’espèces de sauvagine dans le nord de l’Ontario et à Terre-Neuve-et-Labrador, a contribué au baguage de l’Oie des neiges et de l’Oie de Ross sur l’île de Baffin (Nunavut) et a participé à un projet d’étude sur les déplacements estivaux du Harelde kakawi au moyen de la télémesure par satellite.</seg>
+  </tuv>
+</tu>
+<tu>
+  <tuv xml:lang="EN" creationid="ALIGN!">
+    <seg>Contact Us</seg>
+  </tuv>
+  <tuv xml:lang="FR" creationid="ALIGN!">
+    <seg>Contactez-nous</seg>
+  </tuv>
+</tu>
+</body>
+</tmx>
