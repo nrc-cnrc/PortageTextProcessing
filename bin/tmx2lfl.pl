@@ -30,7 +30,9 @@ use portage_utils;
 printCopyright("tmx2lfl.pl", 2009);
 $ENV{PORTAGE_INTERNAL_CALL} = 1;
 
-use XML::Twig;
+# According to the change logs, text_only was added in version 3.28.
+# We will use this line to validate Portage's installation.
+use XML::Twig 3.28;  # We must have text_only
 use Data::Dumper;
 $Data::Dumper::Indent=1;
 
@@ -108,28 +110,24 @@ die "You don't have xmllint on your system!" if (system("which-test.sh xmllint")
 my @lang_specifiers;
 foreach my $file (@filename) {
    verbose("[Checking XML well-formedness of $file]");
-   if (system("xmllint --stream --noout $file 2> /dev/null") != 0) {
+   if (system("xmllint --stream --noout \"$file\" 2> /dev/null") != 0) {
       # YES, we rerun the command.  The first xmllint call would complain if
       # there is no dtd accessible but would still return that the tmx is valid
       # if so.  It is simpler to run it once muted and, if there are errors, to
       # rerun xmllint this time showing the user what xmllint found.
-      system("xmllint --stream --noout $file");
+      system("xmllint --stream --noout \"$file\"");
       die " [BAD]\nFix $file to be XML well-formed.";
    }
    verbose("\r[Checking XML well-formness of $file] [OK]]\n");
    
    # Quickly grab language specifiers from the tmx.
    my $spec;
-   my $cmd = "head -1 $file | egrep -qam1 \$'\\x{fffe}'";
-   debug("$cmd\n");
-   if (system($cmd) == 0) {
-      debug("UTF-16 $file language specifier detection.\n");
-      $spec .= `iconv -f UTF-16 -t UTF-8 $file | grep -m5 "xml:lang" | sort | uniq`;
-   }
-   else {
-      debug("UTF-8 $file language specifier detection.\n");
-      $spec .= `grep -m5 "xml:lang" $file | sort | uniq`;
-   }
+   # In order to minimize dependencies and since there is no speed difference
+   # between sort -u & get_voc on a small set, we will prefer the former.
+   #my $findLanguageTags = "grep '^[[:space:]]*<tuv' | egrep -m10 -o '(xml:)?lang=\"[^\"]+\"' | sort -u";
+   my $findLanguageTags = "xml_grep --nb_results 10 --cond 'tuv[\@xml:lang]' --cond 'tuv[\@lang]' --pretty_print record_c | egrep -m10 -o '(xml:)?lang=\"[^\"]+\"' | sort -u";
+   debug("cat \"$file\" | $findLanguageTags");
+   $spec .= `cat \"$file\" | $findLanguageTags`;
    while ($spec =~ /"([^\"]+)"/g) {
       push(@lang_specifiers, $1);
    }
@@ -140,8 +138,10 @@ if (not defined($src) and not defined($tgt)) {
    # Remove duplicate language identifiers.
    @lang_specifiers = keys %{{ map { $_ => 1 } @lang_specifiers }};
    unless (scalar(@lang_specifiers) == 2) {
-      print STDERR "Language identifiers found are: " . join(":", @lang_specifiers) . "\n";
-      die "Too many or too few language specifiers in your input tmx.";
+      die "Too many language identifiers to automatically extract segments.\n" 
+      . "Select two language identifiers and rerun using -src=X -tgt=Y\n"
+      . "Language identifiers found are: " . join(":", @lang_specifiers) . "\n"
+      . "Too many or too few language specifiers in your input tmx.\n";
    }
 
    $src = $lang_specifiers[0];
@@ -149,8 +149,8 @@ if (not defined($src) and not defined($tgt)) {
 }
 
 # Make sure we have language specifiers for src and tgt
-die "No source language specifier" unless(defined($src));
-die "No target language specifier" unless(defined($tgt));
+die "You must provide a source language specifier\n" unless(defined($src));
+die "You must provide a target language specifier\n" unless(defined($tgt));
 
 if ( $debug ) {
    no warnings;
@@ -232,7 +232,7 @@ sub processTU {
    my $docid = "UNKNOWN";
    my @props = $tu->children('prop');
    foreach my $prop (@props) {
-      if ($prop->{att}->{'type'} eq "Txt::Document") {
+      if ($prop->{att}->{type} eq "Txt::Document") {
          ($docid) = split(/, /, $prop->text, 1);
          debug("DOCID: $docid\n");
       }
