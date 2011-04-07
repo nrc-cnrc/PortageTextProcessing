@@ -124,8 +124,15 @@ foreach my $file (@filename) {
    my $spec;
    # In order to minimize dependencies and since there is no speed difference
    # between sort -u & get_voc on a small set, we will prefer the former.
+   # NOTE: Why not simply call xml_grep?  xml_grep is a perl script and in the
+   # case where you change your perl in your environment, this will not pickup
+   # the correct perl.  This was found by the daily build because the machine
+   # on which it runs is not properly installed anymore.  We prefer to keep
+   # xml_grep in the pipeline because xml tag can be exploded on several lines
+   # and a simple grep on the xml file becomes much harder to find the @lang
+   # attribut for tuv tags only.
    #my $findLanguageTags = "grep '^[[:space:]]*<tuv' | egrep -m10 -o '(xml:)?lang=\"[^\"]+\"' | sort -u";
-   my $findLanguageTags = "xml_grep --nb_results 10 --cond 'tuv[\@xml:lang]' --cond 'tuv[\@lang]' --pretty_print record_c | egrep -m10 -o '(xml:)?lang=\"[^\"]+\"' | sort -u";
+   my $findLanguageTags = "perl `which xml_grep` --nb_results 10 --cond 'tuv[\@xml:lang]' --cond 'tuv[\@lang]' --pretty_print record_c | egrep -m10 -o '(xml:)?lang=\"[^\"]+\"' | sort -u";
    debug("cat \"$file\" | $findLanguageTags");
    $spec .= `cat \"$file\" | $findLanguageTags`;
    while ($spec =~ /"([^\"]+)"/g) {
