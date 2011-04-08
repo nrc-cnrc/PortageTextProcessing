@@ -1,0 +1,21 @@
+This TMX is distributed by the National Research Council Canada. Contact: Samuel Larkin (samuel.larkin@cnrc-nrc.gc.ca).
+
+See http://www.parl.gc.ca/information/about/copyright/permission_hoc.asp?Language=E for legal restrictions.
+
+This is a copy of this information as of 7 March 2011.
+
+
+Important Notices
+
+Speaker's Permission Regarding the Reproduction of the Proceedings of the House of Commons and its Committees
+
+The proceedings of the House of Commons and its Committees are hereby made available to provide greater public access. The parliamentary privilege of the House of Commons to control the publication and broadcast of the proceedings of the House of Commons and its Committees is nonetheless reserved. All copyrights therein are also reserved.
+
+Reproduction of the proceedings of the House of Commons and its Committees, in whole or in part and in any medium, is hereby permitted provided that the reproduction is accurate and is not presented as official. This permission does not extend to reproduction, distribution or use for commercial purpose of financial gain. Reproduction or use outside this permission or without authorization may be treated as copyright infringement in accordance with the Copyright Act. Authorization may be obtained on written application to the Office of the Speaker of the House of Commons.
+
+Reproduction in accordance with this permission does not constitute publication under the authority of the House of Commons. The absolute privilege that applies to the proceedings of the House of Commons does not extend to these permitted reproductions. Where a reproduction includes briefs to a Standing Committee of the House of Commons, authorization for reproduction may be required from the authors in accordance with the Copyright Act.
+
+Nothing in this permission abrogates or derogates from the privileges, powers, immunities and rights of the House of Commons and its Committees. For greater certainty, this permission does not affect the prohibition against impeaching or questioning the proceedings of the House of Commons in courts or otherwise. The House of Commons retains the right and privilege to find users in contempt of Parliament if a reproduction or use is not in accordance with this permission.
+
+
+NRC wishes to thank Francis Morin and his colleagues from the House of Commons Information Services for their help in producing this corpus.

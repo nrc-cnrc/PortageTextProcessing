@@ -1,0 +1,1493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "tmx14.dtd">
+
+<tmx version="1.4">
+  <header creationtool="lfl2tmx.pl" creationtoolversion="1.0.0" segtype="sentence" o-tmf="none" adminlang="EN-CA" srclang="EN" datatype="PlainText"></header>
+  <body>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Justice and Human Rights </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le Comité permanent de la justice et des droits de la personne </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>NUMBER 015 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>NUMÉRO 015 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>1st SESSION </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>1 &lt;Sup&gt; re &lt;/Sup&gt; SESSION </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>39th PARLIAMENT </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>39 &lt;Sup&gt; e &lt;/Sup&gt; LÉGISLATURE </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Tuesday , September 26 , 2006 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le mardi 26 septembre 2006 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Le mardi 26 septembre 2006 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Tuesday , September 26 , 2006 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Justice and Human Rights </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le Comité permanent de la justice et des droits de la personne </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>[ Recorded by Electronic Apparatus ] </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>[ Enregistrement électronique ] </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>September 26 , 2006 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le 26 septembre 2006 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; La greffière du comité ( Mme Diane Diotte ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; La greffière du comité &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Honourable members of the committee , </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Honorables membres du comité , </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I see a quorum . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je vois que nous avons le quorum . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>We can now proceed to the election of the chair , and I am ready to receive motions to that effect . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Nous pouvons maintenant procéder à l' élection d' un président , et je suis prête à recevoir les motions à cet effet . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Derek Lee ( Scarborough — Rouge River , Lib. ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Derek Lee ( Scarborough — Rouge River , Lib. ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>A point of order . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>J' invoque le Règlement . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Maybe the clerk isn't in a position to receive a point of order . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>La greffière n' est peut-être pas en mesure d' accepter un rappel au Règlement . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Are you ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Est-ce possible ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>It 's because I take the view that last time we met last week we had a chair ; we had a chair this week . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>J' interviens parce que nous avions un président quand nous nous sommes réunis la semaine dernière ; nous en avions un aussi cette semaine . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>There 's been no hiatus in the chair holding the office of the chair , and there is no instruction in the Standing Orders . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le président a occupé son poste sans interruption , et il n' y a pas de directive là-dessus dans le Règlement . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>There are no words that require the committee to actually elect a chair , unless we need to , and since the chair was the chair last week -- and perhaps the clerk could refresh us on when the reports referred to were filed , but in my view it doesn't matter -- the Standing Orders do not anywhere explicitly require the election of a chair who is already a chair , nor do they require the election of vice-chairs who are already vice-chairs . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Rien n' oblige le comité à élire un président si ce n' est pas nécessaire et , comme nous en avions un la semaine dernière — et peut-être que la greffière pourrait nous rafraîchir la mémoire étant donné que des rapports ont été déposés , mais je ne crois pas que cela change grand-chose — le Règlement ne précise nulle part qu' il faut réélire un président ou des vice-présidents . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>The wording of Standing Order 106(2) clearly says that these elections shall take place at the beginning of a session , which this is not , and if necessary , which in my view it is not , since there 's been no change in the membership of the chair or the vice-chairs . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>D' après le paragraphe 106(2) du Règlement , ces élections doivent avoir lieu au début d' une session , ce qui n' est pas le cas , et si nécessaire , ce qui ne l' est pas non plus d' après moi , étant donné que le président et les vice-présidents font toujours partie du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>So I make my point of order . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Voilà pourquoi j' invoque le Règlement . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I have done it before and I'll probably do it again , and if the chair wants to go through .. We can elect a chair without taking a whole lot more time . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je l' ai fait par le passé et je vais probablement le refaire , et si le président veut se prêter .. Nous pouvons élire un président sans prendre trop de temps . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I've made my point of order . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>J' ai dit ce que j' avais à dire . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>We can re-elect the chair and everybody will be happy . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Nous pouvons toujours réélire le président et tout le monde va être content . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Art Hanger ( Calgary Northeast , CPC ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Art Hanger &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Let 's go through the election of the chair and whatever happens after . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Procédons à l' élection du président et à ce qui s' ensuit . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Clerk &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; La greffière &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I am ready to receive motions for the election of the Chair . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je suis prête à recevoir des propositions relativement au poste de président . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Myron Thompson ( Wild Rose , CPC ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Myron Thompson ( Wild Rose , PCC ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Madam Chair , I nominate Art Hanger for chair . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Madame la greffière , je propose Art Hanger au poste de président du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Clerk &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; La greffière &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>It has been moved by Mr. Thompson and seconded by Mr. Lee that Mr. Hanger be elected as chair of the committee . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>M. Thompson , appuyé par M. Lee , propose que M. Hanger soit élu président du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Are there any further motions ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Y a -t-il d' autres propositions ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Is it the pleasure of the committee to adopt the motion ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Plaît -il au comité d' adopter la motion ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>( Motion agreed to ) </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>( La motion est adoptée . ) </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Clerk &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mme Diane Diotte &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Mr. Hanger has been duly elected chair of the committee . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>M. Hanger est dûment élu président du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Before inviting Mr. Hanger to take the chair as chair , we will now proceed to the election of the vice-chairs , if there 's agreement to do it . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Avant d' inviter M. Hanger à prendre place au fauteuil , je vais maintenant passer à l' élection des vice-présidents , si vous êtes d' accord . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Derek Lee &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Derek Lee &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I don't agree , Madam Clerk , that it's necessary to re-elect the vice-chairs either , for the same reason , and the clerk would be at pains to find any wording in the Standing Orders that requires it . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je ne suis pas d' accord , madame la greffière , parce que je ne crois pas qu' il est nécessaire de réélire non plus les vice-présidents pour la même raison , et je pense que vous auriez du mal à trouver une disposition du Règlement qui l' exige . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Clerk &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; La greffière &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I'm in the hands of the committee . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je m' en remets au comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Derek Lee &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Derek Lee &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>The member opposite says let 's do it anyway . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le député d' en face veut qu' on le fasse de toute façon . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I object on principle . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je m' y oppose pour une question de principe . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>There are reasons related to how we run the House and who 's in control of what around here , but if members are more comfortable blindly following what I regard as an incorrect interpretation of the Standing Orders , I'm okay to follow because it will save a lot of time . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Il y a des raisons qui justifient le fonctionnement de la Chambre et les responsabilités de chacun mais , si les membres préfèrent suivre aveuglément ce qui me semble être une mauvaise interprétation du Règlement , je vais l' accepter pour gagner du temps . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Réal Ménard ( Hochelaga , BQ ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Réal Ménard ( Hochelaga , BQ ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Madam Clerk , I move that the same vice-chairs be reappointed . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je propose que la candidature des mêmes vice-présidents soit reconduite , madame la greffière . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Clerk &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; La greffière &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Is it the pleasure of the committee to adopt the motion ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Est-ce le désir du comité ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>( Motion agreed to ) </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>( La motion est adoptée . ) </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; The Clerk : &lt;/B&gt; Messrs. Lee and Ménard are therefore reappointed vice-chairs . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; La greffière : &lt;/B&gt; Les vice-présidents sont donc MM. Lee et Ménard . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I'm inviting Mr. Hanger to take the chair . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>J' invite M. Hanger à prendre place au fauteuil . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Réal Ménard &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Réal Ménard &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>No speech . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Pas de discours . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Chair &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Le président &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>The time for speeches has passed . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Ce n' est pas le moment de faire des discours . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I'm going to give you the opportunity here shortly , all of you . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je vais bientôt donner à chacun d' entre vous l' occasion d' intervenir . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I would first like to thank my colleagues on both sides , opposition as well as government side , for their continued support of me in the chair 's position . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>J' aimerais d'abord remercier mes collègues des deux côtés , autant ceux de l' opposition que du parti ministériel , de me confirmer dans mes fonctions de président . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Right now we will adjourn briefly for two minutes . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Nous allons suspendre les travaux deux minutes . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>The witnesses will then take their seats and everything will be recorded at this point . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Les témoins vont pouvoir s' installer et tout sera consigné . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Ms. Barnes . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Madame Barnes . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Hon. Sue Barnes ( London West , Lib. ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; L' hon. Sue Barnes ( London-Ouest , Lib. ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Mr. Hanger , after the witnesses have finished today I would like to have just a couple of minutes to take care of a business item . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Monsieur Hanger , après la comparution des témoins d' aujourd'hui , j' aimerais prendre deux ou trois minutes pour discuter d' une question d' intérêt . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I would like to let everybody know that , but in relation to our witnesses we should do those first . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je tiens à prévenir tout le monde , mais nous allons d'abord entendre les témoins . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Acting Chair ( The Chair ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Le président &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Yes . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Oui . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>We will look after our business at the end of this session . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Nous en discuterons à la fin de la réunion . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-1-JUST-15</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>The meeting is adjourned . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>La séance est levée . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Justice and Human Rights </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Comité permanent de la justice et des droits de la personne </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>NUMBER 025 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>NUMÉRO 025 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>2nd SESSION </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>2 &lt;Sup&gt; e &lt;/Sup&gt; SESSION </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>39th PARLIAMENT </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>39 &lt;Sup&gt; e &lt;/Sup&gt; LÉGISLATURE </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Wednesday , May 7 , 2008 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le mercredi 7 mai 2008 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Le mercredi 7 mai 2008 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Wednesday , May 7 , 2008 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Justice and Human Rights </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Comité permanent de la justice et des droits de la personne </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>[ Recorded by Electronic Apparatus ] </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>[ Enregistrement électronique ] </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>May 7 , 2008 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le 7 mai 2008 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Chair ( Mr. Art Hanger ( Calgary Northeast , CPC ) ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Le président ( M. Art Hanger ( Calgary-Nord-Est , PCC ) ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I now call to order the Standing Committee on Justice and Human Rights . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je déclare ouverte cette séance du Comité permanent de la justice et des droits de la personne . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I would like to begin by addressing the purpose of this particular meeting , as was notified through the clerk to me . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>J' aimerais commencer en abordant l' objet de cette séance particulière , dont m' a informé la greffière . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-25</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I know that I am obligated to call a meeting under Standing Order 106(4) within five days of the clerk receiving a letter signed by four members of the committee . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je sais que je suis tenu , en vertu du paragraphe 106(4) du Règlement , de convoquer une réunion dans les cinq jours suivant la réception , par la greffière , d' une lettre signée par quatre membres du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Justice and Human Rights </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Comité permanent de la justice et des droits de la personne </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>NUMBER 026 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>NUMÉRO 026 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>2nd SESSION </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>2 &lt;Sup&gt; e &lt;/Sup&gt; SESSION </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>39th PARLIAMENT </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>39 &lt;Sup&gt; e &lt;/Sup&gt; LÉGISLATURE </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Wednesday , May 14 , 2008 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le mercredi 14 mai 2008 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Le mercredi 14 mai 2008 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Wednesday , May 14 , 2008 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Justice and Human Rights </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Comité permanent de la justice et des droits de la personne </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>[ Recorded by Electronic Apparatus ] </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>[ Enregistrement électronique ] </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>May 14 , 2008 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le 14 mai 2008 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Chair ( Mr. Art Hanger ( Calgary Northeast , CPC ) ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Le président ( M. Art Hanger ( Calgary-Nord-Est , PCC ) ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I'd like to call the Standing Committee on Justice and Human Rights to order . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>La séance du Comité permanent de la justice et des droits de la personne est ouverte . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>If I could ask the camera crew to move to the far end of the hall , I would appreciate it . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>J' aimerais que l' équipe des caméramans se place à l' autre extrémité de la salle . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>This being Wednesday , May 14 , 2008 , pursuant to Standing Order 106(4) , this meeting is requested by four members of the committee to discuss their request to proceed to the vote on the appeal of the ruling of the chair concerning the motion moved by the member from Beauséjour on March 11 , 2008 . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Nous sommes le mercredi 14 mai 2008 , et conformément à l' article 106(4) du Règlement , cette réunion a été demandée par quatre membres du comité pour que nous parlions de leur demande de procéder à un vote sur l' appel de la décision du président concernant la motion présentée par le député de Beauséjour le 11 mars 2008 . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Brian Murphy ( Moncton — Riverview — Dieppe , Lib. ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Brian Murphy ( Moncton — Riverview — Dieppe , Lib. ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>A point of order on in camera -- </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Un rappel au Règlement à huis clos .. </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Chair &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Le président &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Committee members , I'm recognizing no one right now . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Chers collègues , je ne donnerai la parole à personne pour le moment . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I'm not finished my statement . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je n' ai pas terminé ma déclaration . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>This meeting , like the last meeting , is convened under Standing Order 106(4) . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Cette réunion , comme la dernière , a été convoquée aux termes de l' article 106(4) du Règlement . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Today 's meeting was scheduled after the clerk received a letter signed by various members ; I think it was all of the opposition members , the Liberal and the Bloc . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>La réunion d' aujourd'hui a été convoquée parce que le greffier du comité a reçu une lettre signée par divers membres du comité ; je pense qu' il y avait tous les membres de l' opposition , les Libéraux et le Bloc . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>On Friday -- </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Vendredi .. </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Brian Murphy &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Brian Murphy &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Sorry , Mr. Chair , on a point of order . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Excusez -moi , monsieur le président , j' invoque le Règlement . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Chair &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Le président &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I'm not recognizing anyone until I've finished my statement . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je ne donnerai la parole à personne tant que je n' aurai pas terminé ma déclaration . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Then your point of order will be -- </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Nous pourrons alors entendre votre rappel au Règlement .. </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Brian Murphy &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Brian Murphy &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>It 's on the cameras . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Il s' agit des caméras . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Let 's make this simple . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Essayons de simplifier les choses . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I don't want to interrupt your statement , but this is not an in camera meeting , Mr. Chair . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je ne veux pas interrompre votre déclaration mais nous ne sommes pas en train de siéger à huis clos , monsieur le président . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>So can we have cameras back in the meeting ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Pourrions -nous autoriser les caméramans à filmer la réunion ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Chair &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Le président &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I never asked the gentleman with the camera to leave the room ; I asked him to move to the end of the hall . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je n' ai jamais demandé à la personne qui porte cette caméra de quitter la salle ; je lui ai demandé de se placer à l' extrémité de la salle . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Brian Murphy &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Brian Murphy &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>If that 's a clear ruling , I misunderstood , because they left thinking it was .. I apologize . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Si c' est vraiment votre décision , je l' ai mal comprise , parce qu' ils ont quitté la salle en pensant que .. Excusez -moi . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; The Chair &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Le président &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/39-2-JUST-26</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Let me continue . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Permettez -moi de continuer . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Access to Information , Privacy and Ethics </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Comité permanent de l' accès à l' information , de la protection des renseignements personnels et de l' éthique </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>NUMBER 030 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>NUMÉRO 030 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>2nd SESSION </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>2 &lt;Sup&gt; e &lt;/Sup&gt; SESSION </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>40th PARLIAMENT </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>40 &lt;Sup&gt; e &lt;/Sup&gt; LÉGISLATURE </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Tuesday , October 6 , 2009 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le mardi 6 octobre 2009 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Le mardi 6 octobre 2009 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Tuesday , October 6 , 2009 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Access to Information , Privacy and Ethics </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Comité permanent de l' accès à l' information , de la protection des renseignements personnels et de l' éthique </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>[ Recorded by Electronic Apparatus ] </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>[ Enregistrement électronique ] </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>October 6 , 2009 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le 6 octobre 2009 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Ms. Michelle Tittley ( Procedural Clerk ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mme Michelle Tittley ( greffière à la procédure ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Honourable members of the committee , I see a quorum . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Mesdames et messieurs , je constate que nous avons le quorum . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>We can now proceed to the election of the chair . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Nous pouvons passer à l' élection d' un président . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Pursuant to Standing Order 106(2) , the chair must be a member of the official opposition . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Conformément au paragraphe 106(2) du Règlement , le président doit être député de l' opposition officielle . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I am ready to receive motions to that effect . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je suis prête à recevoir les motions à cet effet . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Bill Siksay ( Burnaby — Douglas , NDP ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Bill Siksay &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Madam Chair , I'd like to nominate Mr. Szabo . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Madame la présidente , je voudrais proposer M. Szabo . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Ms. Michelle Tittley &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mme Michelle Tittley &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>It has been moved by Mr. Siksay that Mr. Szabo be elected chair of the committee . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Il est proposé par M. Siksay que M. Szabo soit élu président du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Are there any further motions ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Y a -t-il d' autres propositions ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Is it the pleasure of the committee to adopt the motion ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Plaît -il au comité d' adopter la motion ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>( Motion agreed to ) </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>( La motion est adoptée . ) </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Ms. Michelle Tittley : &lt;/B&gt; I declare Mr. Szabo duly elected chair of the committee . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Mme Michelle Tittley : &lt;/B&gt; Je déclare M. Szabo dûment élu président du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Some hon. members : &lt;/B&gt; Hear , hear ! </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Des voix : &lt;/B&gt; Bravo ! </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Ms. Michelle Tittley : &lt;/B&gt; Before inviting Mr. Szabo to take the chair , we will proceed to the election of the vice-chairs . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Mme Michelle Tittley : &lt;/B&gt; Avant d' inviter M. Szabo à occuper le fauteuil , nous allons passer à l' élection des vice-présidents . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I am now ready to receive motions for the position of first vice-chair . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je suis maintenant prête à recevoir des motions pour le poste de premier vice-président . </seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>

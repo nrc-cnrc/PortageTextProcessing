@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "tmx14.dtd">
+
+<tmx version="1.4">
+  <header creationtool="lfl2tmx.pl" creationtoolversion="1.0.0" segtype="sentence" o-tmf="none" adminlang="EN-CA" srclang="EN" datatype="PlainText">
+    <note xml:lang="FR-CA">
+Cette TMX est distribuée par le Conseil national de recherches Canada. Contact: Samuel Larkin (samuel.larkin@cnrc-nrc.gc.ca).
+
+Prière de lire les restrictions légales dans http://www.parl.gc.ca/information/about/copyright/permission_hoc.asp?Language=F.
+Ceci est une copie de cette information en date du 7 mars 2011.
+
+
+Permission du Président concernant la reproduction des délibérations de la Chambre des communes et de ses comités
+
+Les délibérations de la Chambre des communes et de ses comités sont mises à la disposition du public pour mieux le renseigner. La Chambre conserve néanmoins son privilège parlementaire de contrôler la publication et la diffusion des délibérations et elle possède tous les droits d’auteur sur celles-ci.
+
+Il est permis de reproduire les délibérations de la Chambre et de ses comités, en tout ou en partie, sur n’importe quel support, pourvu que la reproduction soit exacte et qu’elle ne soit pas présentée comme version officielle. Il n’est toutefois pas permis de reproduire, de distribuer ou d’utiliser les délibérations à des fins commerciales visant la réalisation d'un profit financier. Toute reproduction ou utilisation non permise ou non formellement autorisée peut être considérée comme une violation du droit d’auteur aux termes de la Loi sur le droit d’auteur. Une autorisation formelle peut être obtenue sur présentation d’une demande écrite au Bureau du Président de la Chambre.
+
+La reproduction conforme à la présente permission ne constitue pas une publication sous l’autorité de la Chambre. Le privilège absolu qui s’applique aux délibérations de la Chambre ne s’étend pas aux reproductions permises. Lorsqu’une reproduction comprend des mémoires présentés à un comité de la Chambre, il peut être nécessaire d’obtenir de leurs auteurs l’autorisation de les reproduire, conformément à la Loi sur le droit d’auteur.
+
+La présente permission ne porte pas atteinte aux privilèges, pouvoirs, immunités et droits de la Chambre et de ses comités. Il est entendu que cette permission ne touche pas l’interdiction de contester ou de mettre en cause les délibérations de la Chambre devant les tribunaux ou autrement. La Chambre conserve le droit et le privilège de déclarer l’utilisateur coupable d’outrage au Parlement lorsque la reproduction ou l’utilisation n’est pas conforme à la présente permission.
+
+
+Le CNRC désire remercier Francis Morin et ses collègues des Services d’information de la Chambre des communes pour leur aide à la production de ce corpus.
+</note>
+    <note xml:lang="EN-CA">
+This TMX is distributed by the National Research Council Canada. Contact: Samuel Larkin (samuel.larkin@cnrc-nrc.gc.ca).
+
+See http://www.parl.gc.ca/information/about/copyright/permission_hoc.asp?Language=E for legal restrictions.
+
+This is a copy of this information as of 7 March 2011.
+
+
+Important Notices
+
+Speaker's Permission Regarding the Reproduction of the Proceedings of the House of Commons and its Committees
+
+The proceedings of the House of Commons and its Committees are hereby made available to provide greater public access. The parliamentary privilege of the House of Commons to control the publication and broadcast of the proceedings of the House of Commons and its Committees is nonetheless reserved. All copyrights therein are also reserved.
+
+Reproduction of the proceedings of the House of Commons and its Committees, in whole or in part and in any medium, is hereby permitted provided that the reproduction is accurate and is not presented as official. This permission does not extend to reproduction, distribution or use for commercial purpose of financial gain. Reproduction or use outside this permission or without authorization may be treated as copyright infringement in accordance with the Copyright Act. Authorization may be obtained on written application to the Office of the Speaker of the House of Commons.
+
+Reproduction in accordance with this permission does not constitute publication under the authority of the House of Commons. The absolute privilege that applies to the proceedings of the House of Commons does not extend to these permitted reproductions. Where a reproduction includes briefs to a Standing Committee of the House of Commons, authorization for reproduction may be required from the authors in accordance with the Copyright Act.
+
+Nothing in this permission abrogates or derogates from the privileges, powers, immunities and rights of the House of Commons and its Committees. For greater certainty, this permission does not affect the prohibition against impeaching or questioning the proceedings of the House of Commons in courts or otherwise. The House of Commons retains the right and privilege to find users in contempt of Parliament if a reproduction or use is not in accordance with this permission.
+
+
+NRC wishes to thank Francis Morin and his colleagues from the House of Commons Information Services for their help in producing this corpus.
+</note>
+  </header>
+  <body>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>1 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Access to Information , Privacy and Ethics </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Comité permanent de l' accès à l' information , de la protection des renseignements personnels et de l' éthique </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>NUMBER 030 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>NUMÉRO 030 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>2nd SESSION </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>2 &lt;Sup&gt; e &lt;/Sup&gt; SESSION </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>40th PARLIAMENT </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>40 &lt;Sup&gt; e &lt;/Sup&gt; LÉGISLATURE </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Tuesday , October 6 , 2009 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le mardi 6 octobre 2009 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Le mardi 6 octobre 2009 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Tuesday , October 6 , 2009 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Standing Committee on Access to Information , Privacy and Ethics </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Comité permanent de l' accès à l' information , de la protection des renseignements personnels et de l' éthique </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>CANADA </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>[ Recorded by Electronic Apparatus ] </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>[ Enregistrement électronique ] </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>EVIDENCE </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>TÉMOIGNAGES </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>October 6 , 2009 </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Le 6 octobre 2009 </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Committee </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Ms. Michelle Tittley ( Procedural Clerk ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mme Michelle Tittley ( greffière à la procédure ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Honourable members of the committee , I see a quorum . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Mesdames et messieurs , je constate que nous avons le quorum . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>We can now proceed to the election of the chair . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Nous pouvons passer à l' élection d' un président . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Pursuant to Standing Order 106(2) , the chair must be a member of the official opposition . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Conformément au paragraphe 106(2) du Règlement , le président doit être député de l' opposition officielle . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I am ready to receive motions to that effect . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je suis prête à recevoir les motions à cet effet . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mr. Bill Siksay ( Burnaby — Douglas , NDP ) &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; M. Bill Siksay &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Madam Chair , I'd like to nominate Mr. Szabo . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Madame la présidente , je voudrais proposer M. Szabo . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Ms. Michelle Tittley &lt;/Affiliation&gt; : </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;Affiliation&gt; Mme Michelle Tittley &lt;/Affiliation&gt; : </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>It has been moved by Mr. Siksay that Mr. Szabo be elected chair of the committee . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Il est proposé par M. Siksay que M. Szabo soit élu président du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Are there any further motions ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Y a -t-il d' autres propositions ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>Is it the pleasure of the committee to adopt the motion ? </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Plaît -il au comité d' adopter la motion ? </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>( Motion agreed to ) </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>( La motion est adoptée . ) </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Ms. Michelle Tittley : &lt;/B&gt; I declare Mr. Szabo duly elected chair of the committee . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Mme Michelle Tittley : &lt;/B&gt; Je déclare M. Szabo dûment élu président du comité . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Some hon. members : &lt;/B&gt; Hear , hear ! </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Des voix : &lt;/B&gt; Bravo ! </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Ms. Michelle Tittley : &lt;/B&gt; Before inviting Mr. Szabo to take the chair , we will proceed to the election of the vice-chairs . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>&lt;B&gt; Mme Michelle Tittley : &lt;/B&gt; Avant d' inviter M. Szabo à occuper le fauteuil , nous allons passer à l' élection des vice-présidents . </seg>
+      </tuv>
+    </tu>
+    <tu>
+      <prop type="Txt::Document">src/40-2-ETHI-30</prop>
+      <tuv xml:lang="EN-CA" creationid="lfl2tmx.pl">
+        <seg>I am now ready to receive motions for the position of first vice-chair . </seg>
+      </tuv>
+      <tuv xml:lang="FR-CA" creationid="lfl2tmx.pl">
+        <seg>Je suis maintenant prête à recevoir des motions pour le poste de premier vice-président . </seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>
