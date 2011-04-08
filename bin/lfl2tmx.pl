@@ -95,7 +95,7 @@ sub process(@) {
          closedir( DIR );
 
          # recurse on items in the directory
-         foreach my $s ( @sessions ) {
+         foreach my $s ( sort @sessions ) {
             process( ("$s") );
          }
       }
