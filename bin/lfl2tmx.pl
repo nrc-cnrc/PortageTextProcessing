@@ -40,7 +40,7 @@ sub usage {
    print STDERR "
 Usage: $0 [options] {paths | files.id}
 
-  Creates a tmx from a structure of parallel file pairsi and outputs it to stdout.
+  Creates a tmx from a structure of parallel file pairs and outputs it to stdout.
   Looks for X.id and creates TUs from X_en.al & X_fr.al.
 
 CAVEAT:
