@@ -59,8 +59,6 @@ make_version:
 gcc_version:
 	@[[ $$( echo "`\g++ --version | head -n 1 | egrep -om1 '[0-9]\.[0-9]+'` >= 4.2" | bc) == 1 ]] \
 	|| ! echo "Portage requires at least g++-4.2!" >&2
-	@[[ $$( echo "`\g++ --version | head -n 1 | egrep -om1 '[0-9]\.[0-9]+'` >= 4.4" | bc) == 1 ]] \
-	|| echo "Warning: We highly recommand g++-4.4 or greater if you want to use OpenMP for internal parallelism!" >&2
 
 
 
