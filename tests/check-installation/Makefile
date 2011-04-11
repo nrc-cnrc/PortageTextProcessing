@@ -61,11 +61,14 @@ gcc_version:
 	|| ! echo "Portage requires at least g++-4.2!" >&2
 
 
+# Since the ram is power of 1024 but swap is power of 1000, we will make the
+# conversion here.
 .PHONY: ram_vs_swap
 ram_vs_swap:
 	@SWAP=`cat /proc/meminfo | grep SwapTotal | egrep -o '[0-9]+'`; \
 	RAM=`cat /proc/meminfo | grep MemTotal | egrep -o '[0-9]+'`; \
-	[[ $$SWAP -ge $$((2 * $$RAM)) ]] || echo "We strongly suggest that you have twice as much swap($$SWAP) than ram($$RAM)." >&2
+	[[ $$SWAP -ge $$((2 * $$RAM * 1000 / 1024 * 1000 / 1024)) ]] \
+	|| echo "We strongly suggest that you have twice as much swap($$SWAP) than ram($$RAM)." >&2
 
 
 
