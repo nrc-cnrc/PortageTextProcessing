@@ -40,7 +40,7 @@ testsuite:
 testsuite: pre_installation
 
 .PHONY: pre_installation
-pre_installation: perl_version make_version gcc_version
+pre_installation: perl_version make_version gcc_version ram_vs_swap
 	@echo "You are now ready to install Portage." >&2
 
 .PHONY: perl_version
@@ -59,6 +59,13 @@ make_version:
 gcc_version:
 	@[[ $$( echo "`\g++ --version | head -n 1 | egrep -om1 '[0-9]\.[0-9]+'` >= 4.2" | bc) == 1 ]] \
 	|| ! echo "Portage requires at least g++-4.2!" >&2
+
+
+.PHONY: ram_vs_swap
+ram_vs_swap:
+	@SWAP=`cat /proc/meminfo | grep SwapTotal | egrep -o '[0-9]+'`; \
+	RAM=`cat /proc/meminfo | grep MemTotal | egrep -o '[0-9]+'`; \
+	[[ $$SWAP -ge $$((2 * $$RAM)) ]] || echo "We strongly suggest that you have twice as much swap($$SWAP) than ram($$RAM)." >&2
 
 
 
