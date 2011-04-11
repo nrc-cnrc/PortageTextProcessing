@@ -20,6 +20,7 @@
 # Generic error message
 EXPLAIN := Can not run your program.
 
+SHELL = bash
 .PHONY: all
 all: testsuite
 
@@ -29,7 +30,46 @@ clean:
 
 
 .PHONY: testsuite
-testsuite: canoe cow.sh tokenize.pl ce.pl tmx2lfl.pl
+testsuite:
+	@echo "Installation successful!"
+
+
+
+########################################
+# What can be checked before starting to install Portage.
+testsuite: pre_installation
+
+.PHONY: pre_installation
+pre_installation: perl_version make_version gcc_version
+	@echo "You are now ready to install Portage." >&2
+
+.PHONY: perl_version
+perl_version:
+	@perl -e 'require 5.8.5;' || ! echo "Your perl version is to old." >&2
+	@perl -e 'require 5.8.8;' || echo "Some perl XML functionalities we most likely fail." >&2
+
+
+.PHONY: make_version
+make_version:
+	@[[ $$( echo "`\make --version | head -n 1 | egrep -o '[0-9\.]+'` >= 3.81" | bc) == 1 ]] \
+	|| ! echo "Portage requires make-3.81" >&2
+
+
+.PHONY: gcc_version
+gcc_version:
+	@[[ $$( echo "`\g++ --version | head -n 1 | egrep -om1 '[0-9]\.[0-9]+'` >= 4.2" | bc) == 1 ]] \
+	|| ! echo "Portage requires at least g++-4.2!" >&2
+	@[[ $$( echo "`\g++ --version | head -n 1 | egrep -om1 '[0-9]\.[0-9]+'` >= 4.4" | bc) == 1 ]] \
+	|| echo "Warning: We highly recommand g++-4.4 or greater if you want to use OpenMP for internal parallelism!" >&2
+
+
+
+########################################
+# What needs to work after a successful installation of Portage.
+testsuite: post_installation
+
+.PHONY: post_installation
+post_installation: canoe cow.sh tokenize.pl ce.pl tmx2lfl.pl
 	@echo "Everything is correctly installed!" >&2
 
 
@@ -39,8 +79,9 @@ cow.sh: EXPLAIN:=Make sure Portage is correctly installed.  Check your PATH.
 tmx2lfl.pl: EXPLAIN:=Check your PERL5LIB or you're missing XML::Twig or your version is not greater or equal to XML::Twig-3.28.
 tokenize.pl: EXPLAIN:=Check your PERL5LIB.
 
+.PHONY: cow.sh tokenize.pl canoe ce.pl tmx2lfl.pl
 # We simply make sure we can invoke the help message to trigger the dependencies.
 cow.sh tokenize.pl canoe ce.pl tmx2lfl.pl:
-	@which $@ &> /dev/null || echo "Can't locate $@ in your PATH!" >&2
-	@$@ -h 2>&1 | cmp --quiet - ref/$@.ref || echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
+	@which $@ &> /dev/null || ! echo "Can't locate $@ in your PATH!" >&2
+	@$@ -h 2>&1 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
 
