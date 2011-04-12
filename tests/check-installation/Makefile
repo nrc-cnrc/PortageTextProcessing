@@ -17,6 +17,16 @@
 
 -include Makefile.params
 
+HOSTNAME:=$(shell uname -n)
+ifeq (${HOSTNAME},iitgatsrv0575)
+# On Leclerc, where we run autobuild, the default Perl can't handle XML::Twig
+export PERL5LIB:=/home/portage/i686-g4.2/lib/site_perl/5.8.9:${PERL5LIB}
+export PATH:=/home/portage/pkgs/perl-5.8.9-x86_64/bin:${PATH}
+TMX2LFL:=perl $(shell which tmx2lfl.pl)
+else
+TMX2LFL:=tmx2lfl.pl
+endif
+
 # Generic error message
 EXPLAIN := Can not run your program.
 
@@ -89,7 +99,12 @@ tokenize.pl: EXPLAIN:=Check your PERL5LIB.
 
 .PHONY: cow.sh tokenize.pl canoe ce.pl tmx2lfl.pl
 # We simply make sure we can invoke the help message to trigger the dependencies.
-cow.sh tokenize.pl canoe ce.pl tmx2lfl.pl:
+cow.sh tokenize.pl canoe ce.pl:
 	@which $@ &> /dev/null || ! echo "Can't locate $@ in your PATH!" >&2
 	@$@ -h 2>&1 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
+
+# We need a special target for the daily build on leclerc.
+tmx2lfl.pl:
+	@which $@ &> /dev/null || ! echo "Can't locate $@ in your PATH!" >&2
+	@${TMX2LFL} -h 2>&1 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
 
