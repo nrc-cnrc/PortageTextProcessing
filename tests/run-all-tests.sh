@@ -9,11 +9,22 @@
 # Copyright 2008, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2008, Her Majesty in Right of Canada
 
+if [[ "$1" == "-j" ]]; then
+   PARALLEL_MODE=1
+   PARALLEL_LEVEL=$2
+   shift
+   shift
+fi
+
 if [[ "$1" =~ "^-" ]]; then
    echo "Usage: $0 [test-suite [test-suite2 [...]]]
-       Run the specified test suites, or all test suites if none are specified.
-       Each test suite must contain a script named run-test.sh which returns 0
-       as exit status if the suite passes, non-zero otherwise."
+   Run the specified test suites, or all test suites if none are specified.
+   Each test suite must contain a script named run-test.sh which returns 0
+   as exit status if the suite passes, non-zero otherwise.
+
+Option:
+   -j N   Run the tests N-ways parallel.
+"
    exit
 fi
 
@@ -24,6 +35,14 @@ fi
 
 echo ""
 echo Test suites to run: $TEST_SUITES
+
+if [[ $PARALLEL_MODE ]]; then
+   PARALLEL_MODE=
+   for suite in $TEST_SUITES; do
+      echo $0 $suite
+   done | run-parallel.sh - $PARALLEL_LEVEL
+   exit
+fi
 
 run_test() {
    { time-mem ./run-test.sh; } >& _log.run-test
