@@ -37,7 +37,7 @@ all: testsuite
 
 .PHONY: clean
 clean:
-
+	@true
 
 .PHONY: testsuite
 testsuite:
