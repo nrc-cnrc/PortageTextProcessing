@@ -51,7 +51,7 @@ testsuite: pre_installation
 
 .PHONY: pre_installation
 pre_installation: perl_version make_version gcc_version ram_vs_swap
-	@echo "You are now ready to install Portage." >&2
+	@echo "Prerequisites are correctly installed." >&2
 
 .PHONY: perl_version
 perl_version:
@@ -88,7 +88,7 @@ testsuite: post_installation
 
 .PHONY: post_installation
 post_installation: canoe cow.sh tokenize.pl ce.pl tmx2lfl.pl
-	@echo "Everything is correctly installed!" >&2
+	@echo "Portage is correctly installed." >&2
 
 
 canoe: EXPLAIN:=Make sure Portage is correctly installed.  Check your PATH.
@@ -101,10 +101,10 @@ tokenize.pl: EXPLAIN:=Check your PERL5LIB.
 # We simply make sure we can invoke the help message to trigger the dependencies.
 cow.sh tokenize.pl canoe ce.pl:
 	@which $@ &> /dev/null || ! echo "Can't locate $@ in your PATH!" >&2
-	@$@ -h 2>&1 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
+	@$@ -h 2>&1 | head -5 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
 
 # We need a special target for the daily build on leclerc.
 tmx2lfl.pl:
 	@which $@ &> /dev/null || ! echo "Can't locate $@ in your PATH!" >&2
-	@${TMX2LFL} -h 2>&1 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
+	@${TMX2LFL} -h 2>&1 | head -5 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
 

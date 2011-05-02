@@ -3,27 +3,3 @@ Usage tmx2lfl.pl {options} [ tmx-file... ]
 
 Convert TMX (Translation Memory Exchange) files into a LFL (line-for-line)
 aligned pair of text files.  The languages specified with the -src and -tgt
-arguments are extracted (if the TMX contains exactly two languages, the default
-is to extract them both), and output goes to pair of files <output>.<src> and
-<output>.<tgt>, where <output> is specified with the -output option (default is
-lfl-output) and <src> and <tgt> correspond to language names given with -src
-and -tgt.
-
-Note:
-  The input should be a "Well-Formed" tmx in ASCII, UTF-16 or UTF-8;
-  the output will always be in UTF-8.
-  You can validate your tmx file by doing the following:
-    # To obtain tmx14.dtd
-    curl -o tmx14.dtd http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt
-    # Validate that the tmx is "Well-Formed"
-    xmllint --noout --valid YourFile.tmx
-
-Options:
-  -output=P     Set output file prefix [lfl-output]
-  -src=S        Specify source language [auto-detect]
-  -tgt=T        Specify target language [auto-detect]
-  -txt=X        Specify and trigger outputing a text-only parallel corpus []
-  -extra        Add an extra empty line between pairs of TU's [don't]
-  -verbose      Verbose mode
-  -d            debugging mode.
-  -help,-h      Print this help message and exit
