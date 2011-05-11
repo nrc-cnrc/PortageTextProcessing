@@ -40,7 +40,10 @@ if [[ $PARALLEL_MODE ]]; then
    PARALLEL_MODE=
    for suite in $TEST_SUITES; do
       echo $0 $suite
-   done | run-parallel.sh - $PARALLEL_LEVEL
+   done |
+      run-parallel.sh -unordered-cat -v - $PARALLEL_LEVEL | 
+      egrep 'PASSED|FAILED' |
+      grep -v 'test suites'
    exit
 fi
 
