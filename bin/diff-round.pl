@@ -102,7 +102,7 @@ my $inf_max_diff = 0;
 sub make_open_cmd($) {
    my $file = $_[0];
    if ( $file !~ /\|$/ ) {
-      -r $file or $file eq "-" or die "Can't open $file: $!\n";
+      -r $file or -r "$file.gz" or $file eq "-" or die "Can't open $file: $!\n";
       $file = "gzip -cqdf $file |";
    }
    if ( $sort ) {
