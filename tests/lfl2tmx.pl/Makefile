@@ -19,8 +19,9 @@ LFL2TMX := lfl2tmx.pl
 HOSTNAME:=$(shell uname -n)
 ifeq (${HOSTNAME},iitgatsrv0575)
 # On Leclerc, where we run autobuild, the default Perl can't handle XML::Twig/xml_grep
-export PERL5LIB:=/home/portage/i686-g4.2/lib/site_perl/5.8.9:${PERL5LIB}
+export PERL5LIB:=${HOME}/lib/5.8.9:${HOME}/lib/site_perl/5.8.9:/home/portage/i686-g4.2/lib/site_perl/5.8.9:${PERL5LIB}
 export PATH:=/home/portage/pkgs/perl-5.8.9-x86_64/bin:${PATH}
+$(info Special PERL5LIB for leclerc is now: ${PERL5LIB})
 XML_GREP := perl $(shell which xml_grep)
 else
 XML_GREP := xml_grep
