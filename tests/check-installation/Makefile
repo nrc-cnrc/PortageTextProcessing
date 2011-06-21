@@ -57,7 +57,7 @@ pre_installation: perl_version make_version gcc_version ram_vs_swap
 .PHONY: perl_version
 perl_version:
 	@perl -e 'require 5.8.5;' || ! echo "Your perl version is to old." >&2
-	@perl -e 'require 5.8.8;' || echo "Some perl XML functionalities we most likely fail." >&2
+	@perl -e 'require 5.8.8;' || echo "Some perl XML functionalities will most likely fail." >&2
 
 
 .PHONY: make_version
