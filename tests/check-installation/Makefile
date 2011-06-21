@@ -17,8 +17,6 @@
 
 -include Makefile.params
 
-TMX2LFL := tmx2lfl.pl
-
 # Generic error message
 EXPLAIN := Can not run your program.
 
@@ -78,8 +76,9 @@ ram_vs_swap:
 # What needs to work after a successful installation of Portage.
 testsuite: post_installation
 
+VALIDATE_PGMS := canoe cow.sh tokenize.pl ce.pl tmx2lfl.pl
 .PHONY: post_installation
-post_installation: canoe cow.sh tokenize.pl ce.pl tmx2lfl.pl
+post_installation: ${VALIDATE_PGMS}
 	@echo "Portage is correctly installed." >&2
 
 
@@ -89,14 +88,9 @@ cow.sh: EXPLAIN:=Make sure Portage is correctly installed.  Check your PATH.
 tmx2lfl.pl: EXPLAIN:=Check your PERL5LIB or you're missing XML::Twig or your version is not greater or equal to XML::Twig-3.28.
 tokenize.pl: EXPLAIN:=Check your PERL5LIB.
 
-.PHONY: cow.sh tokenize.pl canoe ce.pl tmx2lfl.pl
+.PHONY: ${VALIDATE_PGMS}
 # We simply make sure we can invoke the help message to trigger the dependencies.
-cow.sh tokenize.pl canoe ce.pl:
+${VALIDATE_PGMS}:
 	@which $@ &> /dev/null || ! echo "Can't locate $@ in your PATH!" >&2
 	@$@ -h 2>&1 | head -5 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
-
-# We need a special target for the daily build on leclerc.
-tmx2lfl.pl:
-	@which $@ &> /dev/null || ! echo "Can't locate $@ in your PATH!" >&2
-	@${TMX2LFL} -h 2>&1 | head -5 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
 
