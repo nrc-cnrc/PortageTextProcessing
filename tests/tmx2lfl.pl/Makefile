@@ -13,16 +13,7 @@
 # Copyright 2009, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2009, Her Majesty in Right of Canada
 
-HOSTNAME:=$(shell uname -n)
-ifeq (${HOSTNAME},iitgatsrv0575)
-# On Leclerc, where we run autobuild, the default Perl can't handle XML::Twig
-export PERL5LIB:=${HOME}/lib/5.8.9:${HOME}/lib/site_perl/5.8.9:/home/portage/i686-g4.2/lib/site_perl/5.8.9:${PERL5LIB}
-export PATH:=/home/portage/pkgs/perl-5.8.9-x86_64/bin:${PATH}
-$(info Special PERL5LIB for leclerc is now: ${PERL5LIB})
-TMX2LFL:=perl $(shell which tmx2lfl.pl)
-else
-TMX2LFL:=tmx2lfl.pl
-endif
+TMX2LFL := tmx2lfl.pl
 
 L1 ?= lang1
 L2 ?= lang2
