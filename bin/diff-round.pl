@@ -79,6 +79,11 @@ my $pow_prec = 1/(10**$prec);
 
 2 == @ARGV or usage "Must specify exactly two input files.";
 
+if (-d $ARGV[1] && -f $ARGV[0]) {
+   $ARGV[1] .= "/" . `basename $ARGV[0]`;
+   $ARGV[1] =~ s/\s*$//;
+}
+
 if ( $pipe ) {
    my $sort_cmd = ($sort ? " LC_ALL=C sort |" : "");
    exec("diffpipe -w -prec $prec 'gzip -cqfd $ARGV[0] |$sort_cmd' 'gzip -cqfd $ARGV[1] |$sort_cmd'")
@@ -97,6 +102,7 @@ my $inf_max_diff = 0;
 sub make_open_cmd($) {
    my $file = $_[0];
    if ( $file !~ /\|$/ ) {
+      -r $file or die "Can't open $file: $!\n";
       $file = "gzip -cqdf $file |";
    }
    if ( $sort ) {
