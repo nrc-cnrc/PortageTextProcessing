@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 
 # @file filter-long-lines.pl 
 # @brief Filter out long lines (> L tokens) from multiple line-aligned files. 
