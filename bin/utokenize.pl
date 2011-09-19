@@ -56,7 +56,8 @@ Options:
 -noss Don't perform sentence-splitting.
       Note: one of -ss or -noss is now required, because the old default (-ss)
       often caused unexpected behaviour.
--notok Don't perform tokenization. [do]
+-notok Don't tokenize the output. [do tokenize]
+-pretok Already tokenized. Don't re-tokenize the input. [do tokenize]
 -lang Specify two-letter language code: en or es or fr [en]
 -paraline
       File is in one-paragraph-per-line format [no]
@@ -75,7 +76,7 @@ Caveat:
 
 ";
 
-our ($help, $h, $lang, $v, $p, $ss, $noss, $paraline, $notok);
+our ($help, $h, $lang, $v, $p, $ss, $noss, $paraline, $notok, $pretok);
 
 if ($help || $h) {
    print $HELP;
@@ -87,6 +88,7 @@ $p = 0 unless defined $p;
 $ss = 0 unless defined $ss;
 $noss = 0 unless defined $noss;
 $notok = 0 unless defined $notok;
+$pretok = 0 unless defined $pretok;
 $paraline = 0 unless defined $paraline;
  
 my $in = shift || "-";
@@ -94,17 +96,23 @@ my $out = shift || "-";
 
 my $psep = $p ? "\n\n" : "\n";
 
-open(IN, "<$in") || die "Can't open $in for reading";
-open(OUT, ">$out") || die "Can't open $out for writing";
+open(IN, "<$in") || die "utokenize.pl: Can't open $in for reading";
+open(OUT, ">$out") || die "utokenize.pl: Can't open $out for writing";
 
 if ( !$ss && !$noss ) {
    die "utokenize.pl: One of -ss and -noss is now required.\n";
+}
+if ( $notok && $pretok ) {
+   die "utokenize.pl: Specify only one of -notok or -pretok.\n";
 }
 if ( $ss && $noss ) {
    die "utokenize.pl: Specify only one of -ss or -noss.\n";
 }
 if ( $noss && $notok ) {
    warn "Just copying the input since -noss and -notok are both specified.\n";
+}
+if ( $noss && $pretok ) {
+   warn "Just copying the input since -noss and -pretok are both specified.\n";
 }
 
 # Enable immediate flush when piping
@@ -127,10 +135,10 @@ while (1)
       }
    }
 
-   my @token_positions = tokenize($para, $lang);
+   my @token_positions = tokenize($para, $lang, $notok, $pretok);
    my @sent_positions = split_sentences($para, @token_positions) unless ($noss);
 
-   if ($notok) {
+   if ($notok || $pretok) {
       if ($noss) {
          # A bit weird, but the user asked to neither split nor tokenize.
          print OUT $para;

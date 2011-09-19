@@ -72,7 +72,7 @@ my $rightquotes = quotemeta("’»”´");
 my $hyphens = quotemeta("‐‑‒–—―-");
 my $wide_dashes = quotemeta("‐‑‒–—―");
 my $splitleft = qr/[\"“«\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
-my $splitright = qr/\.{2,4}|[\"”»!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
+my $splitright = qr/\.{2,}|[\"”»!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
 
 my @known_abbrs_en = qw {
    acad adm aka al apr aug ba bc blvd bsc btw c ca capt cdn ceo cf
@@ -228,10 +228,12 @@ sub get_para #(\*FILEHANDLE, $one_para_per_line)
 
 # EJJ note: can't use the signature (\$$) here, because $para is modified in
 # this method, and we don't want the changes reflected for the caller.
-sub tokenize #(paragraph, lang)
+sub tokenize #(paragraph, lang, notok, pretok)
 {
    my $para = shift;
    my $lang = shift || "en";
+   my $notok = shift || 0;
+   my $pretok = shift || 0;
    my @tok_posits = ();
 
    my ($split_word, $matches_known_abbr);
@@ -257,8 +259,11 @@ sub tokenize #(paragraph, lang)
    while ($para =~ /(<[^>]+>)|([[:^space:]]+)/go) {
       if (defined $1) {
          push(@tok_posits, pos($para)-len($1), len($1)); # markup
+      } elsif ($pretok) {
+         # pre-tokenized: don't retokenize, just mark token positions.
+         push(@tok_posits, pos($para)-len($2), len($2)); # real token
       } else {
-         my @posits = split_punc($2, pos($para) - len($2)); # real token
+         my @posits = split_punc($2, pos($para) - len($2), $notok); # real token
          for (my $i = 0; $i < $#posits; $i += 2) {
             push (@tok_posits,
                   &$split_word(substr($para, $posits[$i], $posits[$i+1]),
@@ -266,6 +271,8 @@ sub tokenize #(paragraph, lang)
          }
       }
    }
+   
+   return @tok_posits if ($pretok);
 
    # Merge trailing dots with previous tokens if called for
    for (my $i = 0; $i < $#tok_posits; $i += 2) {
@@ -479,11 +486,12 @@ sub looks_like_abbr($\$$\@) # (lang, para_string, index_of_abbr, token_positions
 # Split a whitespace-bounded token into constituents. Return list of
 # (start,len) atom positions.
 
-sub split_punc #(string, offset[0])
+sub split_punc #(string, offset[0], nocollapse)
 {
 
    my $tok = shift;
    my $offset = shift || 0;
+   my $nocollapse = shift || 0;
    my @atoms;
 
    if (!defined $tok) {return ();}
@@ -496,28 +504,28 @@ sub split_punc #(string, offset[0])
    if (($tok =~ /^(.*[^$hyphens])?([$hyphens]{2,4}|[$wide_dashes])([^$hyphens].*)?$/o) ||
        ($tok =~ /^(.*[^\.])?(\.{2,4}|…)([^\.].*)?$/o)) {
       my ($p1, $p2, $p3) = ($1, $2, $3);
-      push(@atoms, split_punc($p1, $offset));
-      push(@atoms, $offset+len($p1), length($p2) == 1 ? 1 : 2);
-      push(@atoms, split_punc($p3, $offset+len($p1)+len($p2)));
+      push(@atoms, split_punc($p1, $offset, $nocollapse));
+      push(@atoms, $offset+len($p1), $nocollapse ? len($p2) : length($p2) == 1 ? 1 : 2);
+      push(@atoms, split_punc($p3, $offset+len($p1)+len($p2), $nocollapse));
    }
 
    # split internal $ (as in 'US$30' -> 'US$ 30')
    elsif ($tok =~ /^([[:alpha:]]*\$)([[:digit:],.-]+)$/o) {
       my ($p1, $p2) = ($1, $2);
-      push(@atoms, split_punc($p1, $offset));
-      push(@atoms, split_punc($p2, $offset+len($p1)));
+      push(@atoms, split_punc($p1, $offset, $nocollapse));
+      push(@atoms, split_punc($p2, $offset+len($p1), $nocollapse));
    }
 
    # pull off leading/trailing punc
    elsif ($tok =~ /^($splitleft)/o) {
       push(@atoms, $offset, len($1));
       if (len($1) < len($tok)) {
-         push(@atoms, split_punc(substr($tok, len($1)), $offset+len($1)));
+         push(@atoms, split_punc(substr($tok, len($1)), $offset+len($1), $nocollapse));
       }
    } elsif ($tok =~ /($splitright)$/o) {
       my $l1 = $tok_len - len($1);
       if ($l1 > 0) {
-         push(@atoms, split_punc(substr($tok, 0, $l1), $offset));
+         push(@atoms, split_punc(substr($tok, 0, $l1), $offset, $nocollapse));
       }
       push(@atoms, $offset+$l1, $tok_len - $l1);
    }
@@ -527,19 +535,19 @@ sub split_punc #(string, offset[0])
    #                also, this (a) -> (a) and a) -> a)
    elsif ($first_char eq "(" && $tok !~ /^(\([[:alnum:]]\)|\([^()]+\).+)$/o) {
       push(@atoms, $offset, 1);
-      push(@atoms, split_punc(substr($tok, 1), $offset+1));
+      push(@atoms, split_punc(substr($tok, 1), $offset+1, $nocollapse));
    } elsif ($first_char eq "[" && $tok !~ /^(\[[[:alnum:]]\]|\[[^\[\]]+\].+)$/o) {
       push(@atoms, $offset, 1);
-      push(@atoms, split_punc(substr($tok, 1), $offset+1));
+      push(@atoms, split_punc(substr($tok, 1), $offset+1, $nocollapse));
    } elsif ($last_char eq ")" && $tok !~ /^(\(?[[:alnum:]]\)|.+\([^()]+\))$/o) {
-      push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset));
+      push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset, $nocollapse));
       push(@atoms, $offset+$tok_len-1, 1);
    } elsif ($last_char eq "]" && $tok !~ /^(\[[[:alnum:]]\]|.+\[[^\[\]]+\])$/o) {
-      push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset));
+      push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset, $nocollapse));
       push(@atoms, $offset+$tok_len-1, 1);
    #don't need this, because we now systematically split trailing .
    #} elsif ($tok =~ /[^a-zA-Z\xC0-\xFF]\.$/o) { # thingy). -> thingy) .
-   #   push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset));
+   #   push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset, $nocollapse));
    #   push(@atoms, $offset+$tok_len-1, 1);
    } else { # keep token as is
       push(@atoms, $offset, $tok_len);
