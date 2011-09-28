@@ -46,8 +46,10 @@ my @column_widths;
 while (<>) {
    my @tokens = split /\t/;
    push @rows, \@tokens;
-   for (my $i = 0; $i <= $#tokens; ++$i) {
-      $column_widths[$i] = max(length($tokens[$i]), ($column_widths[$i]||0));
+   if (@tokens > 1) {
+      for (my $i = 0; $i <= $#tokens; ++$i) {
+         $column_widths[$i] = max(length($tokens[$i]), ($column_widths[$i]||0));
+      }
    }
 }
 
