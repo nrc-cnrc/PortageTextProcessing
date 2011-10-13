@@ -59,7 +59,7 @@ B< =============================================
 
 =cut
 
-my $current_year = 2010;
+my $current_year = 2011;
 
 sub printCopyright($$) {
    # Just like in sh_utils.sh, we don't actually bother with the Copyright
