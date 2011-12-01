@@ -42,7 +42,7 @@ use open IO => ':encoding(utf-8)';
 use open ':std';  # <= indicates that STDIN and STDOUT are utf8
 
 my $HELP = "
-Usage: tokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
+Usage: utokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
 
   Tokenize and sentence-split text in UTF-8.
 
