@@ -4,7 +4,7 @@
 # @file portage_utils.py
 # @brief Useful common Python classes and functions
 # 
-# @author Darlene Stewart
+# @author Darlene Stewart & Samuel Larkin
 # 
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -16,11 +16,14 @@ from __future__ import print_function, unicode_literals, division, absolute_impo
 
 import sys
 import argparse
+import __builtin__
+import os
 
 __all__ = ["printCopyright",
            "HelpAction", "VerboseAction", "DebugAction", 
            "set_debug","set_verbose", 
-           "error", "fatal_error", "warn", "info", "debug", "verbose"
+           "error", "fatal_error", "warn", "info", "debug", "verbose",
+	   "open",
           ]
 
 current_year = 2011
@@ -118,6 +121,49 @@ def verbose(*args, **kwargs):
     """Print verbose output to stderr if verbose_flag (-v) or debug_flag (-d) is set."""
     if verbose_flag or debug_flag:
         print(*args, file=sys.stderr, **kwargs)
+
+def open(filename, mode='r'):
+   """Transparently open files that are stdin, stdout, plain text, compressed or pipes.
+
+   examples: open("-")
+      open("file.txt")
+      open("file.gz")
+      open("zcat file.gz | grep a |")
+
+   filename: name of the file to open
+   mode: open mode
+   return: file handle to the open file.
+   """
+
+   filename.strip()
+   #debug("open: ", filename, " in ", mode, " mode")
+   if len(filename) is 0:
+      fatal_error("You must provide a filename")
+      
+   if filename == "-":
+      if mode == 'r':
+         theFile = sys.stdin
+      elif mode == 'w':
+         theFile = sys.stdout
+      else:
+         fatal_error("Unsupported mode.")
+   elif filename.endswith('|'):
+      theFile = os.popen(filename[:-1], 'r')
+   elif filename.startswith('|'):
+      theFile = os.popen(filename[1:], 'w')
+   elif filename.endswith(".gz"):
+      #theFile = gzip.open(filename, mode+'b')
+      if mode == 'r':
+         theFile = os.popen("zcat " + filename)
+      elif mode == 'w':
+         theFile = os.popen("gzip > " + filename, 'w')
+      else:
+         fatal_error("Unsupported mode for gz files.")
+   else:
+      theFile = __builtin__.open(filename, mode)
+
+   return theFile
+
 
 if __name__ == '__main__':
     pass
