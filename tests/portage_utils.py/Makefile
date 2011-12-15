@@ -89,7 +89,7 @@ unittest5.txt: test
 
 
 # Test writing to a compress gz file
-unittest6: unittest6.gz test.gz
+unittest6: unittest6.gz test
 	zcmp $+
 unittest6.gz: test
 	cat $< \
