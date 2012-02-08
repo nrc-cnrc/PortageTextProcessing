@@ -11,7 +11,7 @@
 # $Id$
 #
 # LexiTools.pm
-# PROGRAMMER: George Foster / UTF-8 adaptation by Michel Simard / Eric Joanis
+# PROGRAMMER: George Foster / UTF-8 adaptation by Michel Simard / Eric Joanis / Samuel Larkin
 #             / Adding Spanish Samuel Larkin
 #
 # COMMENTS: POD at end of file.
@@ -37,7 +37,7 @@ our (@ISA, @EXPORT);
 @ISA = qw(Exporter);
 @EXPORT = (
    "get_para", "tokenize", "split_sentences",
-   "get_tokens", "get_token",
+   "get_tokens", "get_token", "get_collapse_token",
    "matches_known_abbr_en", "matches_known_abbr_fr", "matches_known_abbr_es",
    "good_turing_estm", "get_sentence",
    "setDetokenizationLang", "detokenize", "detokenize_array"
@@ -69,8 +69,8 @@ my $leftquotes = quotemeta("‘«“\`");
 my $rightquotes = quotemeta("’»”´");
 # Hyphens: U+2010, U+2011, figure dash (U+2012), n-dash (cp-1252 150, U+2013),
 # m-dash (cp-1252 151, U+2014), horizontal bar (U+2015), hyphen (ascii -)
-my $hyphens = quotemeta("‐‑‒–—―-");
 my $wide_dashes = quotemeta("‐‑‒–—―");
+my $hyphens = $wide_dashes . quotemeta("-");
 my $splitleft = qr/[\"“«\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
 my $splitright = qr/\.{2,}|[\"”»!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
 
@@ -232,7 +232,6 @@ sub tokenize #(paragraph, lang, notok, pretok)
 {
    my $para = shift;
    my $lang = shift || "en";
-   my $notok = shift || 0;
    my $pretok = shift || 0;
    my @tok_posits = ();
 
@@ -263,7 +262,7 @@ sub tokenize #(paragraph, lang, notok, pretok)
          # pre-tokenized: don't retokenize, just mark token positions.
          push(@tok_posits, pos($para)-len($2), len($2)); # real token
       } else {
-         my @posits = split_punc($2, pos($para) - len($2), $notok); # real token
+         my @posits = split_punc($2, pos($para) - len($2)); # real token
          for (my $i = 0; $i < $#posits; $i += 2) {
             push (@tok_posits,
                   &$split_word(substr($para, $posits[$i], $posits[$i+1]),
@@ -339,8 +338,8 @@ sub get_tokens(\$\@) #(para_string, token_positions)
    return @tokens;
 }
 
-# Get the token corresponding to a given index value (0, 2, 4, ...). Return a
-# string.
+# Get the token corresponding to a given index value (0, 2, 4, ...).
+# Return a string.
 
 sub get_token(\$$\@) #(para_string, index, token_positions)
 {
@@ -349,6 +348,32 @@ sub get_token(\$$\@) #(para_string, index, token_positions)
    my $token_positions = shift;
    return $index >= 0 && $index+1 <= $#$token_positions ?
       substr($$string, $token_positions->[$index], $token_positions->[$index+1]) : "";
+}
+
+#
+# Get the token corresponding to a given index value (0, 2, 4, ...) and perform
+# hyphens and elipsis collapse.
+# Return a string.
+
+sub get_collapse_token(\$$\@$) #(para_string, index, token_positions)
+{
+   my $string = shift;
+   my $index = shift;
+   my $token_positions = shift;
+   my $nocollapse = shift || 0;
+   my $tok = get_token($$string, $index, @$token_positions);
+
+   unless ($nocollapse) {
+      if (($tok =~ /^(.*[^$hyphens])?([$hyphens]{2,4}|[$wide_dashes])([^$hyphens].*)?$/o) ||
+          ($tok =~ /^(.*[^\.])?(\.{2,4}|…)([^\.].*)?$/o)) {
+         my ($p1, $p2, $p3) = ($1, $2, $3);
+         $tok = "";
+         $tok .= $p1 if (defined $p1);
+         $tok .= substr($p2, 0, length($p2) == 1 ? 1 : 2);
+         $tok .= $p3 if (defined $p3);
+      }
+   }
+   return $tok;
 }
 
 # Get the sentence corresponding to a given index value (0, 2, 4, ...). Return a
@@ -486,12 +511,10 @@ sub looks_like_abbr($\$$\@) # (lang, para_string, index_of_abbr, token_positions
 # Split a whitespace-bounded token into constituents. Return list of
 # (start,len) atom positions.
 
-sub split_punc #(string, offset[0], nocollapse)
+sub split_punc #(string, offset[0])
 {
-
    my $tok = shift;
    my $offset = shift || 0;
-   my $nocollapse = shift || 0;
    my @atoms;
 
    if (!defined $tok) {return ();}
@@ -504,28 +527,32 @@ sub split_punc #(string, offset[0], nocollapse)
    if (($tok =~ /^(.*[^$hyphens])?([$hyphens]{2,4}|[$wide_dashes])([^$hyphens].*)?$/o) ||
        ($tok =~ /^(.*[^\.])?(\.{2,4}|…)([^\.].*)?$/o)) {
       my ($p1, $p2, $p3) = ($1, $2, $3);
-      push(@atoms, split_punc($p1, $offset, $nocollapse));
-      push(@atoms, $offset+len($p1), $nocollapse ? len($p2) : length($p2) == 1 ? 1 : 2);
-      push(@atoms, split_punc($p3, $offset+len($p1)+len($p2), $nocollapse));
+      push(@atoms, split_punc($p1, $offset));
+      # NOTE: if we actually apply collapsing here, the definition of tokens
+      # changes thus doing sentence splitting versus not doing sentence
+      # splitting changes and yeilds different result in the case that the
+      # input is "---. 1983."
+      push(@atoms, $offset+len($p1), len($p2));
+      push(@atoms, split_punc($p3, $offset+len($p1)+len($p2)));
    }
 
    # split internal $ (as in 'US$30' -> 'US$ 30')
    elsif ($tok =~ /^([[:alpha:]]*\$)([[:digit:],.-]+)$/o) {
       my ($p1, $p2) = ($1, $2);
-      push(@atoms, split_punc($p1, $offset, $nocollapse));
-      push(@atoms, split_punc($p2, $offset+len($p1), $nocollapse));
+      push(@atoms, split_punc($p1, $offset));
+      push(@atoms, split_punc($p2, $offset+len($p1)));
    }
 
    # pull off leading/trailing punc
    elsif ($tok =~ /^($splitleft)/o) {
       push(@atoms, $offset, len($1));
       if (len($1) < len($tok)) {
-         push(@atoms, split_punc(substr($tok, len($1)), $offset+len($1), $nocollapse));
+         push(@atoms, split_punc(substr($tok, len($1)), $offset+len($1)));
       }
    } elsif ($tok =~ /($splitright)$/o) {
       my $l1 = $tok_len - len($1);
       if ($l1 > 0) {
-         push(@atoms, split_punc(substr($tok, 0, $l1), $offset, $nocollapse));
+         push(@atoms, split_punc(substr($tok, 0, $l1), $offset));
       }
       push(@atoms, $offset+$l1, $tok_len - $l1);
    }
@@ -535,19 +562,19 @@ sub split_punc #(string, offset[0], nocollapse)
    #                also, this (a) -> (a) and a) -> a)
    elsif ($first_char eq "(" && $tok !~ /^(\([[:alnum:]]\)|\([^()]+\).+)$/o) {
       push(@atoms, $offset, 1);
-      push(@atoms, split_punc(substr($tok, 1), $offset+1, $nocollapse));
+      push(@atoms, split_punc(substr($tok, 1), $offset+1));
    } elsif ($first_char eq "[" && $tok !~ /^(\[[[:alnum:]]\]|\[[^\[\]]+\].+)$/o) {
       push(@atoms, $offset, 1);
-      push(@atoms, split_punc(substr($tok, 1), $offset+1, $nocollapse));
+      push(@atoms, split_punc(substr($tok, 1), $offset+1));
    } elsif ($last_char eq ")" && $tok !~ /^(\(?[[:alnum:]]\)|.+\([^()]+\))$/o) {
-      push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset, $nocollapse));
+      push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset));
       push(@atoms, $offset+$tok_len-1, 1);
    } elsif ($last_char eq "]" && $tok !~ /^(\[[[:alnum:]]\]|.+\[[^\[\]]+\])$/o) {
-      push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset, $nocollapse));
+      push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset));
       push(@atoms, $offset+$tok_len-1, 1);
    #don't need this, because we now systematically split trailing .
    #} elsif ($tok =~ /[^a-zA-Z\xC0-\xFF]\.$/o) { # thingy). -> thingy) .
-   #   push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset, $nocollapse));
+   #   push(@atoms, split_punc(substr($tok, 0, $tok_len-1), $offset));
    #   push(@atoms, $offset+$tok_len-1, 1);
    } else { # keep token as is
       push(@atoms, $offset, $tok_len);

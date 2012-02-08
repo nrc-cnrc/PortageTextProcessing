@@ -98,6 +98,11 @@ my $psep = $p ? "\n\n" : "\n";
 
 open(IN, "<$in") || die "utokenize.pl: Can't open $in for reading";
 open(OUT, ">$out") || die "utokenize.pl: Can't open $out for writing";
+# According to the documentation:
+# Do not use this pragma for anything else than telling Perl that your script is written in UTF-8.
+# thus let's open the streams in UTF-8.
+binmode IN, ":encoding(UTF-8)";
+binmode OUT, ":encoding(UTF-8)";
 
 if ( !$ss && !$noss ) {
    die "utokenize.pl: One of -ss and -noss is now required.\n";
@@ -135,7 +140,7 @@ while (1)
       }
    }
 
-   my @token_positions = tokenize($para, $lang, $notok, $pretok);
+   my @token_positions = tokenize($para, $lang, $pretok);
    my @sent_positions = split_sentences($para, @token_positions) unless ($noss);
 
    if ($notok || $pretok) {
@@ -170,7 +175,9 @@ while (1)
             print OUT ($v ? "<sent>\n" : "\n");
             shift @sent_positions;
          }
-         print OUT get_token($para, $i, @token_positions), " ";
+
+         print OUT get_collapse_token($para, $i, @token_positions, $notok || $pretok), " ";
+
          if ($v) {
             print OUT "$token_positions[$i],$token_positions[$i+1]\n";
          }
