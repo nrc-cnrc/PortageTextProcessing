@@ -27,12 +27,16 @@ Usage: $0 [INPUT FILE(S)]
   columns are separated by three spaces.
   Caveat: holds all input in memory -- don't use with large files!
 
+  -skip X  ignore first X lines of input.
+
 ";
    exit 1;
 }
 
+my $skip_head = 0;
 use Getopt::Long;
 GetOptions(
+   "skip=i"    => \$skip_head,
    help        => sub { usage },
 ) or usage;
 
@@ -46,6 +50,7 @@ my @column_widths;
 while (<>) {
    my @tokens = split /\t/;
    push @rows, \@tokens;
+   next if ($. <= $skip_head);
    if (@tokens > 1) {
       for (my $i = 0; $i <= $#tokens; ++$i) {
          $column_widths[$i] = max(length($tokens[$i]), ($column_widths[$i]||0));
