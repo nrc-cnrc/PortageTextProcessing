@@ -105,7 +105,7 @@ def fatal_error(*args):
 
 def warn(*args):
     """Print an warning message to stderr."""
-    print("Warn:", *args, file=sys.stderr)
+    print("Warning:", *args, file=sys.stderr)
     return
 
 def info(*args, **kwargs):
