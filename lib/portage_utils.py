@@ -18,7 +18,7 @@ from __future__ import print_function, unicode_literals, division, absolute_impo
 import sys
 import argparse
 import __builtin__
-import os
+from subprocess import Popen, PIPE
 
 __all__ = ["printCopyright",
            "HelpAction", "VerboseAction", "DebugAction", 
@@ -62,7 +62,7 @@ class VerboseAction(argparse.Action):
       super(VerboseAction, self).__init__(option_strings, dest, nargs=0, 
                                           const=True, default=False, 
                                           required=False, help=help)
-   
+
    def __call__(self, parser, namespace, values, option_string=None):
       setattr(namespace, self.dest, True)
       set_verbose(True)
@@ -75,7 +75,7 @@ class DebugAction(argparse.Action):
       super(DebugAction, self).__init__(option_strings, dest, nargs=0, 
                                         const=True, default=False, 
                                         required=False, help=help)
-   
+
    def __call__(self, parser, namespace, values, option_string=None):
       setattr(namespace, self.dest, True)
       set_debug(True)
@@ -135,12 +135,11 @@ def open(filename, mode='r'):
    mode: open mode
    return: file handle to the open file.
    """
-
    filename.strip()
    #debug("open: ", filename, " in ", mode, " mode")
    if len(filename) is 0:
       fatal_error("You must provide a filename")
-      
+
    if filename == "-":
       if mode == 'r':
          theFile = sys.stdin
@@ -149,15 +148,15 @@ def open(filename, mode='r'):
       else:
          fatal_error("Unsupported mode.")
    elif filename.endswith('|'):
-      theFile = os.popen(filename[:-1], 'r')
+      theFile = Popen(filename[:-1], shell=True, stdout=PIPE).stdout
    elif filename.startswith('|'):
-      theFile = os.popen(filename[1:], 'w')
+      theFile = Popen(filename[1:], shell=True, stdin=PIPE).stdin
    elif filename.endswith(".gz"):
       #theFile = gzip.open(filename, mode+'b')
       if mode == 'r':
-         theFile = os.popen("zcat " + filename)
+         theFile = Popen("zcat " + filename, shell=True, stdout=PIPE).stdout
       elif mode == 'w':
-         theFile = os.popen("gzip > " + filename, 'w')
+         theFile = Popen("gzip > " + filename, shell=True, stdin=PIPE).stdin
       else:
          fatal_error("Unsupported mode for gz files.")
    else:
