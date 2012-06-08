@@ -42,6 +42,7 @@ testsuite: unittest4
 testsuite: unittest5
 testsuite: unittest6
 testsuite: unittest7
+testsuite: unittest8
 
 
 # Test reading standard in.
@@ -82,6 +83,7 @@ unittest4: test
 
 # Test writing to a plain text file.
 unittest5: unittest5.txt test
+	[[ `file --mime $<` =~ "text/plain" ]] || ! echo "File is not plain text." >&2
 	diff $+ -q
 unittest5.txt: test
 	cat $< \
@@ -90,6 +92,7 @@ unittest5.txt: test
 
 # Test writing to a compress gz file
 unittest6: unittest6.gz test
+	[[ `file $<` =~ "gzip compressed data" ]] || ! echo "File is not of gzip format." &>2
 	zcmp $+
 unittest6.gz: test
 	cat $< \
@@ -98,8 +101,17 @@ unittest6.gz: test
 
 # Test writing to a compress gz file
 unittest7: unittest7.gz test
+	[[ `file $<` =~ "gzip compressed data" ]] || ! echo "File is not of gzip format." &>2
 	zcmp $+
 unittest7.gz: test
 	cat $< \
 	| python -c "exec('from portage_utils import open\nf=open(\"| gzip > $@\", \"w\")\nfor line in open(\"-\"): f.write(line)')"
+
+
+# Test writing to no file which should produce an error message.
+unittest8: test
+	cat $< \
+	| python -c "exec('from portage_utils import open\nf=open(\"\", \"w\")\nfor line in open(\"-\"): f.write(line)')" 2>&1 \
+	| grep "Fatal error: You must provide a filename" --quiet
+
 
