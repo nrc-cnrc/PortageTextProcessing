@@ -76,7 +76,7 @@ ram_vs_swap:
 # What needs to work after a successful installation of Portage.
 testsuite: post_installation
 
-VALIDATE_PGMS := canoe cow.sh tokenize.pl ce.pl tmx2lfl.pl
+VALIDATE_PGMS := canoe tune.py cow.sh tokenize.pl ce.pl tmx2lfl.pl
 .PHONY: post_installation
 post_installation: ${VALIDATE_PGMS}
 	@echo "Portage is correctly installed." >&2
@@ -87,10 +87,11 @@ ce.pl: EXPLAIN:=Check your PERL5LIB or XML::Twig may not be correctly installed.
 cow.sh: EXPLAIN:=Make sure Portage is correctly installed.  Check your PATH.
 tmx2lfl.pl: EXPLAIN:=Check your PERL5LIB or you're missing XML::Twig or your version is not greater or equal to XML::Twig-3.28.
 tokenize.pl: EXPLAIN:=Check your PERL5LIB.
+tune.py: EXPLAIN:=Check your Python installation.  Python 2.7 is required.
 
 .PHONY: ${VALIDATE_PGMS}
 # We simply make sure we can invoke the help message to trigger the dependencies.
 ${VALIDATE_PGMS}:
 	@which $@ &> /dev/null || ! echo "Can't locate $@ in your PATH!" >&2
-	@$@ -h 2>&1 | head -5 | cmp --quiet - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
+	@$@ -h 2>&1 | head -5 | diff - ref/$@.ref || ! echo "$@ FAILED: ${EXPLAIN}  Refer to \$$PORTAGE/INSTALL" >&2
 
