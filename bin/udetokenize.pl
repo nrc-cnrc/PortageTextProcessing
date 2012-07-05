@@ -53,10 +53,9 @@ Warning: ASCII quotes are handled assuming there is only one level of quotation.
 
 Options:
 
--lang=L        Specify two-letter language code: en or es or fr [en]
-               Works well for English, not bad for French.
--latin1        Replace characters that map to cp-1252 but not to iso-8859-1 by
-               their closest equivalents that do
+-lang=L        Specify two-letter language code: en, es, or fr [en]
+-latin1        Replace utf-8 characters that map to cp-1252 but not to
+               iso-8859-1 by their closest utf-8 equivalents that do
 -chinesepunc   Normalize Chinese punctuation to characters that map back to
                cp-1252, or to iso-8859-1 if -latin1 is also specified
 -stripchinese  Strip any remaining Han characters after detokenizing
