@@ -60,9 +60,9 @@ my %short_stops_hash_en;
 my %short_stops_hash_fr;
 my %short_stops_hash_es;
 
-# Single quotes: ascii ` and ', cp-1252 145 and 146, cp-1252/iso-8859-1 180
+# Single quotes: ascii ` and ', cp-1252 145 (U+2018) and 146 (U+2019), cp-1252/iso-8859-1 180
 my $apostrophes = quotemeta("\`\'‘’´");
-# Quotes: ascii ", cp-1252 147 and 148, cp-1252/iso-8859-1 171 and 187
+# Quotes: ascii ", cp-1252 147 (U+201C) and 148 (U+201D), cp-1252/iso-8859-1 171 and 187
 my $quotes = quotemeta("\"“”«»");
 # specifically left/right quotes and single quotes
 my $leftquotes = quotemeta("‘«“\`");
