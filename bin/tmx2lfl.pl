@@ -36,6 +36,8 @@ use XML::Twig 3.28;  # We must have text_only
 use Data::Dumper;
 $Data::Dumper::Indent=1;
 
+use File::Basename;
+
 binmode STDERR, ":encoding(utf-8)";
 binmode STDOUT, ":encoding(utf-8)";
 
@@ -71,6 +73,8 @@ Options:
   -tgt=T        Specify target language [auto-detect]
   -txt=X        Specify and trigger outputing a text-only parallel corpus []
   -extra        Add an extra empty line between pairs of TU's [don't]
+  -filename     If doc id is UNKNOWN, use the filename stem as the doc id [don't]
+  -timestamp    Add TU creation date timestamp to doc id [don't]
   -verbose      Verbose mode
   -d            debugging mode.
   -help,-h      Print this help message and exit
@@ -85,11 +89,15 @@ my $debug = undef;
 my $verbose = 0;
 my $output  = "lfl-output";
 my $extra   = undef;
+my $add_filename  = undef;
+my $add_timestamp = undef;
 my $src = undef;
 my $tgt = undef;
 my $txt = undef;
 GetOptions(
    extra       => \$extra,
+   filename    => \$add_filename,
+   timestamp   => \$add_timestamp,
    "output=s"  => \$output,
    "src=s"     => \$src,
    "tgt=s"     => \$tgt,
@@ -162,14 +170,16 @@ die "You must provide a target language specifier\n" unless(defined($tgt));
 if ( $debug ) {
    no warnings;
    print STDERR "
-   files     = @filename
-   extra     = $extra
-   output    = $output
-   src       = $src
-   tgt       = $tgt
-   txt       = $txt
-   verbose   = $verbose
-   debug     = $debug
+   files        = @filename
+   extra        = $extra
+   add_filename = $add_filename
+   timestamp    = $add_timestamp
+   output       = $output
+   src          = $src
+   tgt          = $tgt
+   txt          = $txt
+   verbose      = $verbose
+   debug        = $debug
 
 ";
 }
@@ -194,6 +204,7 @@ open(ID, ">:encoding(utf-8)", "$output.id") || die "Unable to open doc id file!"
 
 foreach my $file (@filename) {
     verbose("[Reading in TMX file $file...]\n");
+    $parser->{infile} = basename($file, ".tmx");
     $parser->parsefile($file);
 }
 
@@ -239,11 +250,22 @@ sub processTU {
    my $docid = "UNKNOWN";
    my @props = $tu->children('prop');
    foreach my $prop (@props) {
-      if ($prop->{att}->{type} eq "Txt::Document") {
+      if ($prop->{att}->{'type'} eq "Txt::Document") {
          ($docid) = split(/, /, $prop->text, 1);
          debug("DOCID: $docid\n");
       }
    }
+   
+   if ($add_filename and $docid eq "UNKNOWN") {
+      $docid = $parser->{infile};
+   }
+   
+   if ($add_timestamp) {
+      my $creationdate = $tu->{att}{creationdate};
+      $creationdate = 0 unless defined $creationdate;
+      $docid .= " $creationdate";
+   }
+   
    print ID "$docid\n";
    if (defined($debug) and $docid eq "UNKNOWN") {
       print STDERR "no docid for tuid: $tuid\n";
