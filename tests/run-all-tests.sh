@@ -37,14 +37,23 @@ echo ""
 echo Test suites to run: $TEST_SUITES
 
 if [[ $PARALLEL_MODE ]]; then
+   LOG=.log.run-all-tests-parallel
    PARALLEL_MODE=
    for suite in $TEST_SUITES; do
       echo $0 $suite
    done |
-      run-parallel.sh -unordered-cat -v - $PARALLEL_LEVEL | 
-      egrep 'PASSED|FAILED' |
-      grep -v 'test suites'
-   exit
+      run-parallel.sh -unordered-cat -v - $PARALLEL_LEVEL 2>&1 |
+      tee $LOG | grep --line-buffered '^\['
+   grep PASSED $LOG | grep -v 'test suites' | sort -u
+   grep FAILED $LOG | grep -v 'test suites' | sort -u
+
+   if grep -q FAILED $LOG; then
+      exit 1
+   else
+      echo ""
+      echo PASSED all test suites
+      exit
+   fi
 fi
 
 run_test() {
