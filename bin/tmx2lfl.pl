@@ -227,9 +227,15 @@ sub processPH {
    #print STDERR "PH: " . Dumper($ph);
    #$ph->print(\*STDERR, 1);
 
-   # Special treatment for \- \_ in compounded words.
-   if ($string =~ /\\([-_])/) {
-      $ph->set_text($1);
+   # Special treatment for \- and \_ in compounded words.
+   if ($string =~ /^\s*\\([-_])\s*$/) {
+      # \_ is the RTF and Trados encoding for a non-breaking hyphen; replace it
+      # by -, the regular hyphen, since it is generally used in ad-hoc ways,
+      # when an author or translator doesn't like a particular line-splitting
+      # choice their software has made.
+      $ph->set_text("-") if ($1 eq '_');
+      # \- is the rtf and Trados encoding for an optional hyphen; remove it
+      $ph->set_text("") if ($1 eq '-');
       $ph->erase();
    }
 }
