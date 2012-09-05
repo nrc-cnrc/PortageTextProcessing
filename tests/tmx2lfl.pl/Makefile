@@ -13,7 +13,16 @@
 # Copyright 2009, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2009, Her Majesty in Right of Canada
 
-TMX2LFL := tmx2lfl.pl
+HOSTNAME:=$(shell uname -n)
+ifeq (${HOSTNAME},leclerc)
+# On Leclerc, where we run autobuild, the default Perl can't handle XML::Twig
+export PATH:=/home/portage/pkgs/perl-5.14.2-x86_64/bin:${PATH}
+CE_TMX:=perl $(shell which ce_tmx.pl)
+else
+CE_TMX:=ce_tmx.pl
+endif
+
+TMX2LFL:=tmx2lfl.pl
 
 L1 ?= lang1
 L2 ?= lang2
@@ -180,7 +189,7 @@ unittest9: tmx-1.4.tmx
 .PHONY: ce_tmx_test
 ce_tmx_test: test.utf8.tmx
 	mkdir -p extract
-	ce_tmx.pl -src=lang2 -tgt=lang1  extract extract test.utf8.tmx
+	${CE_TMX} -src=lang2 -tgt=lang1  extract extract test.utf8.tmx
 	diff extract/Q.txt ref/Q.txt -q
 
 clean: clean_ce_tmx
