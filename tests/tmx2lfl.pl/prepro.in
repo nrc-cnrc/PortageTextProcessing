@@ -1,0 +1,6 @@
+Here is a literal soft hyphen: ­ followed by random text.
+ 	  This line    has superfluous whitewspace   	
+||| Testing the three pipes ||| like so.  How about two sets ||| ||| like this? |||
+And how about a BOM?﻿
+And lots of control characters: ⁠ and trailing text.
+Literal \x2011 a‑b \xAD a­b \x1E ab \x1F ab.
