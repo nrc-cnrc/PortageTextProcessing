@@ -13,15 +13,7 @@
 # Copyright 2009, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2009, Her Majesty in Right of Canada
 
-HOSTNAME:=$(shell uname -n)
-ifeq (${HOSTNAME},leclerc)
-# On Leclerc, where we run autobuild, the default Perl can't handle XML::Twig
-export PATH:=/home/portage/pkgs/perl-5.14.2-x86_64/bin:${PATH}
-CE_TMX:=perl $(shell which ce_tmx.pl)
-else
 CE_TMX:=ce_tmx.pl
-endif
-
 TMX2LFL:=tmx2lfl.pl
 
 L1 ?= lang1
