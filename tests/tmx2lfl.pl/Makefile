@@ -42,8 +42,9 @@ test-suite: unittest6
 test-suite: unittest7
 test-suite: unittest8
 test-suite: unittest9
-test-suite: ce_tmx_test
+test-suite: ce_tmx
 test-suite: preprocess_plugin_test
+test-suite: unittest_ci
 
 
 # General unittest clean up.
@@ -177,17 +178,40 @@ unittest9: tmx-1.4.tmx
 
 
 ########################################
+# Make sure the language codes are not case sensitive, following the standard.
+.PHONY: unittest_ci
+unittest_ci: test.tmx unittest1
+	${TMX2LFL} -src LaNg1 -tgt lAnG2 -output=$@ -txt=.TxT $<
+	diff $@.LaNg1     ref/ref.${L1}     -q
+	diff $@.LaNg1.TxT ref/ref.${L1}.txt -q
+	diff $@.lAnG2     ref/ref.${L2}     -q
+	diff $@.lAnG2.TxT ref/ref.${L2}.txt -q
+	diff $@.id        ref/ref.id        -q
+
+
+########################################
 # This test looks at ce_tmx.pl's handling of optional and non-breaking hyphens
-.PHONY: ce_tmx_test
-ce_tmx_test: test.utf8.tmx
-	mkdir -p extract
-	${CE_TMX} -src=lang2 -tgt=lang1  extract extract test.utf8.tmx
-	diff extract/Q.txt ref/Q.txt -q
+.PHONY: ce_tmx_test ce_tmx_test_ci
+ce_tmx_test: L1=lang1
+ce_tmx_test: L2=lang2
+ce_tmx_test_ci: L1=LaNg1
+ce_tmx_test_ci: L2=lAnG2
+ce_tmx_test ce_tmx_test_ci: test.utf8.tmx
+	mkdir -p $@
+	${CE_TMX} -src=${L2} -tgt=${L1}  extract $@ test.utf8.tmx
+	diff $@/Q.txt ref/Q.txt -q
+	utf8_casemap -c u < $@/Q.txt > $@/P.txt
+	${CE_TMX} -src=${L2} -tgt=${L1}  replace $@ out.utf8.tmx
+
+.PHONY: ce_tmx
+ce_tmx: ce_tmx_test ce_tmx_test_ci
+	diff -i ce_tmx_test/QP.template.tmx ce_tmx_test_ci/QP.template.tmx
+	diff --ignore-match changedate -i ce_tmx_test/QP.tmx ce_tmx_test_ci/QP.tmx
 
 clean: clean_ce_tmx
 .PHONY: clean_ce_tmx
 clean_ce_tmx:
-	${RM} -r extract
+	${RM} -r ce_tmx_test ce_tmx_test_ci
 
 
 ########################################
@@ -202,3 +226,5 @@ clean: clean_prepro
 .PHONY: clean_prepro
 clean_prepro:
 	${RM} prepro.out
+
+

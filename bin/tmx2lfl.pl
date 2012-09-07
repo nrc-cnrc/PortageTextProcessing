@@ -58,14 +58,19 @@ is to extract them both), and output goes to pair of files <output>.<src> and
 lfl-output) and <src> and <tgt> correspond to language names given with -src
 and -tgt.
 
-Note:
-  The input should be a \"Well-Formed\" tmx in ASCII, UTF-16 or UTF-8;
+Notes:
+  The input should be a \"Well-Formed\" TMX in ASCII, UTF-16 or UTF-8;
   the output will always be in UTF-8.
-  You can validate your tmx file by doing the following:
+
+  You can validate your TMX file by doing the following:
     # To obtain tmx14.dtd
     curl -o tmx14.dtd http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt
-    # Validate that the tmx is \"Well-Formed\"
+    # Validate that the TMX is \"Well-Formed\"
     xmllint --noout --valid YourFile.tmx
+
+  Following http://www.gala-global.org/oscarStandards/tmx/tmx14b.html#xml:lang
+  and http://www.ietf.org/rfc/rfc3066.txt, language tags in TMX files are case
+  insensitive.
 
 Options:
   -output=P     Set output file prefix [lfl-output]
@@ -120,7 +125,7 @@ foreach my $file (@filename) {
    verbose("[Checking XML well-formedness of $file]");
    if (system("xmllint --stream --noout \"$file\" 2> /dev/null") != 0) {
       # YES, we rerun the command.  The first xmllint call would complain if
-      # there is no dtd accessible but would still return that the tmx is valid
+      # there is no dtd accessible but would still return that the TMX is valid
       # if so.  It is simpler to run it once muted and, if there are errors, to
       # rerun xmllint this time showing the user what xmllint found.
       system("xmllint --stream --noout \"$file\"");
@@ -128,7 +133,7 @@ foreach my $file (@filename) {
    }
    verbose("\r[Checking XML well-formness of $file] [OK]]\n");
    
-   # Quickly grab language specifiers from the tmx.
+   # Quickly grab language specifiers from the TMX.
    my $spec;
    # In order to minimize dependencies and since there is no speed difference
    # between sort -u & get_voc on a small set, we will prefer the former.
@@ -156,7 +161,7 @@ if (not defined($src) and not defined($tgt)) {
       die "Too many language identifiers to automatically extract segments.\n" 
       . "Select two language identifiers and rerun using -src=X -tgt=Y\n"
       . "Language identifiers found are: " . join(":", @lang_specifiers) . "\n"
-      . "Too many or too few language specifiers in your input tmx.\n";
+      . "Too many or too few language specifiers in your input TMX.\n";
    }
 
    $src = $lang_specifiers[0];
@@ -194,9 +199,11 @@ openOutfile($parser, $src);
 openOutfile($parser, $tgt);
 
 # If the user specifies a TEXT_ONLY extension, lets add two streams for those.
+my $lc_txt;
 if ( defined($txt) ) {
    openOutfile($parser, "$src$txt");
    openOutfile($parser, "$tgt$txt");
+   $lc_txt = lc $txt;
 }
 
 # We will also keep track of the docids.
@@ -291,28 +298,29 @@ sub processTU {
       my $lang = $tuv->{att}->{'xml:lang'};
       $lang = $tuv->{att}->{'lang'} unless $lang; # for TMX 1.1 compatibility
       warn("Missing language attribute in TU $tuid") unless $lang;
+      my $lc_lang = lc $lang;
 
       my @segs = $tuv->children('seg');
       warn("No segs in TUV (TU $tuid)") unless @segs;
       #print "SEG: " . Dumper(@segs);
 
-      if ($lang) {
-         $variants{$lang} = [] if not exists $variants{$lang};
+      if ($lc_lang) {
+         $variants{$lc_lang} = [] if not exists $variants{$lc_lang};
          # Get content WITH the rtf markings.
-         push @{$variants{$lang}}, join(" ", map(normalize($_->text), @segs));
+         push @{$variants{$lc_lang}}, join(" ", map(normalize($_->text), @segs));
          # Get content WITHOUT the rtf markings.
          if ( defined($txt) ) {
-            push @{$variants{"$lang$txt"}}, join(" ", map(normalize($_->text_only), @segs));
+            push @{$variants{"$lc_lang$lc_txt"}}, join(" ", map(normalize($_->text_only), @segs));
          }  
       }
    }
 
-   foreach my $lang (keys(%{$parser->{outfile}})) {
-      my $segs = exists($variants{$lang}) ? join(" ", @{$variants{$lang}}) : "EMPTY_\n";
+   foreach my $lc_lang (keys(%{$parser->{outfile}})) {
+      my $segs = exists($variants{$lc_lang}) ? join(" ", @{$variants{$lc_lang}}) : "EMPTY_\n";
       $segs =~ s/^\s+//;   # Trim white spaces at the beginning of each line.
       $segs =~ s/\s+$//;   # Trim white spaces at the end of each line.
-      print { $parser->{outfile}->{$lang} } $segs, "\n";
-      print { $parser->{outfile}->{$lang} } "\n" if $extra;
+      print { $parser->{outfile}->{$lc_lang} } $segs, "\n";
+      print { $parser->{outfile}->{$lc_lang} } "\n" if $extra;
       print STDERR "SEG: $segs\n" if ($debug);
    }
    $parser->{tu_count} = $n + 1;
@@ -336,28 +344,29 @@ sub normalize {
 
 sub openOutfile {
     my ($parser, $lang) = @_;
+    my $lc_lang = lc $lang;
 
-    if (!exists $parser->{outfile}->{$lang}) {
+    if (!exists $parser->{outfile}->{$lc_lang}) {
         my $output = $parser->{outfile_prefix};
         my $filename = "$output.$lang";
         verbose("[Opening output file $filename]\n");
         open(my $stream, ">:encoding(UTF-8)", "$filename") || die "Can't open output file $filename";
-        $parser->{outfile}->{$lang} = $stream;
+        $parser->{outfile}->{$lc_lang} = $stream;
 
         # Catch up with other files:
         for (my $i = 0; $i < $parser->{tu_count}; ++$i) {
-            print { $parser->{outfile}->{$lang} } "\n";
+            print { $parser->{outfile}->{$lc_lang} } "\n";
         }
 
     }
-    return $parser->{outfile}->{$lang};
+    return $parser->{outfile}->{$lc_lang};
 }
 
 sub closeOutfiles {
     my ($parser) = @_;
 
-    for my $lang (keys %{$parser->{outfile}}) {
-        close $parser->{outfile}->{$lang};
+    for my $lc_lang (keys %{$parser->{outfile}}) {
+        close $parser->{outfile}->{$lc_lang};
     }
 }
 
