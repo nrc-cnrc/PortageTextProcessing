@@ -149,3 +149,9 @@ if [[ `basename $0` == "sh_utils.sh" ]]; then
 fi
 
 
+# Return the ceiling of the quotien of $1 / $2 => ⌈$1 / $2⌋
+# Both arguments must be positive integers and the dividor mustn't be 0
+ceiling_quotien() {
+   echo $((($1 + $2 - 1) / $2))
+}
+
