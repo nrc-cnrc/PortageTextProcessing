@@ -101,6 +101,7 @@ unittest6.gz: test
 
 # Test writing to a compress gz file
 unittest7: unittest7.gz test
+	sleep 1 # Occasionally, the file is still empty by the time we get here
 	[[ `file $<` =~ "gzip compressed data" ]] || ! echo "File is not of gzip format." &>2
 	zcmp $+
 unittest7.gz: test
