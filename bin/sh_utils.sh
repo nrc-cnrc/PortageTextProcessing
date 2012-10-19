@@ -104,6 +104,7 @@ run_cmd() {
    else
       verbose 1 $cmd
       eval $cmd
+      return $?
    fi
 }
 
