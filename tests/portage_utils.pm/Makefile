@@ -32,9 +32,8 @@ all:
 	@echo All tests PASSED
 
 F_PREFIX := delme
-.PHONY: clean
-clean:
-	${RM} ${F_PREFIX}{,.gz,.bzip2,.lzma,.pipe} ${F_PREFIX}.ref-*
+TEMP_FILES=${F_PREFIX} ${F_PREFIX}.gz ${F_PREFIX}.bzip2 ${F_PREFIX}.lzma ${F_PREFIX}.pipe ${F_PREFIX}.ref-*
+include ../Makefile.incl
 
 .PHONY: plain
 plain:

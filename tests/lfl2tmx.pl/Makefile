@@ -1,6 +1,5 @@
 #!/usr/bin/make -f
 # vim:noet:ts=3:nowrap:filetype=make
-# $Id$
 
 # @file Makefile
 # @brief Unittest for lfl2tmx.pl
@@ -38,9 +37,8 @@ SHELL = bash
 all: test-suite
 
 
-.PHONY: clean
-clean:
-	${RM} unittest*
+TEMP_FILES=unittest*
+include ../Makefile.incl
 
 
 .PHONY: test-suite

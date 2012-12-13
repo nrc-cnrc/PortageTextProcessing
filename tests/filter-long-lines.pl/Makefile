@@ -17,8 +17,8 @@ FILTER_LONG_LINES = filter-long-lines.pl -d
 
 all: test
 
-clean:
-	${RM} f*.tok.filt10 log
+TEMP_FILES=f*.tok.filt10 log
+include ../Makefile.incl
 
 ########################################
 # Compare a run to a reference

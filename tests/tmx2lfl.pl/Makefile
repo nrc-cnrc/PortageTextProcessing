@@ -1,5 +1,4 @@
 #!/usr/bin/make -f
-# $Id$
 # vim:noet:ts=3
 
 # @file Makefile
@@ -48,10 +47,14 @@ test-suite: unittest_ci
 
 
 # General unittest clean up.
-.PHONY: clean
-clean:
-	${RM} unittest* test.utf8.tmx
+TEMP_FILES=unittest* test.utf8.tmx prepro.out test3.utf8.tmx test5.utf8.tmx
+TEMP_DIRS=ce_tmx_test ce_tmx_test_ci
+include ../Makefile.incl
 
+# The default gitignore and clean targets get the regular files and
+# directories, but not this one, because of its spaces.
+gitignore:
+	echo "${CORPUS_NAME_WITH_A_SPACE}" >> .gitignore
 
 test.utf8.tmx: test.tmx
 	iconv -f UCS-2 -t UTF-8 < $< > $@
@@ -88,12 +91,6 @@ test3.utf8.tmx: test.utf8.tmx
 unittest3: test3.utf8.tmx
 	${TMX2LFL} -output=$@ -txt=.txt $< 2>&1 | grep -q 'Language identifiers found are: lang2:lang1:lang3' 
 
-# Special clean-up for this test.
-clean: clean3
-.PHONY: clean3
-clean3:
-	${RM} test3.utf8.tmx
-
 
 ########################################
 # Using the 3 language specifiers and there should be 10 EMPTY_ tags.
@@ -112,12 +109,6 @@ test5.utf8.tmx: test.utf8.tmx
 .PHONY: unittest5
 unittest5: test5.utf8.tmx
 	[[ `${TMX2LFL} -output=$@ -txt=.txt $< 2>&1 | grep -c "parser error"` == 3 ]]
-
-# Special clean-up for this test.
-clean: clean5
-.PHONY: clean5
-clean5:
-	${RM} test5.utf8.tmx
 
 
 ########################################
@@ -208,11 +199,6 @@ ce_tmx: ce_tmx_test ce_tmx_test_ci
 	diff -i ce_tmx_test/QP.template.tmx ce_tmx_test_ci/QP.template.tmx
 	diff --ignore-match changedate -i ce_tmx_test/QP.tmx ce_tmx_test_ci/QP.tmx
 
-clean: clean_ce_tmx
-.PHONY: clean_ce_tmx
-clean_ce_tmx:
-	${RM} -r ce_tmx_test ce_tmx_test_ci
-
 
 ########################################
 # OK, so I'm really starting to abuse of this directory, but it's kind of a
@@ -221,10 +207,4 @@ clean_ce_tmx:
 preprocess_plugin_test: prepro.in
 	preprocess_plugin fr < prepro.in > prepro.out
 	diff prepro.out ref/prepro.out -q
-
-clean: clean_prepro
-.PHONY: clean_prepro
-clean_prepro:
-	${RM} prepro.out
-
 

@@ -1,5 +1,4 @@
 #!/bin/bash
-# $Id$
 
 # @file run-test.sh
 # @brief Run this test suite, with a non-zero exit status if it fails
@@ -13,6 +12,6 @@
 # Copyright 2010, Her Majesty in Right of Canada
 
 make clean
-make testsuite
+make all
 
 exit

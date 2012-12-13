@@ -1,6 +1,5 @@
 #!/usr/bin/make -f
 # vim:noet:ts=3:nowrap:filetype=make
-# $Id$
 
 # @file Makefile
 # @brief Validate all dependencies for Portage.
@@ -24,10 +23,7 @@ SHELL = bash
 .PHONY: all
 all: testsuite
 
-
-.PHONY: clean
-clean:
-	@true
+include ../Makefile.incl
 
 .PHONY: testsuite
 testsuite:

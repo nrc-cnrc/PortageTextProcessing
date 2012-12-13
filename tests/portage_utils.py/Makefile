@@ -1,6 +1,5 @@
 #!/usr/bin/make -f
 # vim:noet:ts=3:nowrap:filetype=make
-# $Id$
 
 # @file Makefile
 # @brief Testsuite for testing portage_utils.pyc and its open.
@@ -23,9 +22,8 @@ SHELL := bash
 all: testsuite
 
 
-.PHONY: clean
-clean:
-	${RM} test* unittest*
+TEMP_FILES=test* unittest*
+include ../Makefile.incl
 
 test:
 	echo -e "This is a test.\nThen there is a second line.\nBut it ends on the third line." > $@
