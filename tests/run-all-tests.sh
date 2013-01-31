@@ -43,7 +43,9 @@ if [[ $PARALLEL_MODE ]]; then
       echo $0 $suite
    done |
       run-parallel.sh -unordered-cat -v - $PARALLEL_LEVEL 2>&1 |
-      tee $LOG | grep --line-buffered '^\['
+      tee $LOG |
+      grep --line-buffered '^\[' |
+      egrep --line-buffered --color '.*\*.*|$'
    grep PASSED $LOG | grep -v 'test suites' | sort -u
    grep FAILED $LOG | grep -v 'test suites' | sort -u
 
