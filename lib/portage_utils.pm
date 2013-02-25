@@ -1,7 +1,5 @@
 #!/usr/bin/perl -w
 
-# $Id$
-
 # @file portage_utils.pm
 # @brief Library to transparently use compressed file formats, plus some other common perl methods.
 #
@@ -59,7 +57,7 @@ B< =============================================
 
 =cut
 
-my $current_year = 2011;
+my $current_year = 2013;
 
 sub printCopyright($$) {
    # Just like in sh_utils.sh, we don't actually bother with the Copyright

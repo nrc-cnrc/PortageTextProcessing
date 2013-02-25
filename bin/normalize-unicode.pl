@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
-# $Id$
 
 # @file normalize-unicode.pl 
-# @brief Normalize unicode input into canonical representations.  Particularly
-# useful in Arabic where the same text can be encoded in many ways, which are
-# string-wise different, but canonically equivalent.
+# @brief Normalize unicode input into canonical representations.
+#
+# Particularly useful in Arabic where the same text can be encoded in many
+# ways, which are string-wise different, but canonically equivalent.
 #
 # @author Eric Joanis
 #

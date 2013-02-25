@@ -1,7 +1,5 @@
 #!/usr/bin/perl -sw
 
-# $Id$
-#
 # @file utokenize.pl
 # @brief Tokenize and sentence split UTF-8 text.
 #
@@ -12,8 +10,8 @@
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright 2004-2009, Sa Majeste la Reine du Chef du Canada /
-# Copyright 2004-2009, Her Majesty in Right of Canada
+# Copyright 2004-2013, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2004-2013, Her Majesty in Right of Canada
 
 use utf8;
 
@@ -58,9 +56,10 @@ Options:
       often caused unexpected behaviour.
 -notok Don't tokenize the output. [do tokenize]
 -pretok Already tokenized. Don't re-tokenize the input. [do tokenize]
--lang Specify two-letter language code: en or es or fr [en]
+-lang Specify two-letter language code: en, fr, es, or da [en]
 -paraline
       File is in one-paragraph-per-line format [no]
+-xtags Handle XML tags from TMX and SDLXLIFF file formats [don't]
 
 Caveat:
 
@@ -74,15 +73,22 @@ Caveat:
   one-sentence-per-line, use -noss, otherwise your sentence breaks will be
   modified in ways that are almost certainly undesirable.
 
+  Without -xtags, basic tag handling is still available: strings that match
+  / <[^>]+>/ will be left untouched.  With -xtags, mid-token tags are also
+  supported, and attempts are made to do tokenization as if the tags were not
+  really there, while not actually stripping any tags out.
+
 ";
 
-our ($help, $h, $lang, $v, $p, $ss, $noss, $paraline, $notok, $pretok);
+our ($help, $h, $lang, $v, $p, $ss, $noss, $paraline, $notok, $pretok, $xtags);
 
 if ($help || $h) {
    print $HELP;
    exit 0;
 }
 $lang = "en" unless defined $lang;
+setTokenizationLang($lang);
+
 $v = 0 unless defined $v;
 $p = 0 unless defined $p;
 $ss = 0 unless defined $ss;
@@ -90,6 +96,7 @@ $noss = 0 unless defined $noss;
 $notok = 0 unless defined $notok;
 $pretok = 0 unless defined $pretok;
 $paraline = 0 unless defined $paraline;
+$xtags = 0 unless defined $xtags;
  
 my $in = shift || "-";
 my $out = shift || "-";
@@ -126,21 +133,17 @@ select(OUT); $| = 1;
 while (1)
 {
    my $para;
-   if ($noss)
-   {
-      unless (defined($para = <IN>))
-      {
+   if ($noss) {
+      unless (defined($para = <IN>)) {
          last;
       }
-   } else
-   {
-      unless ($para = get_para(\*IN, $paraline))
-      {
+   } else {
+      unless ($para = get_para(\*IN, $paraline)) {
          last;
       }
    }
 
-   my @token_positions = tokenize($para, $lang, $pretok);
+   my @token_positions = tokenize($para, $pretok, $xtags);
    my @sent_positions = split_sentences($para, @token_positions) unless ($noss);
 
    if ($notok || $pretok) {

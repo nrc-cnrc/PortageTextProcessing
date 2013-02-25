@@ -31,11 +31,11 @@ $ENV{PORTAGE_INTERNAL_CALL} = 1;
 
 
 my $HELP =
-"Usage: $0 [INPUT [OUTPUT]]
+"Usage: stableuniq.pl [INPUT [OUTPUT]]
 
-Outputs unique lines from INPUT (or standard input) to OUTPUT (or standard output).  INPUT
-is not required to be sorted, and lines are not reordered (as opposed to using sort and
-uniq to find unique lines).
+Outputs unique lines from INPUT (or standard input) to OUTPUT (or standard
+output).  INPUT is not required to be sorted, and lines are not reordered (as
+opposed to using sort and uniq to find unique lines).
 
 ";
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # coding=utf-8
-# $Id$
 
 # @file portage_utils.py
 # @brief Useful common Python classes and functions
@@ -27,7 +26,7 @@ __all__ = ["printCopyright",
            "open",
           ]
 
-current_year = 2012
+current_year = 2013
 
 def printCopyright(program_name, start_year):
    """Print the standard NRC Copyright notice.

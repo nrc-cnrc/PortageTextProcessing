@@ -1,6 +1,4 @@
 #!/usr/bin/env perl
-# $Id$
-
 # @file tmx2lfl.pl
 # @brief Extract a parallel corpus from tmx files.
 # 
@@ -230,7 +228,7 @@ exit 0;
 sub processPH {
    my ($parser, $ph) = @_;
    my $string = join(" ", map(normalize($_->text_only), $ph));
-   print STDERR "PH: $string\n" if ($debug);
+   debug("PH: $string\n");
    #print STDERR "PH: " . Dumper($ph);
    #$ph->print(\*STDERR, 1);
 
@@ -321,7 +319,7 @@ sub processTU {
       $segs =~ s/\s+$//;   # Trim white spaces at the end of each line.
       print { $parser->{outfile}->{$lc_lang} } $segs, "\n";
       print { $parser->{outfile}->{$lc_lang} } "\n" if $extra;
-      print STDERR "SEG: $segs\n" if ($debug);
+      debug("SEG: $segs\n");
    }
    $parser->{tu_count} = $n + 1;
 

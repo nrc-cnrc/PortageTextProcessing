@@ -27,10 +27,21 @@ fi
 n=$1
 shift
 
+declare -a files
 if [[ $# = 0 ]]; then
-   head -$n | tail -1
+   files="-"
 else
-   for f in $*; do
-      head -$n $f | tail -1
-   done
+   files="$@"
 fi
+for file in ${files[@]}; do
+   #echo $file
+   perl -e '
+      while (<>) {
+         if ($. == '$n') {
+            print;
+            exit;
+         }
+      }
+      print STDERR "Warning: select-line reached EOF before line '$n' in '$file'\n";
+   ' $file
+done

@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
-# $Id$
-
-# @file lines.py 
+# @file lines.py
 # @brief extract the given lines from a file.
 #
 # @author Nicola Ueffing
@@ -18,11 +16,11 @@
 import sys, math, string, gzip
 
 if len(sys.argv)!=3:
-    sys.stderr.write("Usage: %s  \n\
+    sys.stderr.write("Usage: lines.py  \n\
     <file containing line numbers>  <file containing text (can be gzipped)>\n\n\
     Extracts lines specified in first file from second file.\n\
     Line numbers have to start with 1 (not 0) and may contain repititions.\n\
-" % sys.argv[0])
+")
     sys.exit(1)
 
 ### Read arguments

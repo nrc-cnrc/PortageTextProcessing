@@ -1,5 +1,5 @@
-# Copyright (c) 2004 - 2009, Sa Majeste la Reine du Chef du Canada /
-# Copyright (c) 2004 - 2009, Her Majesty in Right of Canada
+# Copyright (c) 2004 - 2013, Sa Majeste la Reine du Chef du Canada /
+# Copyright (c) 2004 - 2013, Her Majesty in Right of Canada
 #
 # For further information, please contact :
 # Technologies langagieres interactives / Interactive Language Technologies
@@ -7,9 +7,6 @@
 # Conseil national de recherches Canada / National Research Council Canada
 # See http://iit-iti.nrc-cnrc.gc.ca/locations-bureaux/gatineau_e.html
 
-
-# $Id$
-#
 # LexiTools.pm
 # PROGRAMMER: George Foster / UTF-8 adaptation by Michel Simard / Eric Joanis / Samuel Larkin
 #             / Adding Spanish Samuel Larkin
@@ -32,33 +29,30 @@ use strict;
 use warnings;
 require Exporter;
 
-our (@ISA, @EXPORT);
+our (@ISA, @EXPORT, @EXPORT_OK);
 
 @ISA = qw(Exporter);
 @EXPORT = (
    "get_para", "tokenize", "split_sentences",
    "get_tokens", "get_token", "get_collapse_token",
-   "matches_known_abbr_en", "matches_known_abbr_fr", "matches_known_abbr_es",
+   "matches_known_abbr",
    "good_turing_estm", "get_sentence",
-   "setDetokenizationLang", "detokenize", "detokenize_array"
+   "setTokenizationLang", "setDetokenizationLang",
+   "detokenize", "detokenize_array"
 );
+@EXPORT_OK = qw( get_tag_re );
 
 # Signatures so the array refs work correctly everywhere
 sub get_token(\$$\@); #(para_string, index, token_positions)
 sub tok_abuts_prev($\@); #(index, token_positions)
 sub tok_is_dot(\$$\@); #(para_string, index, token_positions)
+sub tok_is_xtag(\$$\@); #($para_string, index, token_positions)
 sub context_says_abbr(\$$\@); #($para_string, index_of_dot, token_positions)
-sub looks_like_abbr($\$$\@); # (lang, para_string, index_of_abbr, token_positions)
+sub looks_like_abbr(\$$\@); # (para_string, index_of_abbr, token_positions)
 sub len(\$); #(string)
+sub matches_known_abbr($); #(word)
 
 # Module global stuff.
-
-my %known_abbr_hash_en;
-my %known_abbr_hash_fr;
-my %known_abbr_hash_es;
-my %short_stops_hash_en;
-my %short_stops_hash_fr;
-my %short_stops_hash_es;
 
 # Single quotes: ascii ` and ', cp-1252 145 (U+2018) and 146 (U+2019), cp-1252/iso-8859-1 180
 my $apostrophes = quotemeta("\`\'‘’´");
@@ -73,6 +67,24 @@ my $wide_dashes = quotemeta("‐‑‒–—―");
 my $hyphens = $wide_dashes . quotemeta("-");
 my $splitleft = qr/[\"“«\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
 my $splitright = qr/\.{2,}|[\"”»!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
+
+my $debug_xtags = 0;
+
+# Regular expressions for parsing XML tags
+# Ref: http://www.w3.org/TR/REC-xml/#sec-starttags
+my $tag_inner_re = qr/(?:"[^"]*"|[^">])/;
+my $tag_re = qr/(?:<$tag_inner_re+>)/;
+sub get_tag_re {
+   return $tag_re;
+}
+
+# XML tag names - the standard is not fully followed here - I only keep the
+# ASCII subset of allowed characters.
+# Ref: http://www.w3.org/TR/REC-xml/#NT-NameStartChar
+my $tag_name_re = qr/(?:[a-zA-Z_:][a-zA-Z_:.0-9-]*)/;
+# Spaces within an XML tag
+# Ref: http://www.w3.org/TR/REC-xml/#NT-S
+my $tag_space_re = qr/[ \x09\x0D\x0A]/;
 
 my @known_abbrs_en = qw {
    acad adm aka al apr aug ba bc blvd bsc btw c ca capt cdn ceo cf
@@ -119,6 +131,10 @@ my @known_abbrs_fr = qw {
 # mm.      39            126        700
 my @known_abbrs_es = qw {
    av avda c d da dr dra esq gob gral ing lic prof profa sr sra srta st
+};
+
+my @known_abbrs_da = qw {
+   hr frk frøken fr fru
 };
 
 # short words and abbreviation-like words that can end a sentence
@@ -182,16 +198,15 @@ my @short_stops_fr = qw {
 #   él     134           8626       42908
 my @short_stops_es = qw {
    al ap at cc ce cp da ed ee ep es eu fe ff gm ii ir iu iv mw mí no pc pp se
-   si ss sé sí ti tv ue uu va ve vi xx ya yo él 
+   si ss sé sí ti tv ue uu va ve vi xx ya yo él
 };
 
-# funky hash initializations...
-@known_abbr_hash_en{@known_abbrs_en} = (1) x @known_abbrs_en;
-@known_abbr_hash_fr{@known_abbrs_fr} = (1) x @known_abbrs_fr;
-@known_abbr_hash_es{@known_abbrs_es} = (1) x @known_abbrs_es;
-@short_stops_hash_en{@short_stops_en} = (1) x @short_stops_en;
-@short_stops_hash_fr{@short_stops_fr} = (1) x @short_stops_fr;
-@short_stops_hash_es{@short_stops_es} = (1) x @short_stops_es;
+my @short_stops_da = qw {
+   æf æg af åg al ål am ar år at bb bi bo cd cm co cv da de dø dr
+   ed eg ej el en én er et ét få fe ff fr µg gå gr hk hl hu ii iv
+   ja jf jo jr km ko kø lå le ly µm må mg ml mm mø mr mv nå næ ni nr nu ny
+   og øl om op os på pt rå ro ry så si sø sr tå tb te ti ud ug ve vi vu
+};
 
 # Get the next paragraph from a file. Return: text in para (including trailing
 # markup, if any)
@@ -224,29 +239,55 @@ sub get_para #(\*FILEHANDLE, $one_para_per_line)
    return $para;
 }
 
+my $tokenizationLang;
+my $split_word;
+my %short_stops_hash;
+my %known_abbr_hash;
+sub setTokenizationLang($) {
+   if (defined $tokenizationLang) {
+      $tokenizationLang eq shift or die "The ULexiTools library does not support calling setTokenizationLang() twice with different languages, because of regular expressions using /o with variables set in this function.";
+   } else {
+      $tokenizationLang = shift or die "You must provide a detokenization language id.";
+      if ($tokenizationLang eq "en") {
+         $split_word = \&split_word_en;
+         @known_abbr_hash{@known_abbrs_en} = (1) x @known_abbrs_en;
+         @short_stops_hash{@short_stops_en} = (1) x @short_stops_en;
+      } elsif ($tokenizationLang eq "fr") {
+         $split_word = \&split_word_fr;
+         @known_abbr_hash{@known_abbrs_fr} = (1) x @known_abbrs_fr;
+         @short_stops_hash{@short_stops_fr} = (1) x @short_stops_fr;
+      } elsif ($tokenizationLang eq "es") {
+         $split_word = \&split_word_es;
+         @known_abbr_hash{@known_abbrs_es} = (1) x @known_abbrs_es;
+         @short_stops_hash{@short_stops_es} = (1) x @short_stops_es;
+      } elsif ($tokenizationLang eq "da") {
+         $split_word = \&split_word_da;
+         @known_abbr_hash{@known_abbrs_da} = (1) x @known_abbrs_da;
+         @short_stops_hash{@short_stops_da} = (1) x @short_stops_da;
+         $leftquotes  = quotemeta("»›„“‚");
+         $rightquotes = quotemeta("«‹“”‘");
+         $splitleft   = qr/[\"»›„“‚\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
+         $splitright  = qr/\.{2,}|[\"«‹“”‘!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
+      }
+      else {die "unknown lang in tokenizer: $tokenizationLang";}
+
+      setDetokenizationLang($tokenizationLang); # We use some functions from the detokenizer
+   }
+}
+
 # Split a paragraph into tokens. Return list of (start,len) token positions.
 
-# EJJ note: can't use the signature (\$$) here, because $para is modified in
-# this method, and we don't want the changes reflected for the caller.
-sub tokenize #(paragraph, lang, notok, pretok)
+# EJJ note: We use the signature ($$$) instead of (\$$$) here because $para is
+# modified in this method, and we don't want the changes reflected for the
+# caller.
+sub tokenize($$$) #(paragraph, pretok?, xtags?)
 {
-   my $para = shift;
-   my $lang = shift || "en";
-   my $pretok = shift || 0;
-   my @tok_posits = ();
+   die "You must call setTokenizationLang(\$lang_id) first." unless(defined($tokenizationLang));
 
-   my ($split_word, $matches_known_abbr);
-   if ($lang eq "en") {
-      $split_word = \&split_word_en;
-      $matches_known_abbr = \&matches_known_abbr_en;
-   } elsif ($lang eq "fr") {
-      $split_word = \&split_word_fr;
-      $matches_known_abbr = \&matches_known_abbr_fr;
-   } elsif ($lang eq "es") {
-      $split_word = \&split_word_es;
-      $matches_known_abbr = \&matches_known_abbr_es;
-   }
-   else {die "unknown lang in tokenizer: $lang";}
+   my $para = shift;
+   my $pretok = shift;
+   my $xtags = shift;
+   my @tok_posits = ();
 
    # break up into whitespace-separated chunks, pull off punc, and break up
    # words (don't switch order of subexps in main match expr!)
@@ -255,7 +296,16 @@ sub tokenize #(paragraph, lang, notok, pretok)
    # even if it's represented differently in utf-8!)
    $para =~ s/\xA0/ /g;
 
-   while ($para =~ /(<[^>]+>)|([[:^space:]]+)/go) {
+   my $token_re = $xtags ?
+      # closer to "proper" XML markup parsing, will parse correctly formed
+      # XML tags correctly, unbalanced > is taken literally, as per XML
+      # specifications, unbalanced < should be rejected, but is parsed as a
+      # stand-alone token because we don't want the Portage pipeline to crash.
+      qr/($tag_re)|(<|[^<[:space:]]+)/ :
+      # In non-XML mode, tags in angle braces are recognized and protected, as
+      # long as they are preceded by whitespace.
+      qr/($tag_re)|([[:^space:]]+)/;
+   while ($para =~ /$token_re/go) {
       if (defined $1) {
          push(@tok_posits, pos($para)-len($1), len($1)); # markup
       } elsif ($pretok) {
@@ -270,21 +320,225 @@ sub tokenize #(paragraph, lang, notok, pretok)
          }
       }
    }
-   
-   return @tok_posits if ($pretok);
 
    # Merge trailing dots with previous tokens if called for
-   for (my $i = 0; $i < $#tok_posits; $i += 2) {
-      if (tok_is_dot($para, $i, @tok_posits) && tok_abuts_prev($i, @tok_posits)) {
-         if (context_says_abbr($para, $i, @tok_posits) ||
-               &$matches_known_abbr(get_token($para, $i-2, @tok_posits)) ||
-               looks_like_abbr($lang, $para, $i-2, @tok_posits)) {
-            $tok_posits[$i-1]++;
-            splice(@tok_posits, $i, 2);
-            $i -= 2;    # account for splice
+   if (!$pretok) {
+      for (my $i = 0; $i < $#tok_posits; $i += 2) {
+         if (tok_is_dot($para, $i, @tok_posits) && tok_abuts_prev($i, @tok_posits)) {
+            if (context_says_abbr($para, $i, @tok_posits) ||
+                  matches_known_abbr(get_token($para, $i-2, @tok_posits)) ||
+                  looks_like_abbr($para, $i-2, @tok_posits)) {
+               $tok_posits[$i-1]++;
+               splice(@tok_posits, $i, 2);
+               $i -= 2;    # account for splice
+            }
          }
       }
    }
+
+
+   if ($xtags) {
+      use constant {
+         OPEN_TAG       => 0,
+         CLOSE_TAG      => 1,
+         SELF_CLOSE_TAG => 2,
+         PUNCT_TOKEN    => 3,
+         TEXT_TOKEN     => 4,
+      };
+      for (my $i = 0; $i < $#tok_posits;) {
+         my $j = $i;
+         my @tok_types;
+         for (; $j < $#tok_posits; $j += 2) {
+            last unless $j == $i || tok_abuts_prev($j, @tok_posits);
+            my $token = get_token($para, $j, @tok_posits);
+            if ($token =~ /^<\/$tag_name_re$tag_space_re*>$/o) {
+               push @tok_types, CLOSE_TAG;
+            } elsif ($token =~ /^<open_wrap $tag_inner_re+\/>$/o) {
+               push @tok_types, OPEN_TAG;
+            } elsif ($token =~ /^<close_wrap $tag_inner_re+\/>$/o) {
+               push @tok_types, CLOSE_TAG;
+            } elsif ($token =~ /^<$tag_inner_re+\/>$/o) {
+               push @tok_types, SELF_CLOSE_TAG;
+            } elsif ($token =~ /^$tag_re$/o) {
+               push @tok_types, OPEN_TAG;
+            } elsif (is_punctuation($token) || is_bracket($token)) {
+               print STDOUT "TYPE SEQ BEFORE \"$token\": @tok_types\n" if $debug_xtags;
+               if (grep { $_ != OPEN_TAG && $_ != SELF_CLOSE_TAG } @tok_types) {
+                  print STDOUT "GREP SAID YES\n" if $debug_xtags;
+                  while (@tok_types && $tok_types[-1] == OPEN_TAG) {
+                     $j -= 2;
+                     pop @tok_types;
+                  }
+               } else {
+                  print STDOUT "GREP SAID NO\n" if $debug_xtags;
+                  push @tok_types, PUNCT_TOKEN;
+                  for ($j += 2; $j < $#tok_posits; $j += 2) {
+                     last unless tok_abuts_prev($j, @tok_posits);
+                     my $next_token = get_token($para, $j, @tok_posits);
+                     if ($next_token =~ /^<\/$tag_name_re$tag_space_re*>$/o) {
+                        push @tok_types, CLOSE_TAG;
+                     } elsif ($next_token =~ /^<close_wrap $tag_inner_re+\/>$/o) {
+                        push @tok_types, CLOSE_TAG;
+                     } elsif ($next_token =~ /^<open_wrap $tag_inner_re+\/>$/o) {
+                        last; # we stop at an open tag
+                     } elsif ($next_token =~ /^<$tag_inner_re+\/>$/o) {
+                        push @tok_types, SELF_CLOSE_TAG;
+                     } else {
+                        last; # text, or other open tags
+                     }
+                  }
+               }
+               last;
+            } else {
+               push @tok_types, TEXT_TOKEN;
+            }
+         }
+         if ($j == $i + 2) {
+            print STDOUT "STAND-ALONE: ", get_token($para, $i, @tok_posits), "\n" if $debug_xtags;
+            $i += 2;
+            next;
+         }
+         # Now we know tokens [$i, $j) abut each other and the non-tag content
+         # is either a single punctuation mark or all non-punctuation text.
+         my @open_stack;
+         my @left_tags;
+         my @right_tags;
+         my @inner_tags;
+         my $found_non_tag = 0;
+         for (my $k = $i; $k < $j; $k += 2) {
+            if (tok_is_xtag($para, $k, @tok_posits)) {
+               if ($found_non_tag) {
+                  push @right_tags, $k;
+               } else {
+                  push @left_tags, $k;
+               }
+            } else {
+               $found_non_tag = 1;
+               if (@right_tags) {
+                  push @inner_tags, @right_tags;
+                  @right_tags = ();
+               }
+            }
+         }
+         my @inner_matched = (0) x scalar(@inner_tags);
+         FOR_INNER_I: for (my $inner_i = 0; $inner_i <= $#inner_tags; ++$inner_i) {
+            next if ($inner_matched[$inner_i]); # already found match, no need to look again.
+            my $tag = get_token($para, $inner_tags[$inner_i], @tok_posits);
+            if ($tag =~ /^<open_wrap $tag_inner_re*\bid="(\d+)"$tag_inner_re*\/>$/o) {
+               # TMX opening tag, wrapped in an open_wrap tag.
+               my $open_id = $1;
+               foreach my $subsequent_tag (@inner_tags[$inner_i+1 .. $#inner_tags], @right_tags) {
+                  my $othertag = get_token($para, $subsequent_tag, @tok_posits);
+                  if ($othertag =~ /^<close_wrap $tag_inner_re*\bid="(\d+)"$tag_inner_re*\/>$/o &&
+                      $open_id eq $1) {
+                     $inner_matched[$inner_i] = 1;
+                  }
+               }
+            } elsif ($tag =~ /^<close_wrap $tag_inner_re*\bid="(\d+)"$tag_inner_re*\/>$/o) {
+               # TMX closing tag, wrapped in a close_wrap tag.
+               my $close_id = $1;
+               foreach my $preceeding_tag (@left_tags, @inner_tags[0 .. $inner_i-1]) {
+                  my $othertag = get_token($para, $preceeding_tag, @tok_posits);
+                  if ($othertag =~ /^<open_wrap $tag_inner_re*\bid="(\d+)"$tag_inner_re*\/>$/o &&
+                      $close_id eq $1) {
+                     $inner_matched[$inner_i] = 1;
+                  }
+               }
+            } elsif ($tag =~ /^<($tag_name_re)$tag_inner_re*>$/o) {
+               # Regular opening tag (e.g., XLIFF)
+               my $tagname = $1;
+               print "INNER OPEN TAG $tagname\n" if $debug_xtags;
+               # tag is opening tag, see if it's closed later in the same string
+               foreach my $subsequent_tag (@inner_tags[$inner_i+1 .. $#inner_tags], @right_tags) {
+                  my $othertag = get_token($para, $subsequent_tag, @tok_posits);
+                  if ($othertag =~ /^<\/$tagname$tag_space_re*>$/) {  # Don't put /o here!
+                     $inner_matched[$inner_i] = 1;
+                     print "MATCHING INNER CLOSING TAG $othertag\n" if $debug_xtags;
+                     next FOR_INNER_I;
+                  }
+               }
+            } elsif ($tag =~ /^<\/($tag_name_re)$tag_space_re*>$/o) {
+               # Regular closing tag (e.g., XLIFF)
+               my $tagname = $1;
+               # tag is closing tag, see if it's opened earlier in the same string
+               foreach my $preceeding_tag (@left_tags, @inner_tags[0 .. $inner_i-1]) {
+                  my $othertag = get_token($para, $preceeding_tag, @tok_posits);
+                  if ($othertag =~ /^<$tagname(?:$tag_space_re$tag_inner_re*|)>$/) {  # Don't put /o here!
+                     $inner_matched[$inner_i] = 1;
+                     next FOR_INNER_I;
+                  }
+               }
+            }
+         }
+
+         if ($debug_xtags) {
+            print STDOUT "LEFT: @left_tags  INNER: @inner_tags  RIGHT: @right_tags\n";
+            print STDOUT "INNER MATCHES: @inner_matched\n";
+            print STDOUT "BEFORE: ", get_token($para, $i, @tok_posits);
+            for (my $k = $i+2; $k < $j; $k += 2) {
+               print STDOUT " | ", get_token($para, $k, @tok_posits);
+            }
+            print STDOUT "\n";
+         }
+
+         if ((@inner_tags && !grep {$_ == 0} @inner_matched) || !$found_non_tag) {
+            # If all inner tags are matched, or if there is no non-tag part,
+            # glue the whole thing back as one token
+            my $merge_end = $j;
+            for (my $k = $i + 2; $k < $j; $k += 2) {
+               $tok_posits[$i+1] += $tok_posits[$k+1];
+            }
+            splice(@tok_posits, $i+2, $j-$i-2);
+            $j = $i + 2;
+            @left_tags = @right_tags = ();
+         } else {
+            # glue the right tags back on, if any
+            if (@right_tags) {
+               my $k = $right_tags[0]-2;
+               for (@right_tags) {
+                  $tok_posits[$k+1] += $tok_posits[$_+1];
+               }
+               splice(@tok_posits, $k+2, 2*scalar(@right_tags));
+               $j -= 2*scalar(@right_tags);
+            }
+            # inner tags are glued to the following token if they're opening or
+            # self-closing, or to the previous token if they're closing
+            if (@inner_tags) {
+               print "TYPE SEQ @tok_types\n" if $debug_xtags;
+               foreach my $k (reverse @inner_tags) {
+                  print "INNER TAG $k TYPE $tok_types[($k-$i)/2]\n" if $debug_xtags;
+                  if ($tok_types[($k-$i)/2] == CLOSE_TAG) {
+                     $tok_posits[$k-1] += $tok_posits[$k+1];
+                     splice(@tok_posits, $k, 2);
+                  } else {
+                     $tok_posits[$k+1] += $tok_posits[$k+3];
+                     splice(@tok_posits, $k+2, 2);
+                  }
+                  $j -= 2;
+               }
+            }
+            # glue the left tags back on, if any
+            if (@left_tags) {
+               die unless $left_tags[0] == $i;
+               for (@left_tags) {
+                  $tok_posits[$i+1] += $tok_posits[$_+2+1];
+               }
+               splice(@tok_posits, $i+2, 2*scalar(@left_tags));
+               $j -= 2*scalar(@left_tags);
+            }
+         }
+
+         if ($debug_xtags) {
+            print STDOUT "AFTER: ", get_token($para, $i, @tok_posits);
+            for (my $k = $i+2; $k < $j; $k += 2) {
+               print STDOUT " | ", get_token($para, $k, @tok_posits);
+            }
+            print STDOUT "\n";
+         }
+         $i = $j;
+      }
+   }
+
    return @tok_posits;
 }
 
@@ -355,7 +609,7 @@ sub get_token(\$$\@) #(para_string, index, token_positions)
 # hyphens and elipsis collapse.
 # Return a string.
 
-sub get_collapse_token(\$$\@$) #(para_string, index, token_positions)
+sub get_collapse_token(\$$\@$) #(para_string, index, token_positions, nocollapse)
 {
    my $string = shift;
    my $index = shift;
@@ -411,6 +665,16 @@ sub tok_is_dot(\$$\@) #($para_string, index, token_positions)
           get_token($$string, $index, @$token_positions) eq ".";
 }
 
+sub tok_is_xtag(\$$\@) #($para_string, index, token_positions)
+{
+   my $string = shift;
+   my $index = shift;
+   my $token_positions = shift;
+   return $token_positions->[$index+1] > 2 &&
+          get_token($$string, $index, @$token_positions) =~ /^$tag_re$/o;
+}
+
+
 # Is there hard evidence from upcoming tokens (ignoring the current one), that
 # we should treat current word + "." combo as an abbr (ie tokenize as
 # "word.")?
@@ -432,7 +696,7 @@ sub context_says_abbr(\$$\@) #($para_string, index_of_dot, token_positions)
    # skip ambig punc
    for ($index += 2; $index < $#$token_positions; $index += 2) {
       if (get_token($$string, $index, @$token_positions) !~
-            /^([$quotes\(\)\[\]\{\}…]|[$apostrophes]{1,2}|[$hyphens]{1,3}|[.]{2,4}|<[^>]+>)$/o) {last;}
+            /^([$quotes\(\)\[\]\{\}…]|[$apostrophes]{1,2}|[$hyphens]{1,3}|[.]{2,4}|$tag_re)$/o) {last;}
    }
 
    if ($index > $#$token_positions) {return 0;} # end of para
@@ -445,44 +709,27 @@ sub context_says_abbr(\$$\@) #($para_string, index_of_dot, token_positions)
    } elsif ($tok =~ /^[¡¿]$/) {
       # TODO: what if UU.EE. ¿a question?
       # Let's assume that this is not a mid sentence question even if it is allowed in spanish.
-      return 0;  
+      return 0;
    } else {
       return $tok !~ /^[[:upper:]]/o;   # next real word not cap'd
    }
 }
 
-# Determine if a word matches an English known abbreviation.
+# Determine if a word matches a known abbreviation.
+# The language used is determined by setTokenizationLang(), which initializes
+# known_abbr_hash accordingly.
 
-sub matches_known_abbr_en #(word)
+sub matches_known_abbr($) # (word)
 {
    my $word = shift;
    $word =~ s/[.]//go;
-   return $known_abbr_hash_en{lc($word)} ? 1 : 0;
-}
-
-# Determine if a word matches a French known abbreviation.
-
-sub matches_known_abbr_fr #(word)
-{
-   my $word = shift;
-   $word =~ s/[.]//go;
-   return $known_abbr_hash_fr{lc($word)} ? 1 : 0;
-}
-
-# Determine if a word matches a Spanish known abbreviation.
-
-sub matches_known_abbr_es #(word)
-{
-   my $word = shift;
-   $word =~ s/[.]//go;
-   return $known_abbr_hash_es{lc($word)} ? 1 : 0;
+   return $known_abbr_hash{lc($word)} ? 1 : 0;
 }
 
 # Does the current token look like it is an abbreviation?
 
-sub looks_like_abbr($\$$\@) # (lang, para_string, index_of_abbr, token_positions)
+sub looks_like_abbr(\$$\@) # (para_string, index_of_abbr, token_positions)
 {
-   my $lang = shift;
    my $para = shift;
    my $p = shift;
    my $token_positions = shift;
@@ -496,14 +743,7 @@ sub looks_like_abbr($\$$\@) # (lang, para_string, index_of_abbr, token_positions
    # but if it matches one of these, then the context must REALLY look like a
    # sentence boundary
 
-   if ($lang eq "en") {
-      if (exists($short_stops_hash_en{lc($word)})) {return 0;}
-   } elsif ($lang eq "fr") {
-      if (exists($short_stops_hash_fr{lc($word)})) {return 0;}
-   } elsif ($lang eq "es") {
-      if (exists($short_stops_hash_es{lc($word)})) {return 0;}
-   }
-   else {die "unknown lang in tokenizer: $lang";}
+   if (exists($short_stops_hash{lc($word)})) {return 0;}
    return 1;
 }
 
@@ -550,11 +790,16 @@ sub split_punc #(string, offset[0])
          push(@atoms, split_punc(substr($tok, len($1)), $offset+len($1)));
       }
    } elsif ($tok =~ /($splitright)$/o) {
-      my $l1 = $tok_len - len($1);
-      if ($l1 > 0) {
-         push(@atoms, split_punc(substr($tok, 0, $l1), $offset));
+      if ($1 eq ";" and $tok =~ /&[a-z]+;$/i) {
+         # Leave a trailing ; intact when it looks like an XML entity
+         push(@atoms, $offset, $tok_len);
+      } else {
+         my $l1 = $tok_len - len($1);
+         if ($l1 > 0) {
+            push(@atoms, split_punc(substr($tok, 0, $l1), $offset));
+         }
+         push(@atoms, $offset+$l1, $tok_len - $l1);
       }
-      push(@atoms, $offset+$l1, $tok_len - $l1);
    }
    # next 4 clauses do this:  abc) -> abc )
    #                but this: ab(c) -> ab(c)
@@ -645,7 +890,7 @@ sub split_word_fr #(word, offset)
    return @atom_positions;
 }
 
-# Split an Spanish word into parts, eg ?????
+# Split a Spanish word into parts, eg ?????
 # Return list of (start,len) atom positions.
 
 sub split_word_es #(word, offset)
@@ -656,6 +901,23 @@ sub split_word_es #(word, offset)
 
    push(@atom_positions, $os, len($word));
 
+   return @atom_positions;
+}
+
+# Split a Danish word into parts, eg ?????
+# Return list of (start,len) atom positions.
+
+sub split_word_da #(word, offset)
+{
+   my $word = shift;
+   my $os = shift || 0;
+   my @atom_positions = ();
+
+   if ($word !~ /^it[$apostrophes]s/i && $word =~ /^([[:alpha:]]+)([$apostrophes][Ss])$/o) {
+      push(@atom_positions, $os, len($1), $os+len($1), len($2));
+   } else {
+      push(@atom_positions, $os, len($word));
+   }
    return @atom_positions;
 }
 
@@ -694,17 +956,72 @@ my ($word_pre, $word_before, $word_after);
 my @double_quote=();
 my @single_quote=();
 my @out_sentence;
+my $detok_left_bracket;
+my $detok_right_bracket;
+my $punctuation;
+
 
 my $detokenizationLang;
 sub setDetokenizationLang($) # Two letters language id
 {
-   $detokenizationLang = shift or die "You must provide a detokenization language id.";
+   if (defined $detokenizationLang) {
+      $detokenizationLang eq shift or die "The ULexiTools library does not support calling setDetokenizationLang() twice with different languages, because of regular expressions using /o with variables set in this function.";
+   } else {
+      # IMPORTANT NOTE ABOUT $detok_left_bracket and $detok_right_bracket: “
+      # and ‘ are left out of all the character sets below to work around a bug
+      # in Perl 5.8 and 5.10, fixed in 5.14.  The bug: characters above U+00FF
+      # should not be in character sets, but separately placed after a |.
+
+      $detokenizationLang = shift or die "You must provide a detokenization language id.";
+      #print ref($detokenizationLang), "\n";
+      if ($detokenizationLang eq "es") {
+         #$detok_left_bracket  = quotemeta("[({«“‘`¡¿"); # broken with Perl 5.8 or 5.10
+         #$detok_right_bracket = quotemeta("])}»”’´!?"); # broken with Perl 5.8 or 5.10
+         $detok_left_bracket  = qr/(?:[[({«`¡¿]|“|‘)/;
+         $detok_right_bracket = qr/(?:[])}»´!?]|”|’)/;
+         $punctuation = qr/[,.:;]/;
+      }
+      elsif ($detokenizationLang eq "da") {
+         # NOTE: there is ambiguity for <“> which could probably be resolved by
+         # keeping track of the opening quote for that pair „…“ or “…”.
+         #$detok_left_bracket  = quotemeta("[({»›„“‚"); # broken with Perl 5.8 or 5.10
+         #$detok_right_bracket = quotemeta("])}«‹“”‘"); # broken with Perl 5.8 or 5.10
+         $detok_left_bracket  = qr/(?:[[({»`¡¿]|„|“|‚|›)/;
+         $detok_right_bracket = qr/(?:[])}«´!?]|“|”|‘|‹)/;
+         $punctuation = qr/[,.:!?;]/;
+      }
+      elsif ($detokenizationLang eq "fr") {
+         # "«" and "»" are left out because French keeps them separate from
+         # their contents.
+         #$detok_left_bracket  = quotemeta("[({“‘`"); # broken with Perl 5.8 or 5.10
+         #$detok_right_bracket = quotemeta("])}”’´"); # broken with Perl 5.8 or 5.10
+         $detok_left_bracket  = qr/(?:[[({`]|“|‘)/;
+         $detok_right_bracket = qr/(?:[])}´]|”|’)/;
+         #$detok_right_bracket = qr/[\])}”’´]/;
+         $punctuation = qr/(?:[,.!?;]|…|\.\.\.)/;
+      }
+      else {
+         # Includes left double and single quotes, since they require the same
+         # treatment as brackets
+         # Excludes < and ‹ since we don't split them in utokenize.pl
+         $detok_left_bracket = quotemeta("[({“‘`"); # broken with Perl 5.8 or 5.10
+         $detok_left_bracket  = qr/(?:[[({`]|“|‘)/;
+         # Includes right double and single quotes, since they require the same
+         # treatment as brackets
+         # Excludes > and › since we don't split them in utokenize.pl
+         $detok_right_bracket = quotemeta("])}”’´"); # broken with Perl 5.8 or 5.10
+         $detok_right_bracket = qr/(?:[])}´]|”|’)/;
+         $punctuation = qr/[,.:!?;]/;
+      }
+   }
 }
 
-sub detokenize(\$) # Sentence to be detokenized
+sub detokenize(\$) # (sent)
 {
    my $sent = shift;
-   my @tokens = split(/[ ]+/, $$sent);
+   #my @tokens = split(/[ ]+/, $$sent);
+   my @tokens = $$sent =~ /((?:$tag_re|[^ ])+)/go;
+   #print STDERR "TOKENS: ", join(" | ", @tokens), "\n";
    my @out = detokenize_array(\@tokens);
    return join("", @out);
 }
@@ -713,7 +1030,7 @@ sub detokenize_array(\@) # Ref Array containing words of sentence to be detokeni
 {
    my $tokens_ref = shift;
 
-   die "You must set a detokenization language id." unless(defined($detokenizationLang));
+   die "You must call setDetokenizationLang(\$lang_id) first." unless(defined($detokenizationLang));
 
    @out_sentence = ();#initialize the containers
    @double_quote = ();# assume  a pair of quotations only bound to one line of sentence.
@@ -722,10 +1039,8 @@ sub detokenize_array(\@) # Ref Array containing words of sentence to be detokeni
 
    # Reset global array.
    $#out_sentence=-1;
-   my $delme = 0;
    while( defined (my $word_pre=shift @$tokens_ref) )
    {
-      ++$delme;
       if ($word_pre eq "..") {$word_pre = "...";}
 
       if( $#out_sentence == -1 ){ # first word just push in
@@ -749,7 +1064,7 @@ sub detokenize_array(\@) # Ref Array containing words of sentence to be detokeni
             process_bracket($word_pre, $word_before);
          }
          elsif (is_poss($word_pre)) {
-            process_poss( $word_pre, $word_before);
+            push ( @out_sentence, $word_pre );
          }
          elsif (is_fr_hyph_ending($word_pre)) {
             push ( @out_sentence, $word_pre);
@@ -853,17 +1168,6 @@ sub process_quote #ch1 ,ch2
          push ( @out_sentence, $space);
          push ( @out_sentence, $ch_pre);
       }
-#     else{# in start place, push a space first if the word before it is not special ch(punctuation,bracket)
-#
-#        push (@double_quote, $ch_pre);
-#        if( is_special( $ch_before)){
-#           push ( @out_sentence, $ch_pre);
-#        }
-#        else{
-#           push ( @out_sentence, $space);
-#           push ( @out_sentence, $ch_pre);
-#        }
-#     }
    }
    elsif( is_single_quote($ch_pre)){
       if( $ch_before=~/s$/){# in the situations like ( someones ' something). It is not true always, but mostly.
@@ -879,19 +1183,10 @@ sub process_quote #ch1 ,ch2
             push ( @out_sentence, $space);
             push ( @out_sentence, $ch_pre);
          }
-#        else{
-#           push (@single_quote, $ch_pre);
-#           if( is_special( $ch_before)){
-#              push ( @out_sentence, $ch_pre);
-#           }
-#           else{
-#              push ( @out_sentence, $space);
-#              push ( @out_sentence, $ch_pre);
-#           }
-#        }
       }
    }
 }
+
 sub check_quote #$ch
 {
    my $ch_pre=shift;
@@ -912,26 +1207,21 @@ sub check_quote #$ch
       }
    }
 }
+
 sub is_quote # ch
 {
    my $ch_pre=shift;
    return is_double_quote($ch_pre) || is_single_quote($ch_pre);
 }
+
 sub is_double_quote # $ch
 {
    my $ch_pre=shift;
    # « and » (French angled double quotes) left out intentionally, since
    # they are not glued to the text in French.
-   # “ and ” (English angled double quotes) also left out: we
-   # treat them as brackets instead, since they are left/right specific
-   if ($detokenizationLang eq "es") {
-   # they are not glued to the text in French.
-      #return ((defined $ch_pre) && ($ch_pre eq "\"" or $ch_pre eq "«" or $ch_pre eq "»"));
-      return ((defined $ch_pre) && ($ch_pre =~ /[\"«»]/));
-   }
-   else {
-      return ((defined $ch_pre)&&($ch_pre eq "\""));
-   }
+   # Angled quotes don't belong here in general, because they are treated
+   # as brackets, since they are left/right specific
+   return ((defined $ch_pre)&&($ch_pre =~ /^$tag_re*"$tag_re*$/o));
 }
 
 sub is_single_quote # $ch
@@ -939,8 +1229,9 @@ sub is_single_quote # $ch
    my $ch_pre=shift;
    # `, ´, ‘ and ’ (back and forward tick, English angled single quotes) left
    # out: we treat them as brackets instead, since they are left/right specific
-   return ((defined $ch_pre)&&($ch_pre eq "'"));
+   return ((defined $ch_pre)&&($ch_pre =~ /^$tag_re*'$tag_re*$/o));
 }
+
 sub double_quote_not_empty
 {
    return ( $#double_quote>= 0);
@@ -950,88 +1241,73 @@ sub single_quote_not_empty
 {
    return ( $#single_quote>= 0);
 }
+
 sub is_special # $var1
 {
    my $ch=shift;
    return (is_bracket($ch) || is_punctuation($ch) );
 }
-sub is_punctuation # $var1
+
+sub is_punctuation
 {
    my $ch_pre=shift;
-   if ( $detokenizationLang eq "fr" ) {
-      return $ch_pre =~ m/^(?:[,.!?;…]|\.\.\.)$/;
-   }
-   elsif ( $detokenizationLang eq "es" ) {
-      return $ch_pre =~ m/^[,.:;]$/;
-   }
-   # Default behaves like English.
-   else {
-      return $ch_pre =~ m/^[,.:!?;]$/;
-   }
+   return $ch_pre =~ m/^$tag_re*$punctuation$tag_re*$/o;
 }
+
 sub is_bracket # $ch
 {
    my $ch_pre=shift;
    return ( is_left_bracket($ch_pre) || is_right_bracket($ch_pre) );
 }
+
 sub is_left_bracket # $ch
 {
    my $ch=shift;
-   # Includes left double and single quotes, since they require the same
-   # treatment as brackets
-   # Excludes < and ‹ since we don't split them in utokenize.pl
-   return ( $detokenizationLang eq "es" ? ($ch =~ m/^[[({“‘`¡¿]$/) : ($ch =~ m/^[[({“‘`]$/) );
+   return ($ch =~ /^$tag_re*$detok_left_bracket$tag_re*$/o);
 }
+
+
 sub is_right_bracket #ch
 {
+   #use re qw(Debug All);
+   if (0) {
+      my $re = qr/^(<[a]>)*[])}”’´]$/;
+      use Devel::Peek;
+      print "RE=$re\n";
+   }
    my $ch=shift;
-   # Includes right double and single quotes, since they require the same
-   # treatment as brackets
-   # Excludes > and › since we don't split them in utokenize.pl
-   return ( $detokenizationLang eq "es" ? ($ch =~ m/^[])}”’´!?]$/) : ($ch =~ m/^[])}”’´]$/) );
+   return ($ch =~ /^$tag_re*$detok_right_bracket$tag_re*$/o);
+   #return ($ch =~ m/^(<[a]>)*(?:[])}´]|”|’)$/o);
+   #return ($ch =~ /^[$detok_right_bracket]$/o);
 }
 
 sub is_prefix # ch
 {
    my $ch=shift;
    return ($detokenizationLang eq "fr" &&
-           $ch =~ /^[cdjlmnst]$apos$|^[a-z]*qu$apos$/oi);
-}
-
-# handling plural possessive in English
-sub process_poss # ch1, ch2
-{
-   my $ch_pre=shift;
-   my $ch_before=shift;
-   if (is_poss($ch_pre)) {
-      if ($ch_before =~ /^${apos}s/oi) {
-         push ( @out_sentence, substr($ch_pre, 0, 1));
-      }
-      else {
-         push ( @out_sentence, $ch_pre );
-      }
-   }
+           $ch =~ /^$tag_re*(?:[cdjlmnst]|^[a-z]*qu)$apos$tag_re*$/oi);
 }
 
 sub is_poss # ch
 {
    my $ch=shift;
-   return ($detokenizationLang eq "en" &&
-           $ch =~ /^${apos}s/oi);
+   return (($detokenizationLang eq "en" or $detokenizationLang eq "da") &&
+           $ch =~ /^$tag_re*${apos}s$tag_re*$/oi);
 }
 
 sub is_fr_hyph_ending #ch
 {
    my $ch=shift;
    return ($detokenizationLang eq "fr" &&
-           $ch =~ /^-(?:t-)?(?:je|tu|ils?|elles?|on|nous|vous|moi|toi|lui|eux|en|y|ci|ce|les?|leurs?|la|l[àÀ]|donc)/oi);
+           $ch =~ /^$tag_re*-(?:t-)?$tag_re*(?:$hyph_endings)$tag_re*$/oi);
 }
 
 sub is_price_abut_left # ch1, ch2
 {
    my $ch_pre=shift;
    my $ch_before=shift;
-   return (($detokenizationLang eq "en" or $detokenizationLang eq "es") && $ch_before eq "\$" && $ch_pre =~ /^\.?\d/oi);
+   return (($detokenizationLang eq "en" or $detokenizationLang eq "es") &&
+           $ch_before =~ /^$tag_re*\$$tag_re*$/ && $ch_pre =~ /^$tag_re*\.?\d/oi);
 }
 
 

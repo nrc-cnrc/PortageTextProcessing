@@ -1,5 +1,4 @@
 #!/bin/bash
-#############################################################
 #
 # @file ridbom.sh
 # @brief Rid UTF-8 file from BOM (Byte-Order Marker)
@@ -13,7 +12,6 @@
 # Conseil national de recherches Canada / National Research Council Canada
 # Copyright 2010, Conseil national de recherches du Canada /
 # Copyright 2010, National Research Council of Canada
-#############################################################
 
 ## 
 ## Usage: crlf2lf.sh [FILES ...]
