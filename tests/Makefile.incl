@@ -24,7 +24,7 @@ testsuite: gitignore
 .PHONY: gitignore gitignore.temp_files_and_dirs
 gitignore: gitignore.temp_files_and_dirs
 gitignore.temp_files_and_dirs:
-	echo "${TEMP_FILES} ${TEMP_DIRS} core core.* .gitignore !src/* !ref/*" | tr ' ' '\n' > .gitignore
+	echo "${TEMP_FILES} ${TEMP_DIRS} core core.* .gitignore !src/* !ref/* !in/* !data/*" | tr ' ' '\n' > .gitignore
 
 # The "make clean" target in all test suites will remove files listed under
 # TEMP_FILES and/or TEMP_DIRS.
