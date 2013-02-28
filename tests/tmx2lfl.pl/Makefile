@@ -196,8 +196,8 @@ ce_tmx_test ce_tmx_test_ci: test.utf8.tmx
 
 .PHONY: ce_tmx
 ce_tmx: ce_tmx_test ce_tmx_test_ci
-	diff -i ce_tmx_test/QP.template.tmx ce_tmx_test_ci/QP.template.tmx
-	diff --ignore-match changedate -i ce_tmx_test/QP.tmx ce_tmx_test_ci/QP.tmx
+	diff -i ce_tmx_test/QP.template.xml ce_tmx_test_ci/QP.template.xml
+	diff --ignore-match changedate -i ce_tmx_test/QP.xml ce_tmx_test_ci/QP.xml
 
 
 ########################################
