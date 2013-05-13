@@ -41,6 +41,7 @@ testsuite: unittest5
 testsuite: unittest6
 testsuite: unittest7
 testsuite: unittest8
+testsuite: unittest9
 
 
 # Test reading standard in.
@@ -113,4 +114,14 @@ unittest8: test
 	| python -c "exec('from portage_utils import open\nf=open(\"\", \"w\")\nfor line in open(\"-\"): f.write(line)')" 2>&1 \
 	| grep "Fatal error: You must provide a filename" --quiet
 
+
+.PHONY: unittest9
+unittest9:  unittest9a unittest9b
+
+# Testing partially reading a gzip file and not getting a Broken pipe message.
+unittest9a:  %:  ${PORTAGE}/test-suite/systems/toy-regress-en2fr/models/tm/cpt.merged.hmm3-kn3-zn.tm-train.en2fr.gz
+	python -c "exec('from portage_utils import open\nfor line in open(\"$<\", \"r\", False):\n  if True: break\n')" 2>&1 | grep 'zcat: stdout: Broken pipe'
+
+unittest9b:  %:  ${PORTAGE}/test-suite/systems/toy-regress-en2fr/models/tm/cpt.merged.hmm3-kn3-zn.tm-train.en2fr.gz
+	! { set -o pipefail; python -c "exec('from portage_utils import open\nfor line in open(\"$<\", \"r\", True):\n  if True: break\n')" 2>&1 | grep 'zcat: stdout: Broken pipe'; }
 

@@ -122,7 +122,7 @@ def verbose(*args, **kwargs):
    if verbose_flag or debug_flag:
       print(*args, file=sys.stderr, **kwargs)
 
-def open(filename, mode='r'):
+def open(filename, mode='r', quiet=True):
    """Transparently open files that are stdin, stdout, plain text, compressed or pipes.
 
    examples: open("-")
@@ -132,6 +132,7 @@ def open(filename, mode='r'):
 
    filename: name of the file to open
    mode: open mode
+   quiet:  suppress "zcat: stdout: Broken pipe" messages.
    return: file handle to the open file.
    """
    filename.strip()
@@ -153,7 +154,10 @@ def open(filename, mode='r'):
    elif filename.endswith(".gz"):
       #theFile = gzip.open(filename, mode+'b')
       if mode == 'r':
-         theFile = Popen(["zcat", "-f", filename], stdout=PIPE).stdout
+         if quiet:
+            theFile = Popen(["zcat", "-f", filename], stdout=PIPE, stderr=open('/dev/null', 'w')).stdout
+         else:
+            theFile = Popen(["zcat", "-f", filename], stdout=PIPE).stdout
       elif mode == 'w':
          internal_file = __builtin__.open(filename, mode)
          theFile = Popen(["gzip"], close_fds=True, stdin=PIPE, stdout=internal_file).stdin
