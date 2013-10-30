@@ -20,7 +20,7 @@ import __builtin__
 from subprocess import Popen, PIPE
 
 __all__ = ["printCopyright",
-           "HelpAction", "VerboseAction", "DebugAction", 
+           "HelpAction", "VerboseAction", "VerboseMultiAction", "DebugAction", 
            "set_debug","set_verbose", 
            "error", "fatal_error", "warn", "info", "debug", "verbose",
            "open",
@@ -66,6 +66,21 @@ class VerboseAction(argparse.Action):
       setattr(namespace, self.dest, True)
       set_verbose(True)
 
+class VerboseMultiAction(argparse.Action):
+   """argparse action class increase level of verbosity in output.
+   e.g: parser.add_argument("-v", "--verbose", action=VerboseMultiAction)
+   Using multiple flags increase the verbosity multiple levels.
+   """
+   def __init__(self, option_strings, dest, 
+                help="increase level of verbosity output to stderr [0]"):
+      super(VerboseMultiAction, self).__init__(option_strings, dest, nargs=0, 
+                                               type=int, default=0, 
+                                               required=False, help=help)
+
+   def __call__(self, parser, namespace, values, option_string=None):
+      setattr(namespace, self.dest, getattr(namespace, self.dest, 0) + 1)
+      set_verbose(True)
+
 class DebugAction(argparse.Action):
    """argparse action class for turning on verbose output.
    e.g: parser.add_argument("-d", "--debug", action=DebugAction)
@@ -93,19 +108,19 @@ def set_verbose(flag):
    global verbose_flag
    verbose_flag = flag
 
-def error(*args):
+def error(*args, **kwargs):
    """Print an error message to stderr."""
-   print("Error:", *args, file=sys.stderr)
+   print("Error:", *args, file=sys.stderr, **kwargs)
    return
 
-def fatal_error(*args):
+def fatal_error(*args, **kwargs):
    """Print a fatal error message to stderr and exit with code 1."""
-   print("Fatal error:", *args, file=sys.stderr)
+   print("Fatal error:", *args, file=sys.stderr, **kwargs)
    sys.exit(1)
 
-def warn(*args):
+def warn(*args, **kwargs):
    """Print an warning message to stderr."""
-   print("Warning:", *args, file=sys.stderr)
+   print("Warning:", *args, file=sys.stderr, **kwargs)
    return
 
 def info(*args, **kwargs):
