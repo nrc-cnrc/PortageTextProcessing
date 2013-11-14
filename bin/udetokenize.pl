@@ -58,6 +58,7 @@ Options:
 -chinesepunc   Normalize Chinese punctuation to characters that map back to
                cp-1252, or to iso-8859-1 if -latin1 is also specified
 -stripchinese  Strip any remaining Han characters after detokenizing
+-deparaline    Reconstruct one paragraph per line.
 
 Notes:
  - to simulate the behaviour of newdetok.pl, use:
@@ -67,7 +68,7 @@ Notes:
 my $in=shift || "-";
 my $out=shift || "-";
 
-our ($help, $h, $lang, $latin1, $chinesepunc, $stripchinese);
+our ($help, $h, $lang, $latin1, $chinesepunc, $stripchinese, $deparaline);
 $lang = "en" unless defined $lang;
 setDetokenizationLang($lang);
 
@@ -80,6 +81,7 @@ if ($help || $h) {
 open(IN,  "<$in")  or die " Can not open $in for reading";
 open(OUT, ">$out") or die " Can not open $out for writing";
 
+my $first_sentence = 1;  # The first sentence will be part of a new paragraph in deparaline mode.
 while(<IN>)
 {
    my $sentence = $_;
@@ -143,6 +145,20 @@ while(<IN>)
       $out_sentence =~ s/[\pZ\pC]+/ /g;
    }
 
-   print OUT $out_sentence . "\n";
+   if ($deparaline) {
+      chomp($out_sentence);
+      if ($out_sentence =~ m/^\s*$/) {
+         print "\n";
+         # Next sentence will be the beginning of a new paragraph.
+         $first_sentence = 1;
+      }
+      else {
+         print OUT ($first_sentence ? "" : " "), $out_sentence;
+         $first_sentence = 0;
+      }
+   }
+   else {
+      print OUT $out_sentence . "\n";
+   }
 }
 

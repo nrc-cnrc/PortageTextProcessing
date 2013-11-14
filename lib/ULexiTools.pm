@@ -951,7 +951,7 @@ sub good_turing #(freq-list)
 # Detokenize functions
 
 my $space=" ";
-my $apos = qr/['´’]/;
+my $apos = qr/(?:'|´|’)/; # don't use ['´’]: broken in utf-8
 my ($word_pre, $word_before, $word_after);
 my @double_quote=();
 my @single_quote=();
