@@ -39,9 +39,9 @@ our (@ISA, @EXPORT, @EXPORT_OK);
    "matches_known_abbr",
    "good_turing_estm", "get_sentence",
    "setTokenizationLang", "setDetokenizationLang",
-   "detokenize", "detokenize_array"
+   "detokenize", "detokenize_array",
+   "get_tag_re", "strip_xml_entities"
 );
-@EXPORT_OK = qw( get_tag_re );
 
 # Signatures so the array refs work correctly everywhere
 sub get_token(\$$\@); #(para_string, index, token_positions)
@@ -77,6 +77,18 @@ my $tag_inner_re = qr/(?:"[^"]*"|[^">])/;
 my $tag_re = qr/(?:<$tag_inner_re+>)/;
 sub get_tag_re {
    return $tag_re;
+}
+
+# Modifies $_[0] in place, removing entities and replacing &gt;, &lt; and &amp;
+# by the caracter they represent.
+sub strip_xml_entities(\$) {
+   print "@_\n";
+   foreach (@_) {
+      $$_ =~ s/$tag_re//g;  # Remove tags
+      $$_ =~ s/&gt;/>/g;    # unescape greater than
+      $$_ =~ s/&lt;/</g;    # unescape less than
+      $$_ =~ s/&amp;/&/g;   # unescape ampersand
+   }
 }
 
 # XML tag names - the standard is not fully followed here - I only keep the
