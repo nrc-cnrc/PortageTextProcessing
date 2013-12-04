@@ -82,7 +82,6 @@ sub get_tag_re {
 # Modifies $_[0] in place, removing entities and replacing &gt;, &lt; and &amp;
 # by the caracter they represent.
 sub strip_xml_entities(\$) {
-   print "@_\n";
    foreach (@_) {
       $$_ =~ s/$tag_re//g;  # Remove tags
       $$_ =~ s/&gt;/>/g;    # unescape greater than
