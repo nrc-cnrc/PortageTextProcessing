@@ -46,20 +46,21 @@ Usage: utokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
 
 Options:
 
--v    Write vertical output, with each token followed by its index relative to
-      the start of its paragraph, <sent> markers after sentences, and <para>
-      markers after each paragraph.
--p    Print an extra newline after each paragraph (has no effect if -v)
--ss   Perform sentence-splitting.
--noss Don't perform sentence-splitting.
-      Note: one of -ss or -noss is now required, because the old default (-ss)
-      often caused unexpected behaviour.
--notok Don't tokenize the output. [do tokenize]
--pretok Already tokenized. Don't re-tokenize the input. [do tokenize]
--lang Specify two-letter language code: en, fr, es, or da [en]
--paraline
-      File is in one-paragraph-per-line format [no]
--xtags Handle XML tags from TMX and SDLXLIFF file formats [don't]
+-v         Write vertical output, with each token followed by its index
+           relative to the start of its paragraph, <sent> markers after
+           sentences, and <para> markers after each paragraph.
+-p         Print an extra newline after each paragraph (has no effect if -v)
+-ss        Perform sentence-splitting.
+-noss      Don't perform sentence-splitting; input is treated as one-sentence
+           per line.
+           Note 1: one of -ss or -noss is required.
+           Note 2: -p and -paraline cannot be combined with -noss (paragraphs
+           are not defined with -noss).
+-notok     Don't tokenize the output. [do tokenize]
+-pretok    Already tokenized. Don't re-tokenize the input. [do tokenize]
+-lang      Specify two-letter language code: en, fr, es, or da [en]
+-paraline  File is in one-paragraph-per-line format [no]
+-xtags     Handle XML tags from TMX and SDLXLIFF file formats [don't]
 
 Caveat:
 
@@ -77,6 +78,24 @@ Caveat:
   / <[^>]+>/ will be left untouched.  With -xtags, mid-token tags are also
   supported, and attempts are made to do tokenization as if the tags were not
   really there, while not actually stripping any tags out.
+
+Newline and paragraph semantics:
+
+  With -noss, a newline marks a sentence boundary and the output has exactly
+  the same number of lines as the input.  There is no concept of paragraph.
+
+  With -ss, a newline is just whitespace by default, and a sequence of one or
+  more blank lines marks a paragraph boundary.  Empty lines at the beginning of
+  the input are removed.
+
+  With -ss and -paraline, a newline in the input marks a paragraph boundary.
+  Each sentence is output on its own line.
+   - Without -p, empty lines are deleted, so you just get a sequence of
+     sentences without indication of the original paragraph structure.
+   - With -p, empty input lines are kept, so that you can reconstruct the input
+     paragraph structure from the output, including empty paragraphs: two
+     consecutive newlines in the output mark a paragraph boundary from the
+     input.
 
 ";
 
@@ -112,7 +131,7 @@ binmode IN, ":encoding(UTF-8)";
 binmode OUT, ":encoding(UTF-8)";
 
 if ( !$ss && !$noss ) {
-   die "utokenize.pl: One of -ss and -noss is now required.\n";
+   die "utokenize.pl: One of -ss and -noss is now required; the old default (-ss) frequently caused unexpected behaviour, so we disabled it.\n";
 }
 if ( $notok && $pretok ) {
    die "utokenize.pl: Specify only one of -notok or -pretok.\n";
@@ -120,11 +139,14 @@ if ( $notok && $pretok ) {
 if ( $ss && $noss ) {
    die "utokenize.pl: Specify only one of -ss or -noss.\n";
 }
+if ( $noss && ($paraline || $p) ) {
+   die "utokenize.pl: -paraline and -p are meaningless with -noss.\n";
+}
 if ( $noss && $notok ) {
-   warn "Just copying the input since -noss and -notok are both specified.\n";
+   warn "utokenize.pl: Just copying the input since -noss and -notok are both specified.\n";
 }
 if ( $noss && $pretok ) {
-   warn "Just copying the input since -noss and -pretok are both specified.\n";
+   warn "utokenize.pl: Just copying the input since -noss and -pretok are both specified.\n";
 }
 
 # Enable immediate flush when piping
@@ -133,7 +155,7 @@ select(OUT); $| = 1;
 while (1)
 {
    my $para;
-   if ($noss) {
+   if ($noss || ($paraline && $p)) {
       unless (defined($para = <IN>)) {
          last;
       }
