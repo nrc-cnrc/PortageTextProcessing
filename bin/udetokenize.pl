@@ -147,13 +147,17 @@ while(<IN>)
 
    if ($deparaline) {
       chomp($out_sentence);
-      if ($out_sentence =~ m/^\s*$/) {
+      if ($first_sentence) {
+         print OUT $out_sentence;
+         $first_sentence = 0;
+      }
+      elsif ($out_sentence =~ m/^\s*$/) {
          print "\n";
          # Next sentence will be the beginning of a new paragraph.
          $first_sentence = 1;
       }
       else {
-         print OUT ($first_sentence ? "" : " "), $out_sentence;
+         print OUT " ", $out_sentence;
          $first_sentence = 0;
       }
    }
@@ -161,4 +165,5 @@ while(<IN>)
       print OUT $out_sentence . "\n";
    }
 }
+print OUT "\n" unless $first_sentence;
 
