@@ -9,24 +9,28 @@
 # Copyright 2008, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2008, Her Majesty in Right of Canada
 
-if [[ "$1" == "-j" ]]; then
-   PARALLEL_MODE=1
-   PARALLEL_LEVEL=$2
-   shift
-   shift
-fi
-
-if [[ "$1" =~ "^-" ]]; then
+usage() {
    echo "Usage: $0 [test-suite [test-suite2 [...]]]
    Run the specified test suites, or all test suites if none are specified.
    Each test suite must contain a script named run-test.sh which returns 0
    as exit status if the suite passes, non-zero otherwise.
 
 Option:
-   -j N   Run the tests N-ways parallel.
-"
+   -j N      Run the tests N-ways parallel [1]
+   -local L  Run L parallel workers locally [calculated by run-parallel.sh]
+" >&2
    exit
-fi
+}
+
+while [ $# -gt 0 ]; do
+   case "$1" in
+   -j)      PARALLEL_MODE=1; PARALLEL_LEVEL=$2; shift;;
+   -local)  LOCAL="-local $2"; shift;;
+   -*)      usage;;
+   *)       break;;
+   esac
+   shift
+done
 
 TEST_SUITES=$*
 if [[ ! $TEST_SUITES ]]; then
@@ -42,7 +46,7 @@ if [[ $PARALLEL_MODE ]]; then
    for suite in $TEST_SUITES; do
       echo $0 $suite
    done |
-      run-parallel.sh -unordered-cat -v - $PARALLEL_LEVEL 2>&1 |
+      run-parallel.sh $LOCAL -unordered-cat -v - $PARALLEL_LEVEL 2>&1 |
       tee $LOG |
       grep --line-buffered '^\[' |
       egrep --line-buffered --color '.*\*.*|$'
