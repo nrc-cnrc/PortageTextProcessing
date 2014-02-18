@@ -4,3 +4,4 @@ MONTÉE B-C)
 Trait d'union - 1 in-secable
 Danger, danger Will Robinson avec Système.
 (une simple phrase.)
+Tab de l'autre côté, mais pas tab vertical ou form feed, parce que c'est pas légal dans un fichier XML.

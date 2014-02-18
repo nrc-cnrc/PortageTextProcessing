@@ -14,6 +14,7 @@
 
 CE_TMX:=ce_tmx.pl
 TMX2LFL:=tmx2lfl.pl
+QUIET_DIFF ?= -q
 
 L1 ?= lang1
 L2 ?= lang2
@@ -74,11 +75,11 @@ unittest2: test.utf8.tmx
 # Generic target/commands for unittest1 unittest2.
 unittest1 unittest2:
 	${TMX2LFL} -output=$@ -txt=.txt $<
-	diff $@.${L1}     ref/ref.${L1}     -q
-	diff $@.${L1}.txt ref/ref.${L1}.txt -q
-	diff $@.${L2}     ref/ref.${L2}     -q
-	diff $@.${L2}.txt ref/ref.${L2}.txt -q
-	diff $@.id        ref/ref.id        -q
+	diff $@.${L1}     ref/ref.${L1}     ${QUIET_DIFF}
+	diff $@.${L1}.txt ref/ref.${L1}.txt ${QUIET_DIFF}
+	diff $@.${L2}     ref/ref.${L2}     ${QUIET_DIFF}
+	diff $@.${L2}.txt ref/ref.${L2}.txt ${QUIET_DIFF}
+	diff $@.id        ref/ref.id        ${QUIET_DIFF}
 
 
 ########################################
@@ -97,7 +98,7 @@ unittest3: test3.utf8.tmx
 .PHONY: unittest4
 unittest4: test3.utf8.tmx	
 	${TMX2LFL} -output=$@ -txt=.txt -src=lang1 -tgt=lang3 $<
-	@[[ `cat $@* | grep -c 'EMPTY_'` == 10 ]]
+	[[ `cat $@* | grep -c 'EMPTY_'` == 12 ]]
 
 
 ########################################
@@ -117,9 +118,9 @@ unittest5: test5.utf8.tmx
 .PHONY: unittest6
 unittest6: test.tmx test.utf8.tmx
 	${TMX2LFL} -output=$@ $+
-	cat ref/ref.${L1} ref/ref.${L1} | diff - $@.${L1} -q
-	cat ref/ref.${L2} ref/ref.${L2} | diff - $@.${L2} -q
-	cat ref/ref.id    ref/ref.id    | diff - $@.id    -q
+	cat ref/ref.${L1} ref/ref.${L1} | diff - $@.${L1} ${QUIET_DIFF}
+	cat ref/ref.${L2} ref/ref.${L2} | diff - $@.${L2} ${QUIET_DIFF}
+	cat ref/ref.id    ref/ref.id    | diff - $@.id    ${QUIET_DIFF}
 
 
 ########################################
@@ -131,9 +132,9 @@ ${CORPUS_NAME_WITH_A_SPACE}: test.tmx
 .PHONY: unittest7
 unittest7: ${CORPUS_NAME_WITH_A_SPACE}
 	${TMX2LFL} -output=$@ "$<" "$<"
-	cat ref/ref.${L1} ref/ref.${L1} | diff - $@.${L1} -q
-	cat ref/ref.${L2} ref/ref.${L2} | diff - $@.${L2} -q
-	cat ref/ref.id    ref/ref.id    | diff - $@.id    -q
+	cat ref/ref.${L1} ref/ref.${L1} | diff - $@.${L1} ${QUIET_DIFF}
+	cat ref/ref.${L2} ref/ref.${L2} | diff - $@.${L2} ${QUIET_DIFF}
+	cat ref/ref.id    ref/ref.id    | diff - $@.id    ${QUIET_DIFF}
 
 # Special clean-up for this test.
 clean: clean7
@@ -173,11 +174,11 @@ unittest9: tmx-1.4.tmx
 .PHONY: unittest_ci
 unittest_ci: test.tmx unittest1
 	${TMX2LFL} -src LaNg1 -tgt lAnG2 -output=$@ -txt=.TxT $<
-	diff $@.LaNg1     ref/ref.${L1}     -q
-	diff $@.LaNg1.TxT ref/ref.${L1}.txt -q
-	diff $@.lAnG2     ref/ref.${L2}     -q
-	diff $@.lAnG2.TxT ref/ref.${L2}.txt -q
-	diff $@.id        ref/ref.id        -q
+	diff $@.LaNg1     ref/ref.${L1}     ${QUIET_DIFF}
+	diff $@.LaNg1.TxT ref/ref.${L1}.txt ${QUIET_DIFF}
+	diff $@.lAnG2     ref/ref.${L2}     ${QUIET_DIFF}
+	diff $@.lAnG2.TxT ref/ref.${L2}.txt ${QUIET_DIFF}
+	diff $@.id        ref/ref.id        ${QUIET_DIFF}
 
 
 ########################################
@@ -190,7 +191,7 @@ ce_tmx_test_ci: L2=lAnG2
 ce_tmx_test ce_tmx_test_ci: test.utf8.tmx
 	mkdir -p $@
 	${CE_TMX} -src=${L2} -tgt=${L1}  extract $@ test.utf8.tmx
-	diff $@/Q.txt ref/Q.txt -q
+	diff $@/Q.txt ref/Q.txt ${QUIET_DIFF}
 	utf8_casemap -c u < $@/Q.txt > $@/P.txt
 	${CE_TMX} -src=${L2} -tgt=${L1}  replace $@ out.utf8.tmx
 
@@ -206,5 +207,5 @@ ce_tmx: ce_tmx_test ce_tmx_test_ci
 .PHONY: preprocess_plugin_test
 preprocess_plugin_test: prepro.in
 	preprocess_plugin fr < prepro.in > prepro.out
-	diff prepro.out ref/prepro.out -q
+	diff prepro.out ref/prepro.out ${QUIET_DIFF}
 
