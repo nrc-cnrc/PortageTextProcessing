@@ -16,6 +16,7 @@ from __future__ import print_function, unicode_literals, division, absolute_impo
 
 import sys
 import argparse
+import re
 import __builtin__
 from subprocess import Popen, PIPE
 
@@ -23,10 +24,10 @@ __all__ = ["printCopyright",
            "HelpAction", "VerboseAction", "VerboseMultiAction", "DebugAction", 
            "set_debug","set_verbose", 
            "error", "fatal_error", "warn", "info", "debug", "verbose",
-           "open",
+           "open", "split",
           ]
 
-current_year = 2013
+current_year = 2014
 
 def printCopyright(program_name, start_year):
    """Print the standard NRC Copyright notice.
@@ -182,6 +183,20 @@ def open(filename, mode='r', quiet=True):
       theFile = __builtin__.open(filename, mode)
 
    return theFile
+
+# Regular expression to match whitespace the same way that split() in
+# str_utils.cc does, i.e. sequence of spaces, tabs, and/or newlines.
+split_re = re.compile('[ \t\n]+')
+
+def split(s):
+   """Split s into tokens the same way split() in str_utils.cc does, i.e.
+   using any sequence of spaces, tabs, and/or newlines as a delimiter, and
+   ignoring leading and trailing whitespace.
+
+   s: string to be split into token
+   returns: list of string tokens
+   """
+   return split_re.split(s.strip(' \t\n'))
 
 
 if __name__ == '__main__':
