@@ -59,7 +59,7 @@ B< =============================================
 
 my $current_year = 2015;
 
-sub printCopyright($$) {
+sub printCopyright($;$) {
    # Just like in sh_utils.sh, we don't actually bother with the Copyright
    # statement within Portage.
 }
