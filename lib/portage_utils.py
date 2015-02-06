@@ -3,9 +3,9 @@
 
 # @file portage_utils.py
 # @brief Useful common Python classes and functions
-# 
+#
 # @author Darlene Stewart & Samuel Larkin
-# 
+#
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
@@ -21,8 +21,8 @@ import __builtin__
 from subprocess import Popen, PIPE
 
 __all__ = ["printCopyright",
-           "HelpAction", "VerboseAction", "VerboseMultiAction", "DebugAction", 
-           "set_debug","set_verbose", 
+           "HelpAction", "VerboseAction", "VerboseMultiAction", "DebugAction",
+           "set_debug","set_verbose",
            "error", "fatal_error", "warn", "info", "debug", "verbose",
            "open", "split",
           ]
@@ -31,9 +31,9 @@ current_year = 2014
 
 def printCopyright(program_name, start_year):
    """Print the standard NRC Copyright notice.
-   
+
    The Crown Copyright will be asserted for start_year to latest release year.
-   
+
    program_name: name of the program
    start_year: the first year of Copyright for the program;
    """
@@ -43,11 +43,11 @@ def printCopyright(program_name, start_year):
 
 
 class HelpAction(argparse.Action):
-   """argparse action class for displaying the help message to stderr.    
+   """argparse action class for displaying the help message to stderr.
    e.g: parser.add_argument("-h", "-help", "--help", action=HelpAction)
    """
    def __init__(self, option_strings, dest, help="print this help message to stderr and exit"):
-      super(HelpAction, self).__init__(option_strings, dest, nargs=0, 
+      super(HelpAction, self).__init__(option_strings, dest, nargs=0,
                                        default=argparse.SUPPRESS,
                                        required=False, help=help)
    def __call__(self, parser, namespace, values, option_string=None):
@@ -59,8 +59,8 @@ class VerboseAction(argparse.Action):
    e.g: parser.add_argument("-v", "--verbose", action=VerboseAction)
    """
    def __init__(self, option_strings, dest, help="print verbose output to stderr [False]"):
-      super(VerboseAction, self).__init__(option_strings, dest, nargs=0, 
-                                          const=True, default=False, 
+      super(VerboseAction, self).__init__(option_strings, dest, nargs=0,
+                                          const=True, default=False,
                                           required=False, help=help)
 
    def __call__(self, parser, namespace, values, option_string=None):
@@ -72,10 +72,10 @@ class VerboseMultiAction(argparse.Action):
    e.g: parser.add_argument("-v", "--verbose", action=VerboseMultiAction)
    Using multiple flags increase the verbosity multiple levels.
    """
-   def __init__(self, option_strings, dest, 
+   def __init__(self, option_strings, dest,
                 help="increase level of verbosity output to stderr [0]"):
-      super(VerboseMultiAction, self).__init__(option_strings, dest, nargs=0, 
-                                               type=int, default=0, 
+      super(VerboseMultiAction, self).__init__(option_strings, dest, nargs=0,
+                                               type=int, default=0,
                                                required=False, help=help)
 
    def __call__(self, parser, namespace, values, option_string=None):
@@ -87,8 +87,8 @@ class DebugAction(argparse.Action):
    e.g: parser.add_argument("-d", "--debug", action=DebugAction)
    """
    def __init__(self, option_strings, dest, help="print debug output to stderr [False]"):
-      super(DebugAction, self).__init__(option_strings, dest, nargs=0, 
-                                        const=True, default=False, 
+      super(DebugAction, self).__init__(option_strings, dest, nargs=0,
+                                        const=True, default=False,
                                         required=False, help=help)
 
    def __call__(self, parser, namespace, values, option_string=None):
