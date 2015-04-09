@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-# $Id$
 #
 # @file diff-round.pl 
 # @brief diff two ff files, i.e., files of floating point numbers, where
@@ -28,6 +27,11 @@ BEGIN {
 use portage_utils;
 printCopyright "diff-round.pl", 2006;
 $ENV{PORTAGE_INTERNAL_CALL} = 1;
+
+# We want locale-insensitive processing
+use POSIX qw(locale_h);
+use locale;
+setlocale(LC_ALL, "POSIX");
 
 
 sub usage {
