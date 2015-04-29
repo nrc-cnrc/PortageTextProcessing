@@ -37,11 +37,6 @@ printCopyright("udetokenize.pl", 2004);
 $ENV{PORTAGE_INTERNAL_CALL} = 1;
 
 
-# This is a utf8 handling script => io should be in utf8 format
-# ref: http://search.cpan.org/~tty/kurila-1.7_0/lib/open.pm
-use open IO => ':encoding(utf-8)';
-use open ':std';  # <= indicates that STDIN and STDOUT are utf8
-
 my $HELP = "
 Usage: udetokenize.pl [-lang=L] [-latin1] [-chinesepunc] [-stripchinese]
        [INPUT] [OUTPUT]
@@ -78,8 +73,10 @@ if ($help || $h) {
 }
 
 
-open(IN,  "<$in")  or die " Can not open $in for reading";
-open(OUT, ">$out") or die " Can not open $out for writing";
+zopen(*IN,  "<$in")  or die " Can not open $in for reading";
+zopen(*OUT, ">$out") or die " Can not open $out for writing";
+binmode(IN,  ":encoding(UTF-8)");
+binmode(OUT, ":encoding(UTF-8)");
 
 my $first_sentence = 1;  # The first sentence will be part of a new paragraph in deparaline mode.
 while(<IN>)
@@ -152,7 +149,7 @@ while(<IN>)
          $first_sentence = 0;
       }
       elsif ($out_sentence =~ m/^\s*$/) {
-         print "\n";
+         print OUT "\n";
          # Next sentence will be the beginning of a new paragraph.
          $first_sentence = 1;
       }

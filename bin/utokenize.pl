@@ -33,12 +33,6 @@ $ENV{PORTAGE_INTERNAL_CALL} = 1;
 
 use ULexiTools;
 
-#use locale;
-# This is a utf8 handling script => io should be in utf8 format
-# ref: http://search.cpan.org/~tty/kurila-1.7_0/lib/open.pm
-use open IO => ':encoding(utf-8)';
-use open ':std';  # <= indicates that STDIN and STDOUT are utf8
-
 my $HELP = "
 Usage: utokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
 
@@ -122,11 +116,8 @@ my $out = shift || "-";
 
 my $psep = $p ? "\n\n" : "\n";
 
-open(IN, "<$in") || die "utokenize.pl: Can't open $in for reading";
-open(OUT, ">$out") || die "utokenize.pl: Can't open $out for writing";
-# According to the documentation:
-# Do not use this pragma for anything else than telling Perl that your script is written in UTF-8.
-# thus let's open the streams in UTF-8.
+zopen(*IN, "<$in") || die "utokenize.pl: Can't open $in for reading";
+zopen(*OUT, ">$out") || die "utokenize.pl: Can't open $out for writing";
 binmode IN, ":encoding(UTF-8)";
 binmode OUT, ":encoding(UTF-8)";
 
