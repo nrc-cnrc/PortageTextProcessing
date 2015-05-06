@@ -78,10 +78,10 @@ GetOptions(
    quiet    => \my $quiet,
    min      => \my $use_min,
    abs      => \my $use_abs,
-) or usage;
+) or usage "Error: Invalid option(s).";
 my $pow_prec = 1/(10**$prec);
 
-2 == @ARGV or usage "Must specify exactly two input files.";
+2 == @ARGV or usage "Error: Must specify exactly two input files.";
 
 if (-d $ARGV[1] && -f $ARGV[0]) {
    $ARGV[1] .= "/" . `basename $ARGV[0]`;
@@ -106,7 +106,7 @@ my $inf_max_diff = 0;
 sub make_open_cmd($) {
    my $file = $_[0];
    if ( $file !~ /\|$/ ) {
-      -r $file or -r "$file.gz" or $file eq "-" or die "Can't open $file: $!\n";
+      -r $file or -r "$file.gz" or $file eq "-" or die "Error: Can't open $file: $!\n";
       $file = "gzip -cqdf $file |";
    }
    if ( $sort ) {
@@ -116,9 +116,9 @@ sub make_open_cmd($) {
 }
 
 open F1, make_open_cmd($ARGV[0])
-   or die "Can't create pipe for sorting and/or decompressing $ARGV[0]: $!";
+   or die "Error: Can't create pipe for sorting and/or decompressing $ARGV[0]: $!";
 open F2, make_open_cmd($ARGV[1])
-   or die "Can't create pipe for sorting and/or decompressing $ARGV[1]: $!";
+   or die "Error: Can't create pipe for sorting and/or decompressing $ARGV[1]: $!";
 
 sub max($$) { $_[0] < $_[1] ? $_[1] : $_[0]; }
 sub min($$) { $_[0] > $_[1] ? $_[1] : $_[0]; }
@@ -181,7 +181,7 @@ while (<F1>) {
    my $L1 = $_; chomp $L1;
    my $L2 = <F2>; chomp $L2 if defined $L2;
    if ( ! defined $L2 ) {
-      warn "Unexpected end of $ARGV[1] before end of $ARGV[0] at line $.\n";
+      warn "Warning: Unexpected end of $ARGV[1] before end of $ARGV[0] at line $.\n";
       exit 2;
    }
 
@@ -219,7 +219,7 @@ while (<F1>) {
    #}
 }
 if ( ! eof(F2) ) {
-   warn "Unexpected end of $ARGV[0] before end of $ARGV[1] at line $.\n";
+   warn "Warning: Unexpected end of $ARGV[0] before end of $ARGV[1] at line $.\n";
    exit 2;
 }
 

@@ -185,14 +185,14 @@ B< =============================================
 sub zopen($$) {
    # if no argument is sent in
    if(not @_) {
-      die "\n!!! ERROR: portage_utils::zopen requires input arguments! \taborting...\n";
+      die "\n!!! Error: portage_utils::zopen requires input arguments! \taborting...\n";
    }
    # if we are called as a module then skip the our reference name
    elsif($_[0] and $_[0] =~ /^portage_utils/) {
       shift;
       # if no argument is sent in
       if(not @_) {
-         die "\n!!! ERROR: portage_utils::zopen requires input arguments! \taborting...\n";
+         die "\n!!! Error: portage_utils::zopen requires input arguments! \taborting...\n";
       }
    }
 
@@ -248,14 +248,14 @@ B< =============================================
 sub zin($$) {
    # if no argument is sent in
    if(not @_) {
-      die "\n!!! ERROR: portage_utils::zin requires input arguments! \taborting...\n";
+      die "\n!!! Error: portage_utils::zin requires input arguments! \taborting...\n";
    }
    # if we are called as a module then skip the our reference name
    elsif($_[0] and $_[0] =~ /^portage_utils/) {
       shift;
       # if no argument is sent in
       if(not @_) {
-         die "\n!!! ERROR: portage_utils::zin requires input arguments! \taborting...\n";
+         die "\n!!! Error: portage_utils::zin requires input arguments! \taborting...\n";
       }
    }
 
@@ -263,7 +263,7 @@ sub zin($$) {
 
    print STDERR "DEBUG zin with $stream_name.\n" if ($DEBUG);
 
-   die "Don't use zin to open an output stream!!\n" if ($stream_name =~ /^\s*>/);
+   die "Error: Don't use zin to open an output stream!!\n" if ($stream_name =~ /^\s*>/);
 
    # remove leading < if present
    $stream_name =~ s/^\s*<//;
@@ -337,14 +337,14 @@ B< =============================================
 sub zout($$) {
    # if no argument is sent in
    if(not @_) {
-      die "\n!!! ERROR: portage_utils::zout requires input arguments! \taborting...\n";
+      die "\n!!! Error: portage_utils::zout requires input arguments! \taborting...\n";
    }
    # if we are called as a module then skip the our reference name
    elsif($_[0] and $_[0] =~ /^portage_utils/) {
       shift;
       # if no argument is sent in
       if(not @_) {
-         die "\n!!! ERROR: portage_utils::zout requires input arguments! \taborting...\n";
+         die "\n!!! Error: portage_utils::zout requires input arguments! \taborting...\n";
       }
    }
 
@@ -352,7 +352,7 @@ sub zout($$) {
 
    print STDERR "DEBUG zout with $stream_name.\n" if ($DEBUG);
 
-   die "Don't use zout to open an input stream!!\n" if ($stream_name =~ /^\s*</);
+   die "Error: Don't use zout to open an input stream!!\n" if ($stream_name =~ /^\s*</);
 
    # Remove one redir.
    $stream_name =~ s/^\s*>//;
@@ -360,7 +360,7 @@ sub zout($$) {
    # Is this a pipe.
    if ($stream_name =~ /^\s*\|/) {
       print STDERR "DEBUG zout is a pipe.\n" if ($DEBUG);
-      die "Can't append to a pipe." if ($stream_name =~ /^\s*>/);
+      die "Error: Can't append to a pipe." if ($stream_name =~ /^\s*>/);
       return open($STREAM, "$stream_name");
    }
    # Is this a bzipped stream.
@@ -376,7 +376,7 @@ sub zout($$) {
    # Is this a lzma stream.
    elsif ($stream_name =~ /$isLzma/) {
       print STDERR "DEBUG zout is lzma.\n" if ($DEBUG);
-      die "Can't append to a lzma file." if ($stream_name =~ /^\s*>/);
+      die "Error: Can't append to a lzma file." if ($stream_name =~ /^\s*>/);
       return open($STREAM, "| lzma -cqf >$stream_name");
    }
    # Assume it is a normal file.

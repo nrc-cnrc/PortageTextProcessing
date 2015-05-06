@@ -1,17 +1,17 @@
-# Copyright (c) 2004 - 2013, Sa Majeste la Reine du Chef du Canada /
-# Copyright (c) 2004 - 2013, Her Majesty in Right of Canada
+# @file ULexiTools.pm
+# @brief Library for tokenizing, detokenizing and sentence-splitting.
+# 
+# @author George Foster, Michel Simard, Eric Joanis, Samuel Larkin,
+#         UTF-8 adaptation by Michel Simard,
+#         Spanish support added by Samuel Larkin
 #
-# For further information, please contact :
+# See POD at end of file.
+#
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# See http://iit-iti.nrc-cnrc.gc.ca/locations-bureaux/gatineau_e.html
-
-# LexiTools.pm
-# PROGRAMMER: George Foster / UTF-8 adaptation by Michel Simard / Eric Joanis / Samuel Larkin
-#             / Adding Spanish Samuel Larkin
-#
-# COMMENTS: POD at end of file.
+# Copyright 2004 - 2013, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2004 - 2013, Her Majesty in Right of Canada
 
 
 # TODO:
@@ -257,9 +257,9 @@ my %short_stops_hash;
 my %known_abbr_hash;
 sub setTokenizationLang($) {
    if (defined $tokenizationLang) {
-      $tokenizationLang eq shift or die "The ULexiTools library does not support calling setTokenizationLang() twice with different languages, because of regular expressions using /o with variables set in this function.";
+      $tokenizationLang eq shift or die "Error: ULexiTools library does not support calling setTokenizationLang() twice with different languages, because of regular expressions using /o with variables set in this function.";
    } else {
-      $tokenizationLang = shift or die "You must provide a detokenization language id.";
+      $tokenizationLang = shift or die "Error: You must provide a detokenization language id.";
       if ($tokenizationLang eq "en") {
          $split_word = \&split_word_en;
          @known_abbr_hash{@known_abbrs_en} = (1) x @known_abbrs_en;
@@ -281,7 +281,7 @@ sub setTokenizationLang($) {
          $splitleft   = qr/[\"»›„“‚\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
          $splitright  = qr/\.{2,}|[\"«‹“”‘!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
       }
-      else {die "unknown lang in tokenizer: $tokenizationLang";}
+      else {die "Error: Unknown lang in tokenizer: $tokenizationLang";}
 
       setDetokenizationLang($tokenizationLang); # We use some functions from the detokenizer
    }
@@ -294,7 +294,7 @@ sub setTokenizationLang($) {
 # caller.
 sub tokenize($$$) #(paragraph, pretok?, xtags?)
 {
-   die "You must call setTokenizationLang(\$lang_id) first." unless(defined($tokenizationLang));
+   die "Error: You must call setTokenizationLang(\$lang_id) first." unless(defined($tokenizationLang));
 
    my $para = shift;
    my $pretok = shift;
@@ -531,7 +531,7 @@ sub tokenize($$$) #(paragraph, pretok?, xtags?)
             }
             # glue the left tags back on, if any
             if (@left_tags) {
-               die unless $left_tags[0] == $i;
+               die "Error: left tag" unless $left_tags[0] == $i;
                for (@left_tags) {
                   $tok_posits[$i+1] += $tok_posits[$_+2+1];
                }
@@ -977,14 +977,14 @@ my $detokenizationLang;
 sub setDetokenizationLang($) # Two letters language id
 {
    if (defined $detokenizationLang) {
-      $detokenizationLang eq shift or die "The ULexiTools library does not support calling setDetokenizationLang() twice with different languages, because of regular expressions using /o with variables set in this function.";
+      $detokenizationLang eq shift or die "Error: ULexiTools library does not support calling setDetokenizationLang() twice with different languages, because of regular expressions using /o with variables set in this function.";
    } else {
       # IMPORTANT NOTE ABOUT $detok_left_bracket and $detok_right_bracket: “
       # and ‘ are left out of all the character sets below to work around a bug
       # in Perl 5.8 and 5.10, fixed in 5.14.  The bug: characters above U+00FF
       # should not be in character sets, but separately placed after a |.
 
-      $detokenizationLang = shift or die "You must provide a detokenization language id.";
+      $detokenizationLang = shift or die "Error: You must provide a detokenization language id.";
       #print ref($detokenizationLang), "\n";
       if ($detokenizationLang eq "es") {
          #$detok_left_bracket  = quotemeta("[({«“‘`¡¿"); # broken with Perl 5.8 or 5.10
@@ -1042,7 +1042,7 @@ sub detokenize_array(\@) # Ref Array containing words of sentence to be detokeni
 {
    my $tokens_ref = shift;
 
-   die "You must call setDetokenizationLang(\$lang_id) first." unless(defined($detokenizationLang));
+   die "Error: You must call setDetokenizationLang(\$lang_id) first." unless(defined($detokenizationLang));
 
    @out_sentence = ();#initialize the containers
    @double_quote = ();# assume  a pair of quotations only bound to one line of sentence.

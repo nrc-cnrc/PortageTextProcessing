@@ -1,12 +1,10 @@
 #!/usr/bin/perl -sw
 
 # @file stableuniq.pl 
-# @brief Outputs unique lines from INPUT (or standard input) to OUTPUT (or
+# @brief Output unique lines from INPUT (or standard input) to OUTPUT (or
 # standard output).
 # 
 # @author Aaron Tikuisis
-# 
-# COMMENTS:
 # 
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -33,8 +31,8 @@ $ENV{PORTAGE_INTERNAL_CALL} = 1;
 my $HELP =
 "Usage: stableuniq.pl [INPUT [OUTPUT]]
 
-Outputs unique lines from INPUT (or standard input) to OUTPUT (or standard
-output).  INPUT is not required to be sorted, and lines are not reordered (as
+Output unique lines from INPUT (or standard input) to OUTPUT (or standard
+output). INPUT is not required to be sorted, and lines are not reordered (as
 opposed to using sort and uniq to find unique lines).
 
 ";
@@ -52,8 +50,8 @@ my %existing = ();
 my $in = shift || "-";
 my $out = shift || "-";
 
-open(IN, "<$in") or die "Cannot open $in for input";
-open(OUT, ">$out") or die "Cannot open $out for output";
+open(IN, "<$in") or die "Error: Cannot open $in for input";
+open(OUT, ">$out") or die "Error: Cannot open $out for output";
 
 while (my $line = <IN>)
 {

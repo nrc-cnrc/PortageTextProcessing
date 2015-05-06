@@ -1,6 +1,5 @@
 #!/usr/bin/perl -sw
 
-#
 # @file udetokenize.pl 
 # @brief Transform tokenized UTF-8 text in normal text.
 #
@@ -14,8 +13,8 @@
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright (c) 2004 - 2013, Sa Majeste la Reine du Chef du Canada /
-# Copyright (c) 2004 - 2013, Her Majesty in Right of Canada
+# Copyright 2004 - 2013, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2004 - 2013, Her Majesty in Right of Canada
 
 
 use strict;
@@ -73,8 +72,8 @@ if ($help || $h) {
 }
 
 
-zopen(*IN,  "<$in")  or die " Can not open $in for reading";
-zopen(*OUT, ">$out") or die " Can not open $out for writing";
+zopen(*IN,  "<$in")  or die "Error: Cannot open $in for reading";
+zopen(*OUT, ">$out") or die "Error: Cannot open $out for writing";
 binmode(IN,  ":encoding(UTF-8)");
 binmode(OUT, ":encoding(UTF-8)");
 

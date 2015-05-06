@@ -1,10 +1,9 @@
 #!/usr/bin/env perl
+
 # @file tmx2lfl.pl
 # @brief Extract a parallel corpus from tmx files.
 # 
 # @author Samuel Larkin based on Michel Simard's work.
-# 
-# COMMENTS:
 # 
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -110,13 +109,13 @@ GetOptions(
    verbose     => sub { ++$verbose },
    quiet       => sub { $verbose = 0 },
    debug       => \$debug,
-) or usage;
+) or usage "Error: Invalid option(s).";
 
 my @filename = @ARGV;
 
 
 # Validate input files.
-die "You don't have xmllint on your system!" if (system("which-test.sh xmllint") != 0);
+die "Error: You don't have xmllint on your system!" if (system("which-test.sh xmllint") != 0);
 
 my @lang_specifiers;
 foreach my $file (@filename) {
@@ -127,7 +126,7 @@ foreach my $file (@filename) {
       # if so.  It is simpler to run it once muted and, if there are errors, to
       # rerun xmllint this time showing the user what xmllint found.
       system("xmllint --stream --noout \"$file\"");
-      die " [BAD]\nFix $file to be XML well-formed.";
+      die "[BAD]\nError: Fix $file to be XML well-formed.";
    }
    verbose("\r[Checking XML well-formness of $file] [OK]]\n");
    
@@ -156,7 +155,7 @@ if (not defined($src) and not defined($tgt)) {
    # Remove duplicate language identifiers.
    @lang_specifiers = keys %{{ map { $_ => 1 } @lang_specifiers }};
    unless (scalar(@lang_specifiers) == 2) {
-      die "Too many language identifiers to automatically extract segments.\n" 
+      die "Error: Too many language identifiers to automatically extract segments.\n" 
       . "Select two language identifiers and rerun using -src=X -tgt=Y\n"
       . "Language identifiers found are: " . join(":", @lang_specifiers) . "\n"
       . "Too many or too few language specifiers in your input TMX.\n";
@@ -167,8 +166,8 @@ if (not defined($src) and not defined($tgt)) {
 }
 
 # Make sure we have language specifiers for src and tgt
-die "You must provide a source language specifier\n" unless(defined($src));
-die "You must provide a target language specifier\n" unless(defined($tgt));
+die "Error: You must provide a source language specifier\n" unless(defined($src));
+die "Error: You must provide a target language specifier\n" unless(defined($tgt));
 
 if ( $debug ) {
    no warnings;
@@ -205,7 +204,7 @@ if ( defined($txt) ) {
 }
 
 # We will also keep track of the docids.
-open(ID, ">:encoding(utf-8)", "$output.id") || die "Unable to open doc id file!";
+open(ID, ">:encoding(utf-8)", "$output.id") || die "Error: Unable to open doc id file!";
 
 foreach my $file (@filename) {
     verbose("[Reading in TMX file $file...]\n");
@@ -287,7 +286,7 @@ sub processTU {
 
    # Process the Translation Unit Variants.
    my @tuvs = $tu->children('tuv');
-   warn("Missing variants in TU $tuid") if (!@tuvs);
+   warn("Warning: Missing variants in TU $tuid") if (!@tuvs);
    my %variants = ();
    foreach my $tuv (@tuvs) {
       #print "TUV: " . Dumper($tuv);
@@ -295,11 +294,11 @@ sub processTU {
 
       my $lang = $tuv->{att}->{'xml:lang'};
       $lang = $tuv->{att}->{'lang'} unless $lang; # for TMX 1.1 compatibility
-      warn("Missing language attribute in TU $tuid") unless $lang;
+      warn("Warning: Missing language attribute in TU $tuid") unless $lang;
       my $lc_lang = lc $lang;
 
       my @segs = $tuv->children('seg');
-      warn("No segs in TUV (TU $tuid)") unless @segs;
+      warn("Warning: No segs in TUV (TU $tuid)") unless @segs;
       #print "SEG: " . Dumper(@segs);
 
       if ($lc_lang) {
@@ -348,7 +347,7 @@ sub openOutfile {
         my $output = $parser->{outfile_prefix};
         my $filename = "$output.$lang";
         verbose("[Opening output file $filename]\n");
-        open(my $stream, ">:encoding(UTF-8)", "$filename") || die "Can't open output file $filename";
+        open(my $stream, ">:encoding(UTF-8)", "$filename") || die "Error: Can't open output file $filename";
         $parser->{outfile}->{$lc_lang} = $stream;
 
         # Catch up with other files:

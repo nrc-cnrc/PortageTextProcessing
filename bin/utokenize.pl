@@ -116,28 +116,28 @@ my $out = shift || "-";
 
 my $psep = $p ? "\n\n" : "\n";
 
-zopen(*IN, "<$in") || die "utokenize.pl: Can't open $in for reading";
-zopen(*OUT, ">$out") || die "utokenize.pl: Can't open $out for writing";
+zopen(*IN, "<$in") || die "Error: utokenize.pl: Can't open $in for reading";
+zopen(*OUT, ">$out") || die "Error: utokenize.pl: Can't open $out for writing";
 binmode IN, ":encoding(UTF-8)";
 binmode OUT, ":encoding(UTF-8)";
 
 if ( !$ss && !$noss ) {
-   die "utokenize.pl: One of -ss and -noss is now required; the old default (-ss) frequently caused unexpected behaviour, so we disabled it.\n";
+   die "Error: utokenize.pl: One of -ss and -noss is now required; the old default (-ss) frequently caused unexpected behaviour, so we disabled it.\n";
 }
 if ( $notok && $pretok ) {
-   die "utokenize.pl: Specify only one of -notok or -pretok.\n";
+   die "Error: utokenize.pl: Specify only one of -notok or -pretok.\n";
 }
 if ( $ss && $noss ) {
-   die "utokenize.pl: Specify only one of -ss or -noss.\n";
+   die "Error: utokenize.pl: Specify only one of -ss or -noss.\n";
 }
 if ( $noss && ($paraline || $p) ) {
-   die "utokenize.pl: -paraline and -p are meaningless with -noss.\n";
+   die "Error: utokenize.pl: -paraline and -p are meaningless with -noss.\n";
 }
 if ( $noss && $notok ) {
-   warn "utokenize.pl: Just copying the input since -noss and -notok are both specified.\n";
+   warn "Warning: utokenize.pl: Just copying the input since -noss and -notok are both specified.\n";
 }
 if ( $noss && $pretok ) {
-   warn "utokenize.pl: Just copying the input since -noss and -pretok are both specified.\n";
+   warn "Warning: utokenize.pl: Just copying the input since -noss and -pretok are both specified.\n";
 }
 
 # Enable immediate flush when piping
