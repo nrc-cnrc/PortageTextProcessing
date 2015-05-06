@@ -1,5 +1,0 @@
-
-Usage: cow.sh [-v] [-Z] [-nbest-list-size N] [-maxiter MAX]
-       [-filt] [-ttable-limit T] [-filt-no-ttable-limit] [-lb|-no-lb]
-       [-floor index|-nofloor] [-model MODEL] [-mad SEED] [-e] [-path P]
-       [-s SEED] [-nr] [-wr PER] [-micro M] [-microsm S] [-micropar N]

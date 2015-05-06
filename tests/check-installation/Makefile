@@ -19,6 +19,9 @@
 # Generic error message
 EXPLAIN := Can not run your program.
 
+# Stabilize the output
+export PORTAGE_INTERNAL_CALL=1
+
 SHELL = bash
 .PHONY: all
 all: testsuite
@@ -41,8 +44,9 @@ pre_installation: perl_version python_version make_version gcc_version ram_vs_sw
 
 .PHONY: perl_version
 perl_version:
-	@perl -e 'require 5.8.5;' || ! echo "Your perl version is to old." >&2
+	@perl -e 'require 5.8.5;' || ! echo "Your perl version is too old." >&2
 	@perl -e 'require 5.8.8;' || echo "Some perl XML functionalities will most likely fail." >&2
+	@perl -e 'use threads;' || ! echo "Perl must be installed with -Dusethreads." >&2
 
 .PHONY: python_version
 python_version:
@@ -63,7 +67,7 @@ make_version:
 .PHONY: gcc_version
 gcc_version:
 	@[[ $$( echo "`${CXX} --version | head -n 1 | egrep -om1 '[0-9]\.[0-9]+' | head -n 1` >= 4.2" | bc) == 1 ]] \
-	|| ! echo "Portage requires at least g++-4.2." >&2
+	|| ! echo "Portage requires at least g++-4.2, unless you have a binary distribution." >&2
 
 
 # Since the ram is power of 1024 but swap is power of 1000, we will make the
@@ -81,7 +85,7 @@ ram_vs_swap:
 # What needs to work after a successful installation of Portage.
 testsuite: post_installation
 
-VALIDATE_PGMS := canoe cow.sh tokenize.pl ce.pl tmx2lfl.pl filter-nc1.py
+VALIDATE_PGMS := canoe tune.py tokenize.pl ce.pl tmx2lfl.pl filter-nc1.py arpalm.encode
 .PHONY: post_installation
 post_installation: ${VALIDATE_PGMS}
 	@echo "Portage itself is correctly installed." >&2
@@ -89,10 +93,11 @@ post_installation: ${VALIDATE_PGMS}
 
 canoe: EXPLAIN:=Make sure Portage is correctly installed.  Check your PATH.
 ce.pl: EXPLAIN:=Check your PERL5LIB or XML::Twig may not be correctly installed.
-cow.sh: EXPLAIN:=Make sure Portage is correctly installed.  Check your PATH.
+tune.py: EXPLAIN:=Make sure Portage is correctly installed.  Check your PATH.
 tmx2lfl.pl: EXPLAIN:=Check your PERL5LIB or you're missing XML::Twig or your version is not greater or equal to XML::Twig-3.28.
 tokenize.pl: EXPLAIN:=Check your PERL5LIB.
 filter-nc1.py: EXPLAIN:=Check your Python version and PYTHONPATH variable.
+arpalm.encore: EXPLAIN:=Check that all boost libraries are installed.
 
 .PHONY: ${VALIDATE_PGMS}
 # We simply make sure we can invoke the help message to trigger the dependencies.
