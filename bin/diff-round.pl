@@ -91,7 +91,7 @@ if (-d $ARGV[1] && -f $ARGV[0]) {
 if ( $pipe ) {
    my $sort_cmd = ($sort ? " LC_ALL=C sort |" : "");
    exec("diffpipe -w -prec $prec 'gzip -cqfd $ARGV[0] |$sort_cmd' 'gzip -cqfd $ARGV[1] |$sort_cmd'")
-      or die "Can't exec diffpipe: $!";
+      or die "Error: Can't exec diffpipe: $!";
 }
 
 # Will hold the maximum numerical difference found
