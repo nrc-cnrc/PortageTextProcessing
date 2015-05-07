@@ -5,8 +5,6 @@
 # Write output to files <fileN>.filt<L>.
 # 
 # @author Darlene Stewart based on George Foster's strip-parallel-blank-lines.pl
-# 
-# COMMENTS: 
 #
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -60,13 +58,13 @@ Getopt::Long::GetOptions(
    "debug"          => \my $debug,
 
    "length=i"       => \my $long,
-) or (die $HELP, "ERROR: filter-long-lines.pl aborted due to bad option.\n");
+) or (die $HELP, "Error: filter-long-lines.pl aborted due to bad option.\n");
 
 $long = 300 unless defined $long;
-$long > 0 or die $HELP, "ERROR: length must be a positive integer.\n";
+$long > 0 or die $HELP, "Error: length must be a positive integer.\n";
 
-@ARGV <= 3 or die $HELP, "ERROR: Too many arguments.\n";
-@ARGV > 0 or die $HELP, "ERROR: Too few arguments. Input file FILE1 required.\n";
+@ARGV <= 3 or die $HELP, "Error: Too many arguments.\n";
+@ARGV > 0 or die $HELP, "Error: Too few arguments. Input file FILE1 required.\n";
 
 my ($in1, $in2, $in3) = ("", "", "");
 $in1 = shift;
@@ -83,19 +81,19 @@ sub getOutputFilename($$) {
    return $out;
 }
 
-zopen(*IN1, "$in1") or die "ERROR: Cannot open $in1 for reading\n";
+zopen(*IN1, "$in1") or die "Error: Cannot open $in1 for reading\n";
 my $out1 = getOutputFilename($in1, $long);
-zopen(*OUT1, ">$out1") or die "ERROR: Cannot open $out1 for writing\n";
+zopen(*OUT1, ">$out1") or die "Error: Cannot open $out1 for writing\n";
 
 if ($in2) {
-   zopen(*IN2, "$in2") or die "ERROR: Cannot open $in2 for reading\n";
+   zopen(*IN2, "$in2") or die "Error: Cannot open $in2 for reading\n";
    my $out2 = getOutputFilename($in2, $long);
-   zopen(*OUT2, ">$out2") or die "ERROR: Cannot open $out2 for writing\n";
+   zopen(*OUT2, ">$out2") or die "Error: Cannot open $out2 for writing\n";
 }
 if ($in3) {
-   zopen(*IN3, "$in3") or die "ERROR: Cannot open $in3 for reading\n";
+   zopen(*IN3, "$in3") or die "Error: Cannot open $in3 for reading\n";
    my $out3 = getOutputFilename($in3, $long);
-   zopen(*OUT3, ">$out3") or die "ERROR: Cannot open $out3 for writing\n";
+   zopen(*OUT3, ">$out3") or die "Error: Cannot open $out3 for writing\n";
 }
 
 my ($line1, $line2, $line3);
@@ -106,12 +104,12 @@ while ($line1 = <IN1>) {
    @line = split(' ',$line1);
    $len1 = @line;
    if ($in2) {
-      if (not $line2 = <IN2>) {die "file $in2 is too short!\n"};
+      if (not $line2 = <IN2>) {die "Error: file $in2 is too short!\n"};
       @line = split(' ',$line2);
       $len2 = @line;
    }
    if ($in3) {
-      if (not $line3 = <IN3>) {die "file $in3 is too short!\n"};
+      if (not $line3 = <IN3>) {die "Error: file $in3 is too short!\n"};
       @line = split(' ',$line3);
       $len3 = @line;
    }
@@ -132,8 +130,8 @@ while ($line1 = <IN1>) {
    }
 }
 
-if ($in2 && <IN2>) { die "ERROR: file $in2 is too long!\n"; }
-if ($in3 && <IN3>) { die "ERROR: file $in3 is too long!\n"; }
+if ($in2 && <IN2>) { die "Error: file $in2 is too long!\n"; }
+if ($in3 && <IN3>) { die "Error: file $in3 is too long!\n"; }
 
 if ($verbose || $debug) {
    print STDERR "Read ", $skip_cnt+$print_cnt, " lines.\n";

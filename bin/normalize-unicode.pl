@@ -8,8 +8,6 @@
 #
 # @author Eric Joanis
 #
-# COMMENTS:
-#
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
@@ -67,9 +65,9 @@ GetOptions(
     help        => sub { usage },
     verbose     => \my $verbose,
     debug       => \my $debug,
-) or usage;
+) or usage "Error: Invalid option(s).";
 
-@ARGV > 0 or usage "Missing UnicodeData.txt file name";
+@ARGV > 0 or usage "Error: Missing UnicodeData.txt file name";
 my $unicode_data = shift || "-";
 
 if ( $unicode_data eq "ar"  ) { $unicode_data = "UnicodeData-Arabic.txt" }
@@ -77,12 +75,12 @@ if ( $unicode_data eq "ar-full" ) { $unicode_data = "UnicodeData-Arabic-full.txt
 
 if ( ! -e $unicode_data ) {
    if ( ! exists $ENV{PORTAGE} ) {
-      die "Can't find $unicode_data file in local directory, and \$PORTAGE " .
+      die "Error: Can't find $unicode_data file in local directory, and \$PORTAGE " .
           "is not \ndefined, so there is nowhere else to look.\n"
    } elsif ( -e "$ENV{PORTAGE}/models/unicode/$unicode_data" ) {
       $unicode_data = "$ENV{PORTAGE}/models/unicode/$unicode_data";
    } else {
-      die "Can't find $unicode_data file in either local directory or in\n" .
+      die "Error: Can't find $unicode_data file in either local directory or in\n" .
           "\$PORTAGE/models/unicode directory.\n";
    }
 }
@@ -99,7 +97,7 @@ sub utf82hex ($) {
    return sprintf "%04X", ord($_[0]);
 }
 
-open UNICODEDATA, $unicode_data or die "Can't open $unicode_data: $!\n";
+open UNICODEDATA, $unicode_data or die "Error: Can't open $unicode_data: $!\n";
 my %canonical;
 while (<UNICODEDATA>) {
    my @tokens = split ';', $_, 7;

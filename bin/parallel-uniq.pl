@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-# $Id$
 
 # @file parallel-uniq.pl 
 # @brief Remove duplicate lines from parallel files, where a duplicate is a
@@ -7,9 +6,6 @@
 #
 # @author Eric Joanis
 #
-# COMMENTS:
-#
-# Eric Joanis
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
@@ -64,14 +60,14 @@ GetOptions(
     verbose     => sub { ++$verbose },
     quiet       => sub { $verbose = 0 },
     debug       => \my $debug,
-) or usage;
+) or usage "Error: Invalid option(s).";
 
-@ARGV > 1 or usage "Missing file name(s)";
+@ARGV > 1 or usage "Error: Missing file name(s)";
 
 my $file1 = shift;
 my $file2 = shift || "-";
 
-0 == @ARGV or usage "Superfluous parameter(s): @ARGV";
+0 == @ARGV or usage "Error: Superfluous argument(s): @ARGV";
 
 if ( $debug ) {
     no warnings;
@@ -84,10 +80,10 @@ if ( $debug ) {
 ";
 }
 
-open(FILE1, "$file1") or die "Can't open $file1 for reading: $!\n";
-open(FILE2, "$file2") or die "Can't open $file2 for reading: $!\n";
-open(OUT1, ">$file1.uniq") or die "Can't create $file1.uniq: $!\n";
-open(OUT2, ">$file2.uniq") or die "Can't create $file2.uniq: $!\n";
+open(FILE1, "$file1") or die "Error: Can't open $file1 for reading: $!\n";
+open(FILE2, "$file2") or die "Error: Can't open $file2 for reading: $!\n";
+open(OUT1, ">$file1.uniq") or die "Error: Can't create $file1.uniq: $!\n";
+open(OUT2, ">$file2.uniq") or die "Error: Can't create $file2.uniq: $!\n";
 
 # hash of hashes: $seen{$line1}{$line2} exists if $line1 exists in $file1 at
 # the same position as $line2 in $file2.

@@ -1,8 +1,7 @@
 #!/usr/bin/env perl
-# $Id$
 
 # @file lfl2tmx.pl
-# @brief Creates a TMX from aligned plain text file pairs.
+# @brief Create a TMX from aligned plain text file pairs.
 #
 # @author Samuel Larkin
 #
@@ -40,7 +39,7 @@ sub usage {
    print STDERR "
 Usage: $0 [options] {paths | files.id}
 
-  Creates a tmx from a structure of parallel file pairs and outputs it to stdout.
+  Create a tmx from a structure of parallel file pairs and outputs it to stdout.
   Looks for X.id and creates TUs from X_en.al & X_fr.al.
 
 CAVEAT:
@@ -68,7 +67,7 @@ GetOptions(
    x           => \my $strip_xml,
    t           => \my $detokenize,
    "copyright=s"  => \my $copyright,
-) or usage;
+) or usage "Error: Invalid option(s).";
 
 # Prototype declaration for recursive function.
 sub process(@);
@@ -116,8 +115,8 @@ sub process(@) {
          }
 
          print STDERR "E: $file_en  F: $file_fr\n" if ($debug);
-         open (E, "$file_en") or die "Unable to open ${item}_en.al";
-         open (F, "$file_fr") or die "Unable to open ${item}_fr.al";
+         open (E, "$file_en") or die "Error: Unable to open ${item}_en.al";
+         open (F, "$file_fr") or die "Error: Unable to open ${item}_fr.al";
          while (defined(my $e = <E>) and defined(my $f = <F>)) {
             chomp $e;
             chomp $f;
@@ -167,7 +166,7 @@ $writer->startTag( 'header',
 if ($copyright and $copyright ne "") {
    my @copyright;
 
-   open(C, "${copyright}_fr.txt") or die "Unable to open the English copyright file.";
+   open(C, "${copyright}_fr.txt") or die "Error: Unable to open the English copyright file.";
    binmode(C, ":encoding(UTF-8)");
    @copyright = <C>;
    close C;
@@ -175,7 +174,7 @@ if ($copyright and $copyright ne "") {
       "\n" . join("", @copyright),
       'xml:lang'=>'FR-CA');
 
-   open(C, "${copyright}_en.txt") or die "Unable to open the English copyright file.";
+   open(C, "${copyright}_en.txt") or die "Error: Unable to open the English copyright file.";
    binmode(C, ":encoding(UTF-8)");
    @copyright = <C>;
    close C;

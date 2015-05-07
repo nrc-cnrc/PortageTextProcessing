@@ -4,8 +4,6 @@
 # @brief Lowercase mapping for utf-8
 # 
 # @author Eric Joanis, based on lc-latin.pl by George Foster
-# 
-# COMMENTS: 
 #
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
@@ -36,7 +34,7 @@ if ($help || $h) {
 $in = shift || "/dev/stdin";
 $out = shift || "/dev/stdout";
  
-if (!open(IN, "< :encoding(utf-8)", $in)) {die "Can't open $in for reading";}
-if (!open(OUT, "> :encoding(utf-8)", $out)) {die "Can't open $out for writing";}
+if (!open(IN, "< :encoding(utf-8)", $in)) {die "Error: Can't open $in for reading";}
+if (!open(OUT, "> :encoding(utf-8)", $out)) {die "Error: Can't open $out for writing";}
 
 while (<IN>) {print OUT lc;}

@@ -69,17 +69,17 @@ GetOptions(
    "latin1"    => \my $latin1,
    ascii       => \my $ascii,
    "cp1252"    => \my $cp1252,
-) or usage;
+) or usage "Error: Invalid option(s).";
 
 if ($ascii) { $latin1 = 1; } # allows cascaded processing
 
 my $in = shift || "-";
 my $out = shift || "-";
 
-0 == @ARGV or usage "Superfluous parameter(s): @ARGV";
+0 == @ARGV or usage "Error: Superfluous argument(s): @ARGV";
 
-zopen(*IN, "<$in") or die "Can't open $in for reading: $!\n";
-zopen(*OUT, ">$out") or die "Can't open $out for writing: $!\n";
+zopen(*IN, "<$in") or die "Error: Can't open $in for reading: $!\n";
+zopen(*OUT, ">$out") or die "Error: Can't open $out for writing: $!\n";
 binmode(IN,  ":encoding(UTF-8)");
 binmode(OUT, ":encoding(UTF-8)");
 
