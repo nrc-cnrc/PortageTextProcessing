@@ -28,8 +28,6 @@ all: gzip
 all: bzip2
 all: std
 all: pipe
-all:
-	@echo All tests PASSED
 
 F_PREFIX := delme
 TEMP_FILES=${F_PREFIX} ${F_PREFIX}.gz ${F_PREFIX}.bzip2 ${F_PREFIX}.lzma ${F_PREFIX}.pipe ${F_PREFIX}.ref-*

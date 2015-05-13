@@ -1,8 +1,6 @@
 #!/usr/bin/make -f
 # vim:noet:ts=3:nowrap
 
-# $Id$
-
 # @file Makefile
 # @brief Testsuite for second-to-hms.pl
 #

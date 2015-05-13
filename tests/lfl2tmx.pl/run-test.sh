@@ -1,5 +1,4 @@
 #!/bin/bash
-# $Id$
 
 # @file run-test.sh
 # @brief Run this test suite, with a non-zero exit status if it fails
