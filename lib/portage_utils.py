@@ -196,7 +196,8 @@ def split(s):
    s: string to be split into token
    returns: list of string tokens
    """
-   return split_re.split(s.strip(' \t\n'))
+   ss = s.strip(' \t\n');
+   return [] if len(ss) is 0 else split_re.split(ss)
 
 
 if __name__ == '__main__':

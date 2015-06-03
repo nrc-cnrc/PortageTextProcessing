@@ -125,10 +125,19 @@ open_unittest9b:  %:  ${PORTAGE}/test-suite/systems/toy-regress-en2fr/models/tm/
 
 
 .PHONY: split_testsuite
-split_testsuite: split_unittest1
+split_testsuite: split_unittest1 split_unittest2
 
+# test split functionality on string containing a non-breaking space.
 .PHONY: split_unittest1
 split_unittest1:
 	echo "from portage_utils import split; print(split(u' a b\tc\t d\N{no-break space}dd \t\n'))" \
 	| python \
 	| diff - <(echo "[u'a', u'b', u'c', u'd\xa0dd']")
+
+# test split functionality on string containing no tokens (i.e. only whitespace)
+.PHONY: split_unittest2
+split_unittest2:
+	echo "from portage_utils import split; print(split(u'\n'))" \
+	| python \
+	| diff - <(echo "[]")
+	
