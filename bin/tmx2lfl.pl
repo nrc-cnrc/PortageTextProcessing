@@ -157,7 +157,7 @@ if (not defined($src) and not defined($tgt)) {
    unless (scalar(@lang_specifiers) == 2) {
       die "Error: Too many language identifiers to automatically extract segments.\n" 
       . "Select two language identifiers and rerun using -src=X -tgt=Y\n"
-      . "Language identifiers found are: " . join(":", @lang_specifiers) . "\n"
+      . "Language identifiers found are: " . join(":", sort @lang_specifiers) . "\n"
       . "Too many or too few language specifiers in your input TMX.\n";
    }
 

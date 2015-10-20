@@ -15,7 +15,6 @@
 
 
 use warnings;
-use encoding "UTF-8";
 
 # Add whitespace around slashes ('/') separating words of at least three characters.
 # Skip anything that looks like a url.
@@ -24,7 +23,10 @@ use encoding "UTF-8";
 
 my $word = "(?:(?:[[:alpha:]][[:alpha:]\-]{2,})|(?:[[:alpha:]][[:alpha:]\-]*'[[:alpha:]]+))";
 
-while (my $line = <>) {
+binmode( STDIN,  ":encoding(UTF-8)" );
+binmode( STDOUT, ":encoding(UTF-8)" );
+
+while (my $line = <STDIN>) {
     chop $line;
     while ($line =~ m/(?:^|[ ("'])(?!www\.)(${word}\)?(((\/ *)|( \/))\(?${word})+)(?:[ ).?;,:"']|$)/g) {
        my ($pre, $match, $post) = ($`, $&, $');
