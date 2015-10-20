@@ -90,7 +90,7 @@ test3.utf8.tmx: test.utf8.tmx
 # There should be three language specifiers.
 .PHONY: unittest3
 unittest3: test3.utf8.tmx
-	${TMX2LFL} -output=$@ -txt=.txt $< 2>&1 | grep -q 'Language identifiers found are: lang[123]:lang[123]:lang[123]'
+	${TMX2LFL} -output=$@ -txt=.txt $< 2>&1 | grep -q 'Language identifiers found are: lang1:lang2:lang3'
 
 
 ########################################
