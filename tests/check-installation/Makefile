@@ -39,7 +39,13 @@ testsuite:
 testsuite: pre_installation
 
 .PHONY: pre_installation
-pre_installation: perl_version perl_modules python_version make_version gcc_version ram_vs_swap
+pre_installation: perl_version
+pre_installation: perl_modules
+pre_installation: python_version
+pre_installation: python_modules
+pre_installation: make_version
+pre_installation: gcc_version
+pre_installation: ram_vs_swap
 	@echo "Prerequisites are correctly installed." >&2
 
 .PHONY: perl_version
@@ -76,8 +82,9 @@ python_version:
 
 .PHONY: python_modules
 python_modules:
-	@rc=0; for module in argparse ctypes __future__ optparse os.path subprocess codecs glob gzip math os re sys string; do \
-		/usr/bin/python -c "import $$module" || rc=1;\
+	@rc=0; for module in argparse ctypes __future__ optparse os.path subprocess codecs glob gzip math os re sys string theano; do \
+		echo "Checking python's $$module";\
+		python -c "import $$module" || rc=1;\
 	done; [[ $$rc == 0 ]] || ! echo "Some required Python modules are missing." >&2
 
 .PHONY: make_version
