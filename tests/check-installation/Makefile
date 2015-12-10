@@ -39,14 +39,36 @@ testsuite:
 testsuite: pre_installation
 
 .PHONY: pre_installation
-pre_installation: perl_version python_version make_version gcc_version ram_vs_swap
+pre_installation: perl_version perl_modules python_version make_version gcc_version ram_vs_swap
 	@echo "Prerequisites are correctly installed." >&2
 
 .PHONY: perl_version
 perl_version:
-	@perl -e 'require 5.8.5;' || ! echo "Your perl version is too old." >&2
-	@perl -e 'require 5.8.8;' || echo "Some perl XML functionalities will most likely fail." >&2
+	@perl -e 'require 5.14.0;' || ! echo "Your perl version is too old." >&2
+	@perl -e 'require 5.14.4;' || echo "Some perl XML functionalities will most likely fail." >&2
 	@perl -e 'use threads;' || ! echo "Perl must be installed with -Dusethreads." >&2
+
+.PHONY:  perl_modules
+perl_modules:
+	@perldoc -l Algorithm::Diff
+	@perldoc -l Bloom::Faster
+	@perldoc -l Class::ParmList
+	@perldoc -l Data::TreeDumper
+	@perldoc -l Encode::Buckwalter || ! echo "Buckwalter encoding is used during MADA." >&2
+	@perldoc -l Encode::HanConvert
+	@perldoc -l Iterator
+	@perldoc -l JSON
+	@perldoc -l JSON::XS || ! echo "JSON parsing will be significantly slower without a C implementation." >&2
+	@perldoc -l Test::More
+	@perldoc -l Tie::Cache
+	@perldoc -l Time::HiRes
+	@perldoc -l Time::Piece
+	@perldoc -l Tree::Simple
+	@perldoc -l XML::Twig
+	@perldoc -l XML::Writer
+	@perldoc -l YAML
+	@perl -e 'use Term::ANSIColor 2.02;'  || ! echo "jobtree & qstattree require colorvalid to parse user defined colors via $$PORTAGE_QSTATTREE_COLORS" >&2
+
 
 .PHONY: python_version
 python_version:
