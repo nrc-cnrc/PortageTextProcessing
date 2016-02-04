@@ -46,7 +46,7 @@ if [[ $PARALLEL_MODE ]]; then
    for suite in $TEST_SUITES; do
       echo $0 $suite
    done |
-      run-parallel.sh -j 16 -on-error continue $LOCAL -unordered-cat - $PARALLEL_LEVEL 2>&1 |
+      run-parallel.sh -j 16 -psub -1 -on-error continue $LOCAL -unordered-cat - $PARALLEL_LEVEL 2>&1 |
       tee $LOG |
       grep --line-buffered '^\[' |
       egrep --line-buffered --color '.*\*.*|$'
