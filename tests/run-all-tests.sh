@@ -6,8 +6,8 @@
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright 2008, Sa Majeste la Reine du Chef du Canada /
-# Copyright 2008, Her Majesty in Right of Canada
+# Copyright 2008-2016, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2008-2016, Her Majesty in Right of Canada
 
 usage() {
    echo "Usage: $0 [test-suite [test-suite2 [...]]]
@@ -16,8 +16,9 @@ usage() {
    as exit status if the suite passes, non-zero otherwise.
 
 Option:
-   -j N      Run the tests N-ways parallel [1]
-   -local L  Run L parallel workers locally [calculated by run-parallel.sh]
+   -j N       Run the tests N-ways parallel [1]
+   -local L   Run L parallel workers locally [calculated by run-parallel.sh]
+   -v(erbose) Increase verbosity
 " >&2
    exit
 }
@@ -26,6 +27,7 @@ while [ $# -gt 0 ]; do
    case "$1" in
    -j)      PARALLEL_MODE=1; PARALLEL_LEVEL=$2; shift;;
    -local)  LOCAL="-local $2"; shift;;
+   -v|-verbose) VERBOSE=1;;
    -*)      usage;;
    *)       break;;
    esac
@@ -46,19 +48,29 @@ if [[ $PARALLEL_MODE ]]; then
    for suite in $TEST_SUITES; do
       echo $0 $suite
    done |
-      run-parallel.sh -j 16 -psub -1 -on-error continue $LOCAL -unordered-cat - $PARALLEL_LEVEL 2>&1 |
-      tee $LOG |
-      grep --line-buffered '^\[' |
-      egrep --line-buffered --color '.*\*.*|$'
+      if [[ $VERBOSE ]]; then
+         run-parallel.sh -j 4 -v -psub -1 -on-error continue $LOCAL -unordered-cat - $PARALLEL_LEVEL 2>&1 |
+         tee $LOG
+      else
+         run-parallel.sh -j 4 -psub -1 -on-error continue $LOCAL -unordered-cat - $PARALLEL_LEVEL 2>&1 |
+         tee $LOG |
+         egrep -i --line-buffered '^\[|error' |
+         egrep -v -i --line-buffered '^(Test suites to run:|Running|PASSED|\*\*\* FAILED) ' |
+         egrep -i --line-buffered --color '.*\*.*|$|(^|[^-])error'
+      fi
    grep PASSED $LOG | grep -v 'test suites' | sort -u
    grep FAILED $LOG | grep -v 'test suites' | sort -u
 
    if grep -q FAILED $LOG; then
       exit 1
+   elif perl -e 'while (<>) { if (m# (\d+)/\1 DONE #) { exit(0); } } exit(1)' $LOG; then
+      echo ""
+      echo PASSED all test suites.
+      exit
    else
       echo ""
-      echo PASSED all test suites
-      exit
+      echo Test suite not completed.
+      exit 1
    fi
 fi
 
