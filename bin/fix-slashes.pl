@@ -16,10 +16,17 @@
 
 use warnings;
 
-# Add whitespace around slashes ('/') separating words of at least three characters.
-# Skip anything that looks like a url.
-# We make it at least three characters in an attempt to avoid breaking up
-# specifications of units (e.g. km/hr).
+if (@ARGV && $ARGV[0] eq "-h") {
+   print STDERR "
+Usage: $0 < IN > OUT
+
+   Add whitespace around slashes ('/') separating words of at least three characters.
+   Skip anything that looks like a url.
+   We make it at least three characters in an attempt to avoid breaking up
+   specifications of units (e.g. km/hr).
+";
+   exit;
+}
 
 my $word = "(?:(?:[[:alpha:]][[:alpha:]\-]{2,})|(?:[[:alpha:]][[:alpha:]\-]*'[[:alpha:]]+))";
 
