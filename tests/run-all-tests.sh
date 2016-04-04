@@ -56,7 +56,7 @@ if [[ $PARALLEL_MODE ]]; then
          tee $LOG |
          egrep -i --line-buffered '^\[|error' |
          egrep -v -i --line-buffered '^(Test suites to run:|Running|PASSED|\*\*\* FAILED) ' |
-         egrep -i --line-buffered --color '.*\*.*|$|(^|[^-])error'
+         egrep --line-buffered --color '.*\*.*|$|(^|[^-])[Ee][Rr][Rr][Oo][Rr]'
       fi
    grep PASSED $LOG | grep -v 'test suites' | sort -u
    grep FAILED $LOG | grep -v 'test suites' | sort -u
