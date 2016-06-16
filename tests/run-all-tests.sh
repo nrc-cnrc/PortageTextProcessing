@@ -43,7 +43,7 @@ echo ""
 echo Test suites to run: $TEST_SUITES
 
 if [[ $PARALLEL_MODE ]]; then
-   LOG=.log.run-all-tests-parallel
+   LOG=.log.run-all-tests-parallel.`date +%Y%m%dT%H%M%S`
    PARALLEL_MODE=
    for suite in $TEST_SUITES; do
       echo $0 $suite
