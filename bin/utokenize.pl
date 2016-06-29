@@ -1,4 +1,4 @@
-#!/usr/bin/perl -sw
+#!/usr/bin/env perl
 
 # @file utokenize.pl
 # @brief Tokenize and sentence split UTF-8 text.
@@ -10,12 +10,13 @@
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright 2004-2013, Sa Majeste la Reine du Chef du Canada /
-# Copyright 2004-2013, Her Majesty in Right of Canada
+# Copyright 2004-2016, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2004-2016, Her Majesty in Right of Canada
 
 use utf8;
 
 use strict;
+use warnings;
 
 
 BEGIN {
@@ -33,8 +34,12 @@ $ENV{PORTAGE_INTERNAL_CALL} = 1;
 
 use ULexiTools;
 
-my $HELP = "
-Usage: utokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
+sub usage {
+   local $, = "\n";
+   print STDERR @_, "";
+   $0 =~ s#.*/##;
+   print STDERR "
+Usage: $0 [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
 
   Tokenize and sentence-split text in UTF-8.
 
@@ -92,13 +97,34 @@ Newline and paragraph semantics:
      input.
 
 ";
-
-our ($help, $h, $lang, $v, $p, $ss, $noss, $paraline, $notok, $pretok, $xtags);
-
-if ($help || $h) {
-   print $HELP;
-   exit 0;
+   exit 1;
 }
+
+
+
+use Getopt::Long;
+Getopt::Long::Configure("no_ignore_case");
+# Note to programmer: Getopt::Long automatically accepts unambiguous
+# abbreviations for all options.
+my $verbose = 1;
+GetOptions(
+   help        => sub { usage },
+   h           => sub { usage },
+
+   "lang=s"   => \my $lang,
+   v          => \my $v,
+   p          => \my $p,
+   ss         => \my $ss,
+   noss       => \my $noss,
+   notok      => \my $notok,
+   pretok     => \my $pretok,
+   paraline   => \my $paraline,
+   xtags      => \my $xtags,
+) or usage "Error: Invalid option(s).";
+
+
+
+
 $lang = "en" unless defined $lang;
 setTokenizationLang($lang);
 
@@ -111,8 +137,10 @@ $pretok = 0 unless defined $pretok;
 $paraline = 0 unless defined $paraline;
 $xtags = 0 unless defined $xtags;
  
-my $in = shift || "-";
+my $in  = shift || "-";
 my $out = shift || "-";
+
+0 == @ARGV or usage "Error: Superfluous argument(s): @ARGV";
 
 my $psep = $p ? "\n\n" : "\n";
 
