@@ -1,5 +1,3 @@
-#!/usr/bin/perl -w
-
 # @file portage_utils.pm
 # @brief Library to transparently use compressed file formats, plus some other common perl methods.
 #
@@ -12,6 +10,7 @@
 # Copyright 2009, Her Majesty in Right of Canada
 
 package portage_utils;
+
 require Exporter;
 @ISA = qw(Exporter);
 # symbols to export on request
