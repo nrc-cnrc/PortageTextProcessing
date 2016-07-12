@@ -27,7 +27,7 @@ __all__ = ["printCopyright",
            "open", "split",
           ]
 
-current_year = 2015
+current_year = 2016
 
 def printCopyright(program_name, start_year):
    """Print the standard NRC Copyright notice.
