@@ -1,5 +1,0 @@
-
-Usage: tokenize.pl [-v] [-p] -ss|-noss [-notok] [-lang=l] [in [out]]
-
-  Tokenize and sentence-split text in ISO-8859-1 (iso latin 1).
-
