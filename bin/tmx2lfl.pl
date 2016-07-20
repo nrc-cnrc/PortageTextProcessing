@@ -27,9 +27,10 @@ use portage_utils;
 printCopyright("tmx2lfl.pl", 2009);
 $ENV{PORTAGE_INTERNAL_CALL} = 1;
 
-# According to the change logs, text_only was added in version 3.28.
+# According to the change logs, text_only was added in version 3.28 but we'll
+# require at least 3.32 as per commit 2b921af69.
 # We will use this line to validate Portage's installation.
-use XML::Twig 3.28;  # We must have text_only
+use XML::Twig 3.32;  # We must have text_only
 use Data::Dumper;
 $Data::Dumper::Indent=1;
 
