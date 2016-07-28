@@ -181,5 +181,5 @@ post_installation: check_structpred
 check_structpred: EXPLAIN:=Make sure Java is correctly installed.
 check_structpred:
 	@which structpred.jar &> /dev/null || ! echo "Can't locate structpred.jar in your PATH. Refer to \$$PORTAGE/INSTALL." >&2
-	@structpred.jar JavaVersion 2>&1 | grep -q "StructPred version" \
+	@java -jar `which structpred.jar` JavaVersion 2>&1 | grep -q "StructPred version" \
 	|| ! echo "structpred.jar JavaVersion FAILED: ${EXPLAIN} Refer to \$$PORTAGE/INSTALL." >&2
