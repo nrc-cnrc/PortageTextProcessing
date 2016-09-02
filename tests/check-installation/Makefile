@@ -88,8 +88,8 @@ python_modules:
 
 .PHONY: java_version
 java_version:
-	@[[ $$(echo "$$(java -version 2>&1 | egrep -o -m 1 '[0-9]+\.[0-9]+') >= 1.6" | bc) == 1 ]]  \
-	|| ! echo "Portage requires Java 1.6 or more recent." >&2
+	@[[ $$(echo "$$(java -Xmx1000m -version 2>&1 | egrep -o -m 1 '[0-9]+\.[0-9]+') >= 1.6" | bc) == 1 ]]  \
+	|| ! echo "Portage requires Java 1.6 or more recent." Found `java -Xmx1000m -version`. >&2
 
 .PHONY: make_version
 make_version:
@@ -181,5 +181,5 @@ post_installation: check_structpred
 check_structpred: EXPLAIN:=Make sure Java is correctly installed.
 check_structpred:
 	@which structpred.jar &> /dev/null || ! echo "Can't locate structpred.jar in your PATH. Refer to \$$PORTAGE/INSTALL." >&2
-	@java -jar `which structpred.jar` JavaVersion 2>&1 | grep -q "StructPred version" \
+	@java -Xmx1000m -jar `which structpred.jar` JavaVersion 2>&1 | grep -q "StructPred version" \
 	|| ! echo "structpred.jar JavaVersion FAILED: ${EXPLAIN} Refer to \$$PORTAGE/INSTALL." >&2
