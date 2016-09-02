@@ -1,4 +1,4 @@
-#!/usr/bin/perl -sw
+#!/usr/bin/env perl
 
 # @file udetokenize.pl 
 # @brief Transform tokenized UTF-8 text in normal text.
@@ -13,14 +13,13 @@
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright 2004 - 2013, Sa Majeste la Reine du Chef du Canada /
-# Copyright 2004 - 2013, Her Majesty in Right of Canada
+# Copyright 2004 - 2016, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2004 - 2016, Her Majesty in Right of Canada
 
 
 use strict;
+use warnings;
 use utf8;
-
-use ULexiTools;
 
 BEGIN {
    # If this script is run from within src/ rather than being properly
@@ -36,9 +35,15 @@ printCopyright("udetokenize.pl", 2004);
 $ENV{PORTAGE_INTERNAL_CALL} = 1;
 
 
-my $HELP = "
-Usage: udetokenize.pl [-lang=L] [-latin1] [-chinesepunc] [-stripchinese]
-       [INPUT] [OUTPUT]
+use ULexiTools;
+
+sub usage {
+   local $, = "\n";
+   print STDERR @_, "";
+   $0 =~ s#.*/##;
+   print STDERR "
+Usage: $0 [-lang=L] [-latin1] [-chinesepunc] [-stripchinese]
+       [INPUT [OUTPUT]]
 
 Detokenize tokenized text encoded in utf-8.
 
@@ -58,18 +63,33 @@ Notes:
  - to simulate the behaviour of newdetok.pl, use:
       udetokenize.pl -latin1 -chinesepunc -stripchinese
 ";
+   exit 1;
+}
 
-my $in=shift || "-";
-my $out=shift || "-";
+use Getopt::Long;
+Getopt::Long::Configure("no_ignore_case");
+# Note to programmer: Getopt::Long automatically accepts unambiguous
+# abbreviations for all options.
+my $verbose = 1;
+GetOptions(
+   help        => sub { usage },
+   h           => sub { usage },
 
-our ($help, $h, $lang, $latin1, $chinesepunc, $stripchinese, $deparaline);
+   "lang=s"       => \my $lang,
+   latin1         => \my $latin1,
+   chinesepunc    => \my $chinesepunc,
+   stripchinese   => \my $stripchinese,
+   deparaline     => \my $deparaline,
+) or usage "Error: Invalid option(s).";
+
 $lang = "en" unless defined $lang;
 setDetokenizationLang($lang);
 
-if ($help || $h) {
-   print $HELP;
-   exit 0;
-}
+my $in  = shift || "-";
+my $out = shift || "-";
+
+0 == @ARGV or usage "Error: Superfluous argument(s): @ARGV";
+
 
 
 zopen(*IN,  "<$in")  or die "Error: Cannot open $in for reading";
