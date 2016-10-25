@@ -71,20 +71,23 @@ perl_modules:
 	@$(call check,XML::Twig version,perl -e 'use XML::Twig 3.32;',Portage requires XML::Twig version 3.32 or greater.)
 
 perl_modules_for_portage_r_and_d:
-	@perldoc -l Algorithm::Diff
-	@perldoc -l Bloom::Faster
-	@perldoc -l Data::TreeDumper
-	@perldoc -l Encode::Buckwalter || ! echo "Buckwalter encoding is used during MADA." >&2
-	@perldoc -l Encode::HanConvert
-	@perldoc -l Iterator
-	@perldoc -l JSON::XS || ! echo "JSON parsing will be significantly slower without a C implementation." >&2
-	@perldoc -l Test::More
-	@perldoc -l Tie::Cache
-	@perldoc -l Time::HiRes
-	@perldoc -l Time::Piece
-	@perldoc -l Tree::Simple
-	@perldoc -l XML::Writer
-	@perl -e 'use Term::ANSIColor 2.02;'  || ! echo "jobtree & qstattree require colorvalid to parse user defined colors via $$PORTAGE_QSTATTREE_COLORS" >&2
+	@rc=0; for module in \
+		Algorithm::Diff \
+		Bloom::Faster \
+		Data::TreeDumper \
+		Encode::HanConvert \
+		Iterator \
+		Test::More \
+		Tie::Cache \
+		Time::Piece \
+		Tree::Simple \
+		XML::Writer \
+	; do \
+		$(call check,Perl module $$module,perldoc -l $$module >& /dev/null,NOT FOUND) || rc=1; \
+	done; [[ $$rc == 0 ]] || ! echo "Some required Perl modules are missing."
+	@$(call check,Perl module Encode::Buckwalter,perldoc -l Encode::Buckwalter >& /dev/null,"NOT FOUND. Buckwalter encoding is used during MADA.")
+	@$(call check,Perl module JSON::XS,perldoc -l JSON::XS >& /dev/null,"NOT FOUND. JSON parsing will be significantly slower without a C implementation.")
+	@$(call check,Perl module Term::ANSIColor,perl -e 'use Term::ANSIColor 2.02;',"jobtree & qstattree require colorvalid to parse user defined colors via \$$PORTAGE_QSTATTREE_COLORS")
 
 
 .PHONY: python_version
@@ -183,8 +186,8 @@ arpalm.encode: EXPLAIN:=Check that all boost libraries are installed.
 ${VALIDATE_PGMS}:
 	@$(call check,$@ installed,which $@ &> /dev/null,\
 		"NOT FOUND. Cannot locate PortageII program $@ in your PATH. Refer to \$$PORTAGE/INSTALL.")
-	-@$(call check,$@ runs,$@ -h >& /dev/null,"$@ -h FAILED TO RUN: ${EXPLAININSTALL}")
-	-@$(call check,$@ help,$@ -h 2>&1 | head -5 | diff - ref/$@.ref,\
+	@$(call check,$@ runs,$@ -h >& /dev/null,"$@ -h FAILED TO RUN: ${EXPLAININSTALL}")
+	@$(call check,$@ help,$@ -h 2>&1 | head -5 | diff - ref/$@.ref,\
 		"$@ -h did not produce the expected output: Is it the right version? ${EXPLAININSTALL}")
 
 post_installation: check_casemark
