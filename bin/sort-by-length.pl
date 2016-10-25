@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-# $Id$
 
 # @file sort-by-length.pl 
 # @brief sort a text file by sentence length.
@@ -47,14 +46,14 @@ Options:
   -n        Print line numbers
 
 ";
-    exit 1;
+    exit @_ ? 1 : 0;
 }
 
 use Getopt::Long;
 GetOptions(
     help        => sub { usage },
     n           => \my $print_numbers,
-) or usage;
+) or usage "Error: Invalid option(s).";
 
 # Read the whole input, be it stdin or any number of files specified on the
 # command line

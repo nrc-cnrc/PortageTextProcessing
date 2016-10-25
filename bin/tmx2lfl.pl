@@ -82,7 +82,7 @@ Options:
   -d            debugging mode.
   -help,-h      Print this help message and exit
 ";
-   exit 1;
+   exit @_ ? 1 : 0;
 }
 
 use Getopt::Long;

@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-# $Id$
 
 # @file expand-auto.pl
 # @brief Like expand, but with automatically calculated tab stops.
@@ -31,7 +30,7 @@ Usage: $0 [INPUT FILE(S)]
   -tab T   expand tabs to leave T blank characters between colunns [3]
 
 ";
-   exit 1;
+   exit @_ ? 1 : 0;
 }
 
 my $skip_head = 0;
@@ -41,7 +40,7 @@ GetOptions(
    "skip=i"    => \$skip_head,
    "tab=i"     => \$tab_width,
    help        => sub { usage },
-) or usage;
+) or usage "Error: Invalid option(s).";
 
 sub max($$) {
    $_[0] < $_[1] ? $_[1] : $_[0];

@@ -63,7 +63,7 @@ Notes:
  - to simulate the behaviour of newdetok.pl, use:
       udetokenize.pl -latin1 -chinesepunc -stripchinese
 ";
-   exit 1;
+   exit @_ ? 1 : 0;
 }
 
 use Getopt::Long;

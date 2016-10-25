@@ -97,7 +97,7 @@ Newline and paragraph semantics:
      input.
 
 ";
-   exit 1;
+   exit @_ ? 1 : 0;
 }
 
 

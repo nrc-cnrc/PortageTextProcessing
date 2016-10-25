@@ -56,7 +56,7 @@ Options:
   -v(erbose)      Increment the verbosity level by 1 (may be repeated)
   -d(ebug)        Print debugging information
 ";
-   exit 1;
+   exit @_ ? 1 : 0;
 }
 
 use Getopt::Long;
