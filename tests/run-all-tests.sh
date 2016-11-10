@@ -45,9 +45,16 @@ echo Test suites to run: $TEST_SUITES
 if [[ $PARALLEL_MODE ]]; then
    LOG=.log.run-all-tests-parallel.`date +%Y%m%dT%H%M%S`
    PARALLEL_MODE=
-   for suite in $TEST_SUITES; do
-      echo $0 $suite
-   done |
+   {
+      # Launch tune.py first, since it's the longest one to run and would get
+      # launched almost last by default.
+      if [[ $TEST_SUITES =~ tune.py ]]; then echo $0 tune.py; fi
+      for suite in $TEST_SUITES; do
+         if [[ $suite =~ tune.py ]]; then : ; else
+            echo $0 $suite
+         fi
+      done
+   } |
       if [[ $VERBOSE ]]; then
          run-parallel.sh -j 4 -v -psub -1 -on-error continue $LOCAL -unordered-cat - $PARALLEL_LEVEL 2>&1 |
          tee $LOG
