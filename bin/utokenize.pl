@@ -122,12 +122,7 @@ GetOptions(
    xtags      => \my $xtags,
 ) or usage "Error: Invalid option(s).";
 
-
-
-
 $lang = "en" unless defined $lang;
-setTokenizationLang($lang);
-
 $v = 0 unless defined $v;
 $p = 0 unless defined $p;
 $ss = 0 unless defined $ss;
@@ -142,92 +137,7 @@ my $out = shift || "-";
 
 0 == @ARGV or usage "Error: Superfluous argument(s): @ARGV";
 
-my $psep = $p ? "\n\n" : "\n";
-
-zopen(*IN, "<$in") || die "Error: utokenize.pl: Can't open $in for reading";
-zopen(*OUT, ">$out") || die "Error: utokenize.pl: Can't open $out for writing";
-binmode IN, ":encoding(UTF-8)";
-binmode OUT, ":encoding(UTF-8)";
-
-if ( !$ss && !$noss ) {
-   die "Error: utokenize.pl: One of -ss and -noss is now required; the old default (-ss) frequently caused unexpected behaviour, so we disabled it.\n";
+if (tokenize_file($in, $out, $lang, $v, $p, $ss, $noss, $notok,
+                  $pretok, $paraline, $xtags) != 0) {
+   die "Error: utokenize.pl encountered a fatal error";
 }
-if ( $notok && $pretok ) {
-   die "Error: utokenize.pl: Specify only one of -notok or -pretok.\n";
-}
-if ( $ss && $noss ) {
-   die "Error: utokenize.pl: Specify only one of -ss or -noss.\n";
-}
-if ( $noss && ($paraline || $p) ) {
-   die "Error: utokenize.pl: -paraline and -p are meaningless with -noss.\n";
-}
-if ( $noss && $notok ) {
-   warn "Warning: utokenize.pl: Just copying the input since -noss and -notok are both specified.\n";
-}
-if ( $noss && $pretok ) {
-   warn "Warning: utokenize.pl: Just copying the input since -noss and -pretok are both specified.\n";
-}
-
-# Enable immediate flush when piping
-select(OUT); $| = 1;
-
-while (1)
-{
-   my $para;
-   if ($noss || ($paraline && $p)) {
-      unless (defined($para = <IN>)) {
-         last;
-      }
-   } else {
-      unless ($para = get_para(\*IN, $paraline)) {
-         last;
-      }
-   }
-
-   my @token_positions = tokenize($para, $pretok, $xtags);
-   my @sent_positions = split_sentences($para, @token_positions) unless ($noss);
-
-   if ($notok || $pretok) {
-      if ($noss) {
-         # A bit weird, but the user asked to neither split nor tokenize.
-         print OUT $para;
-      }
-      else {
-         # User asked for sentence splitting only, no tokenization.
-         my $sentence_start = 0;
-         for (my $i = 0; $i < $#sent_positions+1; ++$i) {
-            # sent_position indicate the beginning of the next sentence, since
-            # we want index to be the end of the sentence, we need the previous
-            # tuple's index.
-            my $index = $sent_positions[$i]-2;
-
-            my $sentence_end = $token_positions[$index] + $token_positions[$index+1];
-            my $sentence = get_sentence($para, $sentence_start, $sentence_end);
-            $sentence =~ s/\s*\n\s*/ /g; # remove sentence-internal newlines
-            print OUT $sentence;
-            print OUT " $sentence_start,$sentence_end" if ($v);
-            print OUT ($v ? "<sent>" : "");
-            print OUT "\n" unless ($i == $#sent_positions);
-            $sentence_start = $token_positions[$sent_positions[$i]];
-         }
-         print OUT ($v ?  "<para>\n" : $psep);
-      }
-   }
-   else {
-      for (my $i = 0; $i < $#token_positions; $i += 2) {
-         if (!$noss && $i == $sent_positions[0]) {
-            print OUT ($v ? "<sent>\n" : "\n");
-            shift @sent_positions;
-         }
-
-         print OUT get_collapse_token($para, $i, @token_positions, $notok || $pretok), " ";
-
-         if ($v) {
-            print OUT "$token_positions[$i],$token_positions[$i+1]\n";
-         }
-         print OUT $psep if ($noss && $i < $#token_positions - 2 && substr($para, $token_positions[$i], $token_positions[$i+2] - $token_positions[$i]) =~ /\n/);
-      }
-      print OUT ($v ?  "<para>\n" : $psep);
-   }
-}
-

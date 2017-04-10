@@ -22,6 +22,7 @@
 # - make simple abbr / complex abbr selectable
 
 use utf8;
+use portage_utils;
 
 package ULexiTools;
 
@@ -40,7 +41,8 @@ our (@ISA, @EXPORT, @EXPORT_OK);
    "good_turing_estm", "get_sentence",
    "setTokenizationLang", "setDetokenizationLang",
    "detokenize", "detokenize_array",
-   "get_tag_re", "strip_xml_entities"
+   "get_tag_re", "strip_xml_entities",
+   "tokenize_file",
 );
 
 # Signatures so the array refs work correctly everywhere
@@ -68,6 +70,26 @@ my $wide_dashes = quotemeta("‐‑‒–—―");
 my $hyphens = $wide_dashes . quotemeta("-");
 my $splitleft = qr/[\"“«\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
 my $splitright = qr/\.{2,}|[\"”»!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
+
+# punctuation, left_bracket and right_bracket are used both for tokenization
+# and detokenization, whereas others constants are just for tokenization.
+my $es_left_bracket  = qr/(?:[[({«`¡¿]|“|‘)/;
+my $es_right_bracket = qr/(?:[])}»´!?]|”|’)/;
+my $es_punctuation = qr/[,.:;]/;
+my $da_left_bracket  = qr/(?:[[({»`¡¿]|„|“|‚|›)/;
+my $da_right_bracket = qr/(?:[])}«´!?]|“|”|‘|‹)/;
+my $da_punctuation = qr/[,.:!?;]/;
+my $fr_left_bracket  = qr/(?:[[({`]|“|‘)/;
+my $fr_right_bracket = qr/(?:[])}´]|”|’)/;
+my $fr_punctuation = qr/(?:[,.!?;]|…|\.\.\.)/;
+my $en_left_bracket  = qr/(?:[[({`]|“|‘)/;
+my $en_right_bracket = qr/(?:[])}´]|”|’)/;
+my $en_punctuation = qr/[,.:!?;]/;
+
+# Holds the variant of the above in effect for tokenization
+my $tok_left_bracket;
+my $tok_right_bracket;
+my $tok_punctuation;
 
 my $debug_xtags = 0;
 
@@ -268,26 +290,36 @@ sub setTokenizationLang($) {
          $split_word = \&split_word_en;
          @known_abbr_hash{@known_abbrs_en} = (1) x @known_abbrs_en;
          @short_stops_hash{@short_stops_en} = (1) x @short_stops_en;
+         $tok_left_bracket  = $en_left_bracket;
+         $tok_right_bracket = $en_right_bracket;
+         $tok_punctuation   = $en_punctuation;
       } elsif ($tokenizationLang eq "fr") {
          $split_word = \&split_word_fr;
          @known_abbr_hash{@known_abbrs_fr} = (1) x @known_abbrs_fr;
          @short_stops_hash{@short_stops_fr} = (1) x @short_stops_fr;
+         $tok_left_bracket  = $fr_left_bracket;
+         $tok_right_bracket = $fr_right_bracket;
+         $tok_punctuation   = $fr_punctuation;
       } elsif ($tokenizationLang eq "es") {
          $split_word = \&split_word_es;
          @known_abbr_hash{@known_abbrs_es} = (1) x @known_abbrs_es;
          @short_stops_hash{@short_stops_es} = (1) x @short_stops_es;
+         $tok_left_bracket  = $es_left_bracket;
+         $tok_right_bracket = $es_right_bracket;
+         $tok_punctuation   = $es_punctuation;
       } elsif ($tokenizationLang eq "da") {
          $split_word = \&split_word_da;
          @known_abbr_hash{@known_abbrs_da} = (1) x @known_abbrs_da;
          @short_stops_hash{@short_stops_da} = (1) x @short_stops_da;
+         $tok_left_bracket  = $da_left_bracket;
+         $tok_right_bracket = $da_right_bracket;
+         $tok_punctuation   = $da_punctuation;
          $leftquotes  = quotemeta("»›„“‚");
          $rightquotes = quotemeta("«‹“”‘");
          $splitleft   = qr/[\"»›„“‚\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
          $splitright  = qr/\.{2,}|[\"«‹“”‘!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
       }
       else {die "Error: Unknown lang in tokenizer: $tokenizationLang";}
-
-      setDetokenizationLang($tokenizationLang); # We use some functions from the detokenizer
    }
 }
 
@@ -377,7 +409,7 @@ sub tokenize($$$) #(paragraph, pretok?, xtags?)
                push @tok_types, SELF_CLOSE_TAG;
             } elsif ($token =~ /^$tag_re$/o) {
                push @tok_types, OPEN_TAG;
-            } elsif (is_punctuation($token) || is_bracket($token)) {
+            } elsif (is_tok_special($token)) {
                print STDOUT "TYPE SEQ BEFORE \"$token\": @tok_types\n" if $debug_xtags;
                if (grep { $_ != OPEN_TAG && $_ != SELF_CLOSE_TAG } @tok_types) {
                   print STDOUT "GREP SAID YES\n" if $debug_xtags;
@@ -558,6 +590,15 @@ sub tokenize($$$) #(paragraph, pretok?, xtags?)
    return @tok_posits;
 }
 
+
+sub is_tok_special
+{
+   my $ch=shift;
+   return
+      $ch =~ /^$tag_re*$tok_punctuation$tag_re*$/o ||
+      $ch =~ /^$tag_re*$tok_left_bracket$tag_re*$/o ||
+      $ch =~ /^$tag_re*$tok_right_bracket$tag_re*$/o;
+}
 
 # Split sentences, given a tokenized paragraph. Return a list of indexes into
 # @para_string, giving the start token of successive sentences (except the
@@ -962,6 +1003,123 @@ sub good_turing #(freq-list)
    return @gt_freqs;
 }
 
+sub tokenize_file($$$$$$$$$$$)
+{
+   my $in = shift;
+   my $out = shift;
+   my $lang = shift;
+   my $v = shift;
+   my $p = shift;
+   my $ss = shift;
+   my $noss = shift;
+   my $notok = shift;
+   my $pretok = shift;
+   my $paraline = shift;
+   my $xtags = shift;
+
+   my $psep = $p ? "\n\n" : "\n";
+   setTokenizationLang($lang);
+
+   if (!portage_utils::zopen(*IN, "<$in")) {
+      warn "Error: tokenize_file(): Can't open $in for reading";
+      return 1;
+   }
+   if (!portage_utils::zopen(*OUT, ">$out")) {
+      warn "Error: tokenize_file(): Can't open $out for writing";
+      return 1;
+   }
+   binmode IN, ":encoding(UTF-8)";
+   binmode OUT, ":encoding(UTF-8)";
+
+   if ( !$ss && !$noss ) {
+      warn "Error: tokenize_file(): One of -ss and -noss is now required; the old default (-ss) frequently caused unexpected behaviour, so we disabled it.\n";
+      return 1;
+   }
+   if ( $notok && $pretok ) {
+      warn "Error: tokenize_file(): Specify only one of -notok or -pretok.\n";
+      return 1;
+   }
+   if ( $ss && $noss ) {
+      warn "Error: tokenize_file(): Specify only one of -ss or -noss.\n";
+      return 1;
+   }
+   if ( $noss && ($paraline || $p) ) {
+      warn "Error: tokenize_file(): -paraline and -p are meaningless with -noss.\n";
+      return 1;
+   }
+   if ( $noss && $notok ) {
+      warn "Warning: tokenize_file(): Just copying the input since -noss and -notok are both specified.\n";
+   }
+   if ( $noss && $pretok ) {
+      warn "Warning: tokenize_file(): Just copying the input since -noss and -pretok are both specified.\n";
+   }
+
+   # Enable immediate flush when piping
+   select(OUT); $| = 1; select(STDOUT);
+
+   while (1)
+   {
+      my $para;
+      if ($noss || ($paraline && $p)) {
+         unless (defined($para = <IN>)) {
+            last;
+         }
+      } else {
+         unless ($para = get_para(\*IN, $paraline)) {
+            last;
+         }
+      }
+
+      my @token_positions = tokenize($para, $pretok, $xtags);
+      my @sent_positions = split_sentences($para, @token_positions) unless ($noss);
+
+      if ($notok || $pretok) {
+         if ($noss) {
+            # A bit weird, but the user asked to neither split nor tokenize.
+            print OUT $para;
+         }
+         else {
+            # User asked for sentence splitting only, no tokenization.
+            my $sentence_start = 0;
+            for (my $i = 0; $i < $#sent_positions+1; ++$i) {
+               # sent_position indicate the beginning of the next sentence, since
+               # we want index to be the end of the sentence, we need the previous
+               # tuple's index.
+               my $index = $sent_positions[$i]-2;
+
+               my $sentence_end = $token_positions[$index] + $token_positions[$index+1];
+               my $sentence = get_sentence($para, $sentence_start, $sentence_end);
+               $sentence =~ s/\s*\n\s*/ /g; # remove sentence-internal newlines
+               print OUT $sentence;
+               print OUT " $sentence_start,$sentence_end" if ($v);
+               print OUT ($v ? "<sent>" : "");
+               print OUT "\n" unless ($i == $#sent_positions);
+               $sentence_start = $token_positions[$sent_positions[$i]];
+            }
+            print OUT ($v ?  "<para>\n" : $psep);
+         }
+      }
+      else {
+         for (my $i = 0; $i < $#token_positions; $i += 2) {
+            if (!$noss && $i == $sent_positions[0]) {
+               print OUT ($v ? "<sent>\n" : "\n");
+               shift @sent_positions;
+            }
+
+            print OUT get_collapse_token($para, $i, @token_positions, $notok || $pretok), " ";
+
+            if ($v) {
+               print OUT "$token_positions[$i],$token_positions[$i+1]\n";
+            }
+            print OUT $psep if ($noss && $i < $#token_positions - 2 && substr($para, $token_positions[$i], $token_positions[$i+2] - $token_positions[$i]) =~ /\n/);
+         }
+         print OUT ($v ?  "<para>\n" : $psep);
+      }
+   }
+
+   return 0;
+}
+
 
 ################################################################################
 # Detokenize functions
@@ -974,7 +1132,7 @@ my @single_quote=();
 my @out_sentence;
 my $detok_left_bracket;
 my $detok_right_bracket;
-my $punctuation;
+my $detok_punctuation;
 
 
 my $detokenizationLang;
@@ -993,41 +1151,40 @@ sub setDetokenizationLang($) # Two letters language id
       if ($detokenizationLang eq "es") {
          #$detok_left_bracket  = quotemeta("[({«“‘`¡¿"); # broken with Perl 5.8 or 5.10
          #$detok_right_bracket = quotemeta("])}»”’´!?"); # broken with Perl 5.8 or 5.10
-         $detok_left_bracket  = qr/(?:[[({«`¡¿]|“|‘)/;
-         $detok_right_bracket = qr/(?:[])}»´!?]|”|’)/;
-         $punctuation = qr/[,.:;]/;
+         $detok_left_bracket  = $es_left_bracket;
+         $detok_right_bracket = $es_right_bracket;
+         $detok_punctuation = $en_punctuation;
       }
       elsif ($detokenizationLang eq "da") {
          # NOTE: there is ambiguity for <“> which could probably be resolved by
          # keeping track of the opening quote for that pair „…“ or “…”.
          #$detok_left_bracket  = quotemeta("[({»›„“‚"); # broken with Perl 5.8 or 5.10
          #$detok_right_bracket = quotemeta("])}«‹“”‘"); # broken with Perl 5.8 or 5.10
-         $detok_left_bracket  = qr/(?:[[({»`¡¿]|„|“|‚|›)/;
-         $detok_right_bracket = qr/(?:[])}«´!?]|“|”|‘|‹)/;
-         $punctuation = qr/[,.:!?;]/;
+         $detok_left_bracket  = $da_left_bracket;
+         $detok_right_bracket = $da_right_bracket;
+         $detok_punctuation = $da_punctuation;
       }
       elsif ($detokenizationLang eq "fr") {
          # "«" and "»" are left out because French keeps them separate from
          # their contents.
          #$detok_left_bracket  = quotemeta("[({“‘`"); # broken with Perl 5.8 or 5.10
          #$detok_right_bracket = quotemeta("])}”’´"); # broken with Perl 5.8 or 5.10
-         $detok_left_bracket  = qr/(?:[[({`]|“|‘)/;
-         $detok_right_bracket = qr/(?:[])}´]|”|’)/;
-         #$detok_right_bracket = qr/[\])}”’´]/;
-         $punctuation = qr/(?:[,.!?;]|…|\.\.\.)/;
+         $detok_left_bracket  = $fr_left_bracket;
+         $detok_right_bracket = $fr_right_bracket;
+         $detok_punctuation = $fr_punctuation;
       }
       else {
          # Includes left double and single quotes, since they require the same
          # treatment as brackets
          # Excludes < and ‹ since we don't split them in utokenize.pl
-         $detok_left_bracket = quotemeta("[({“‘`"); # broken with Perl 5.8 or 5.10
-         $detok_left_bracket  = qr/(?:[[({`]|“|‘)/;
+         #$detok_left_bracket = quotemeta("[({“‘`"); # broken with Perl 5.8 or 5.10
+         $detok_left_bracket  = $en_left_bracket;
          # Includes right double and single quotes, since they require the same
          # treatment as brackets
          # Excludes > and › since we don't split them in utokenize.pl
-         $detok_right_bracket = quotemeta("])}”’´"); # broken with Perl 5.8 or 5.10
-         $detok_right_bracket = qr/(?:[])}´]|”|’)/;
-         $punctuation = qr/[,.:!?;]/;
+         #$detok_right_bracket = quotemeta("])}”’´"); # broken with Perl 5.8 or 5.10
+         $detok_right_bracket = $en_right_bracket;
+         $detok_punctuation = $en_punctuation;
       }
    }
 }
@@ -1066,7 +1223,7 @@ sub detokenize_array(\@) # Ref Array containing words of sentence to be detokeni
          }
       } else {  # if it is not first word, considering the situations(punctuations, brackets, quotes, normal words)
          $word_before= $out_sentence[-1];
-         if( is_punctuation($word_pre) ){ # don't add space before the word
+         if( is_detok_punctuation($word_pre) ){ # don't add space before the word
             push ( @out_sentence, $word_pre);
          }
          elsif ( $detokenizationLang eq "es" and $word_pre =~ /[¡¿]/ ) {
@@ -1076,7 +1233,7 @@ sub detokenize_array(\@) # Ref Array containing words of sentence to be detokeni
          elsif( is_quote( $word_pre) ){ # process quote according it is start or end
             process_quote($word_pre, $word_before);
          }
-         elsif( is_bracket( $word_pre)){ # process bracket according it is start or end
+         elsif( is_detok_bracket( $word_pre)){ # process bracket according it is start or end
             process_bracket($word_pre, $word_before);
          }
          elsif (is_poss($word_pre)) {
@@ -1106,7 +1263,7 @@ sub process_word #ch1, ch2
    elsif( is_price_abut_left($ch_pre, $ch_before) ) {
       push ( @out_sentence, $ch_pre);
    }
-   elsif( is_punctuation($ch_before) || is_right_bracket($ch_before)){
+   elsif( is_detok_punctuation($ch_before) || is_right_bracket($ch_before)){
       push ( @out_sentence, $space);
       push ( @out_sentence, $ch_pre);
    }
@@ -1133,7 +1290,7 @@ sub process_bracket #ch1, ch2
       push ( @out_sentence, $ch_pre);
    }
    else{
-#     if( is_punctuation($ch_before)){
+#     if( is_detok_punctuation($ch_before)){
 #        push ( @out_sentence, $ch_pre);
 #     }
       if( is_quote($ch_before)){
@@ -1258,19 +1415,13 @@ sub single_quote_not_empty
    return ( $#single_quote>= 0);
 }
 
-sub is_special # $var1
-{
-   my $ch=shift;
-   return (is_bracket($ch) || is_punctuation($ch) );
-}
-
-sub is_punctuation
+sub is_detok_punctuation
 {
    my $ch_pre=shift;
-   return $ch_pre =~ m/^$tag_re*$punctuation$tag_re*$/o;
+   return $ch_pre =~ m/^$tag_re*$detok_punctuation$tag_re*$/o;
 }
 
-sub is_bracket # $ch
+sub is_detok_bracket # $ch
 {
    my $ch_pre=shift;
    return ( is_left_bracket($ch_pre) || is_right_bracket($ch_pre) );
