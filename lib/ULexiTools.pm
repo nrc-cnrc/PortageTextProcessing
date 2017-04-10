@@ -42,7 +42,7 @@ our (@ISA, @EXPORT, @EXPORT_OK);
    "setTokenizationLang", "setDetokenizationLang",
    "detokenize", "detokenize_array",
    "get_tag_re", "strip_xml_entities",
-   "tokenize_file",
+   "tokenize_file", "detokenize_file"
 );
 
 # Signatures so the array refs work correctly everywhere
@@ -1021,11 +1021,11 @@ sub tokenize_file($$$$$$$$$$$)
    setTokenizationLang($lang);
 
    if (!portage_utils::zopen(*IN, "<$in")) {
-      warn "Error: tokenize_file(): Can't open $in for reading";
+      warn "Error: tokenize_file(): Can't open $in for reading\n";
       return 1;
    }
    if (!portage_utils::zopen(*OUT, ">$out")) {
-      warn "Error: tokenize_file(): Can't open $out for writing";
+      warn "Error: tokenize_file(): Can't open $out for writing\n";
       return 1;
    }
    binmode IN, ":encoding(UTF-8)";
@@ -1475,6 +1475,119 @@ sub is_price_abut_left # ch1, ch2
    my $ch_before=shift;
    return (($detokenizationLang eq "en" or $detokenizationLang eq "es") &&
            $ch_before =~ /^$tag_re*\$$tag_re*$/ && $ch_pre =~ /^$tag_re*\.?\d/oi);
+}
+
+
+sub detokenize_file($$$$$$$)
+{
+   my $in = shift;
+   my $out = shift;
+   my $lang = shift;
+   my $latin1 = shift;
+   my $chinesepunc = shift;
+   my $stripchinese = shift;
+   my $deparaline = shift;
+
+   setDetokenizationLang($lang);
+
+   if (!portage_utils::zopen(*IN, "<$in")) {
+      warn "Error: detokenize_file(): Can't open $in for reading\n";
+      return 1;
+   }
+   if (!portage_utils::zopen(*OUT, ">$out")) {
+      warn "Error: detokenize_file(): Can't open $out for writing\n";
+      return 1;
+   }
+   binmode(IN,  ":encoding(UTF-8)");
+   binmode(OUT, ":encoding(UTF-8)");
+
+   my $first_sentence = 1;  # The first sentence will be part of a new paragraph in deparaline mode.
+   while(<IN>)
+   {
+      my $sentence = $_;
+      chomp $sentence;
+
+      if ( $chinesepunc ) {
+         # Normalize Chinese brackets and punctuation
+         # Note: this section is hard to read because of the encoding - to
+         # inspect code point by code point, you can run:
+         # iconv -f utf-8 -t ascii --unicode-subst '[[[U%x]]]' udetokenize.pl
+         foreach ($sentence) {
+            tr/〔〕【】『』〖〗︶︻︼/()[]“”[])[]/;
+            tr/﹝﹞﹙﹚﹛﹜/()(){}/;
+            tr/。、《》〈〉「」/.,«»‹›“”/;
+            tr/﹃﹄〃﹁﹂/“””“”/;
+            tr/‵′‶″〝〞‵/`´“”“”`/;
+            tr/﹖﹗︰﹪﹡﹟〜/?!:%*#~/;
+            tr/―﹣‾/—\-\-/;
+            tr/･·・/•••/;
+            tr/﹑﹒﹕､﹔﹐/, :,;,/;
+            tr/※¿¡‖//d;
+         }
+         # Changed from Howard's script - we use the cp-1252 characters instead,
+         # unless -latin1 is specified:
+         #   tr/‵′″―《》〈〉「」『』〝〞﹁﹂﹃﹄〃‵/''"-"""""""""""""""'/g;
+         # Not in Howard's script, but done here: tr/‶/“/g;
+
+         # The following things from Howard's script are not done here, but
+         # are done below if the -latin1 switch is specified.
+         # Not done from Howard's script because we want to preserve right
+         # French and English punctuation: tr/«»“”·‘’—–‰/"""" ''--%/g;
+         # Also not done: s/[•･·]//g; # we use • (\xb7) for all three
+         # Not done to preserve rich punctuation in F/E: $line =~ s/…/ ... /g;
+      }
+
+      my $out_sentence = detokenize($sentence);
+
+      if ( $chinesepunc ) {
+         foreach ($out_sentence) {
+            s/‥/../g;
+         }
+      }
+
+      if ( $latin1 ) {
+         foreach ($out_sentence) {
+            s/€/Euro/g;
+            s/…/.../g;
+            s/‥/../g;
+            s/‰/%0/g;
+            s/Œ/OE/g;
+            s/—/--/g;
+            s/™/TM/g;
+            s/œ/oe/g;
+            tr/‚ƒ„†‡ˆŠ‹Ž/,f"**^S<Z/;
+            tr/‘’“”•–˜š›žŸ/''""·\-~s>zY/;
+         }
+      }
+
+      if ( $stripchinese || $chinesepunc ) {
+         $out_sentence =~ s/\p{Han}//g if $stripchinese;
+         $out_sentence =~ s/[\pZ\pC]+/ /g;
+      }
+
+      if ($deparaline) {
+         chomp($out_sentence);
+         if ($first_sentence) {
+            print OUT $out_sentence;
+            $first_sentence = 0;
+         }
+         elsif ($out_sentence =~ m/^\s*$/) {
+            print OUT "\n";
+            # Next sentence will be the beginning of a new paragraph.
+            $first_sentence = 1;
+         }
+         else {
+            print OUT " ", $out_sentence;
+            $first_sentence = 0;
+         }
+      }
+      else {
+         print OUT $out_sentence . "\n";
+      }
+   }
+   print OUT "\n" unless $first_sentence;
+   
+   return 0;
 }
 
 

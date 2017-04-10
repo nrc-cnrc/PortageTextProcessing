@@ -137,7 +137,6 @@ my $out = shift || "-";
 
 0 == @ARGV or usage "Error: Superfluous argument(s): @ARGV";
 
-if (tokenize_file($in, $out, $lang, $v, $p, $ss, $noss, $notok,
-                  $pretok, $paraline, $xtags) != 0) {
-   die "Error: utokenize.pl encountered a fatal error";
-}
+tokenize_file($in, $out, $lang, $v, $p, $ss, $noss, $notok,
+              $pretok, $paraline, $xtags) == 0
+   or die "Error: utokenize.pl encountered a fatal error\n";
