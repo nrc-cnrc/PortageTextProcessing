@@ -1117,6 +1117,9 @@ sub tokenize_file($$$$$$$$$$$)
       }
    }
 
+   close IN;
+   close OUT;
+
    return 0;
 }
 
@@ -1586,6 +1589,9 @@ sub detokenize_file($$$$$$$)
       }
    }
    print OUT "\n" unless $first_sentence;
+
+   close IN;
+   close OUT;
    
    return 0;
 }
