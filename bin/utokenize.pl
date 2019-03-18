@@ -57,7 +57,7 @@ Options:
            are not defined with -noss).
 -notok     Don't tokenize the output. [do tokenize]
 -pretok    Already tokenized. Don't re-tokenize the input. [do tokenize]
--lang      Specify two-letter language code: en, fr, es, or da [en]
+-lang      Specify two-letter language code: en, fr, es, iu, or da [en]
 -paraline  File is in one-paragraph-per-line format [no]
 -xtags     Handle XML tags from TMX and SDLXLIFF file formats [don't]
 

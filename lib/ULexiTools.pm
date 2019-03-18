@@ -85,6 +85,9 @@ my $fr_punctuation = qr/(?:[,.!?;]|…|\.\.\.)/;
 my $en_left_bracket  = qr/(?:[[({`]|“|‘)/;
 my $en_right_bracket = qr/(?:[])}´]|”|’)/;
 my $en_punctuation = qr/[,.:!?;]/;
+my $iu_left_bracket  = qr/(?:[[({«`]|“|‘)/;
+my $iu_right_bracket = qr/(?:[])}»´]|”|’)/;
+my $iu_punctuation = qr/(?:[,.:!?;]|…|\.\.\.)/;
 
 # Holds the variant of the above in effect for tokenization
 my $tok_left_bracket;
@@ -171,6 +174,9 @@ my @known_abbrs_da = qw {
    hr frk frøken fr fru
 };
 
+my @known_abbrs_iu = qw {
+};
+
 # short words and abbreviation-like words that can end a sentence
 my @short_stops_en = qw {
    to in is be on it we as by an at or do my he if no am us so up me go
@@ -183,6 +189,9 @@ my @short_stops_fr = qw {
    ni pu vu dû lu ça ai an su fi tu né eh te es ta os bu ri ô us nu ci if oh
    çà pû mû na ès té ah dé or
    tv cn cp pm bp pq gm ae ue cd fm al mg ed pc fc dp
+};
+
+my @short_stops_iu = qw {
 };
 
 # The following stop-words were mined from the WMT-ACL10 es corpora.
@@ -301,7 +310,7 @@ sub setTokenizationLang($) {
          $tok_right_bracket = $fr_right_bracket;
          $tok_punctuation   = $fr_punctuation;
       } elsif ($tokenizationLang eq "es") {
-         $split_word = \&split_word_es;
+         $split_word = \&split_word_basic;
          @known_abbr_hash{@known_abbrs_es} = (1) x @known_abbrs_es;
          @short_stops_hash{@short_stops_es} = (1) x @short_stops_es;
          $tok_left_bracket  = $es_left_bracket;
@@ -318,6 +327,13 @@ sub setTokenizationLang($) {
          $rightquotes = quotemeta("«‹“”‘");
          $splitleft   = qr/[\"»›„“‚\$\#¡¿]|[$hyphens]+|‘‘?|\'\'?|\`\`?/;
          $splitright  = qr/\.{2,}|[\"«‹“”‘!,:;\?%.]|[$hyphens]+|’’?|\'\'?|´´?|…/;
+      } elsif ($tokenizationLang eq "iu") {
+         $split_word = \&split_word_basic;
+         @known_abbr_hash{@known_abbrs_iu} = (1) x @known_abbrs_iu;
+         @short_stops_hash{@short_stops_iu} = (1) x @short_stops_iu;
+         $tok_left_bracket  = $iu_left_bracket;
+         $tok_right_bracket = $iu_right_bracket;
+         $tok_punctuation   = $iu_punctuation;
       }
       else {die "Error: Unknown lang in tokenizer: $tokenizationLang";}
    }
@@ -767,6 +783,9 @@ sub context_says_abbr(\$$\@) #($para_string, index_of_dot, token_positions)
       # TODO: what if UU.EE. ¿a question?
       # Let's assume that this is not a mid sentence question even if it is allowed in spanish.
       return 0;
+   } elsif ($tokenizationLang eq "iu") {
+      # Inuktitut has no concept of casing
+      return 0;
    } else {
       return $tok !~ /^[[:upper:]]/o;   # next real word not cap'd
    }
@@ -787,6 +806,8 @@ sub matches_known_abbr($) # (word)
 
 sub looks_like_abbr(\$$\@) # (para_string, index_of_abbr, token_positions)
 {
+   if ($tokenizationLang eq "iu") { return 0; }
+
    my $para = shift;
    my $p = shift;
    my $token_positions = shift;
@@ -947,10 +968,9 @@ sub split_word_fr #(word, offset)
    return @atom_positions;
 }
 
-# Split a Spanish word into parts, eg ?????
-# Return list of (start,len) atom positions.
+# Spanish and Inuktitut don't require any custom word splitting that I know of.
 
-sub split_word_es #(word, offset)
+sub split_word_basic #(word, offset)
 {
    my $word = shift;
    my $os = shift || 0;
