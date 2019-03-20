@@ -50,6 +50,8 @@ def get_args():
    parser.add_argument("-h", "-help", "--help", action=HelpAction)
    parser.add_argument("-v", "--verbose", action=VerboseAction)
    parser.add_argument("-d", "--debug", action=DebugAction)
+   parser.add_argument("-a", "--alignment-column", dest="alignment_column", default=0, type=int,
+                       help="indexfile is an alignment info file from ssal -a; process given column: 1 or 2")
    
    parser.add_argument("indexfile", type=open, help="sorted index file")
    
@@ -62,6 +64,12 @@ def get_args():
    cmd_args = parser.parse_args()
       
    return cmd_args
+
+
+def parse_alignment_line(line, column):
+   tokens = line.split()
+   (start,end) = tokens[column-1].split('-')
+   return (int(start),int(end))
 
 
 def main():
@@ -85,24 +93,53 @@ def main():
 
    line_number = 0
 
-   index_line = indexfile.readline()
-   if index_line:
-      index = int(index_line)
-   
-   for in_line in infile:
-      if not index_line:
-         break
-      line_number += 1
-      if line_number == index:
-         print(in_line, file=outfile, end='')
-         index_line = indexfile.readline()
-         if index_line:
-            index = int(index_line)
-      elif line_number > index:
-         fatal_error("Index file out of sort order at index:", index, "input line:", line_number)
+   if cmd_args.alignment_column == 0:
+      index_line = indexfile.readline()
+      if index_line:
+         index = int(index_line)
 
-   if index_line:
-      fatal_error("Out of input before end of index file at index:", index)
+      for in_line in infile:
+         if not index_line:
+            break
+         line_number += 1
+         if line_number == index:
+            print(in_line, file=outfile, end='')
+            index_line = indexfile.readline()
+            if index_line:
+               index = int(index_line)
+         elif line_number > index:
+            fatal_error("Index file out of sort order at index:", index, "input line:", line_number)
+
+      if index_line:
+         fatal_error("Out of input before end of index file at index:", index)
+
+   elif cmd_args.alignment_column == 1 or cmd_args.alignment_column == 2:
+      col = cmd_args.alignment_column
+      index_line = indexfile.readline()
+      if index_line:
+         (start, end) = parse_alignment_line(index_line, col)
+
+      for in_line in infile:
+         if not index_line:
+            break
+         if line_number >= start and line_number < end:
+            print(in_line.strip('\n'), file=outfile, end='')
+            if line_number+1 < end:
+               print(' ', file=outfile, end='')
+
+         line_number += 1
+         while line_number == end:
+            print('', file=outfile, end='\n')
+            index_line = indexfile.readline()
+            if index_line:
+               (start, end) = parse_alignment_line(index_line, col)
+               if start < line_number:
+                  fatal_error("Alignment file out of order at:", index_line.strip(), "input line:", line_number)
+            else:
+               break
+
+   else:
+      fatal_error("invalid -a/--alignment-column value: use 1 or 2 (or 0 for none).")
 
    indexfile.close()
    infile.close()
