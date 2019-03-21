@@ -68,8 +68,15 @@ def get_args():
 
 def parse_alignment_line(line, column):
    tokens = line.split()
-   (start,end) = tokens[column-1].split('-')
-   return (int(start),int(end))
+   try:
+      (start,end) = tokens[column-1].split('-', 1)
+      start=int(start)
+      end=int(end)
+   except:
+      fatal_error("Invalid alignment info line:", line.strip())
+   if end < start:
+      fatal_error("Invalid alignment has end<start at:", line.strip())
+   return (start,end)
 
 
 def main():
@@ -118,6 +125,8 @@ def main():
       index_line = indexfile.readline()
       if index_line:
          (start, end) = parse_alignment_line(index_line, col)
+         if start < 0:
+            fatal_error("Alignment file specifies negative line number at:", index_line.strip())
 
       for in_line in infile:
          if not index_line:
@@ -134,9 +143,12 @@ def main():
             if index_line:
                (start, end) = parse_alignment_line(index_line, col)
                if start < line_number:
-                  fatal_error("Alignment file out of order at:", index_line.strip(), "input line:", line_number)
+                  fatal_error("Alignment file out of order at:", index_line.strip())
             else:
                break
+
+      if index_line:
+         fatal_error("Out of input before end of alignment index file at:", index_line.strip())
 
    else:
       fatal_error("invalid -a/--alignment-column value: use 1 or 2 (or 0 for none).")
