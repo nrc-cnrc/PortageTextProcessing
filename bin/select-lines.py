@@ -52,6 +52,10 @@ def get_args():
    parser.add_argument("-d", "--debug", action=DebugAction)
    parser.add_argument("-a", "--alignment-column", dest="alignment_column", default=0, type=int,
                        help="indexfile is an alignment info file from ssal -a; process given column: 1 or 2")
+   parser.add_argument("--joiner", dest="joiner", default=" ", type=str,
+                       help="with -a, join lines in a range with given joiner [one space]")
+   parser.add_argument("--separator", dest="separator", default="\n", type=str,
+                       help="with -a, separate ranges with given separator [one newline]")
    
    parser.add_argument("indexfile", type=open, help="sorted index file")
    
@@ -134,11 +138,11 @@ def main():
          if line_number >= start and line_number < end:
             print(in_line.strip('\n'), file=outfile, end='')
             if line_number+1 < end:
-               print(' ', file=outfile, end='')
+               print(cmd_args.joiner, file=outfile, end='')
 
          line_number += 1
          while line_number == end:
-            print('', file=outfile, end='\n')
+            print(cmd_args.separator, file=outfile, end='')
             index_line = indexfile.readline()
             if index_line:
                (start, end) = parse_alignment_line(index_line, col)
