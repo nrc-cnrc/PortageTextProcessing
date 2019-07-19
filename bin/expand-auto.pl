@@ -28,6 +28,7 @@ Usage: $0 [INPUT FILE(S)]
 
   -skip X  ignore first X lines of input.
   -tab T   expand tabs to leave T blank characters between colunns [3]
+  -utf8    process the text in UTF-8
 
 ";
    exit @_ ? 1 : 0;
@@ -35,12 +36,22 @@ Usage: $0 [INPUT FILE(S)]
 
 my $skip_head = 0;
 my $tab_width = 3;
-use Getopt::Long;
-GetOptions(
-   "skip=i"    => \$skip_head,
-   "tab=i"     => \$tab_width,
-   help        => sub { usage },
-) or usage "Error: Invalid option(s).";
+my $utf8 = 0;
+BEGIN {
+   # Open parsing in a BEGIN block so $utf8 is available to use pragma below
+   use Getopt::Long;
+   GetOptions(
+      "skip=i"    => \$skip_head,
+      "tab=i"     => \$tab_width,
+      utf8        => \$utf8,
+      help        => sub { usage },
+   ) or usage "Error: Invalid option(s).";
+}
+
+# If -utf8 occurs on the command line, set all files to utf-8 by default
+# use open ':std', ':encoding(UTF-8)'; would be sipler, but it cannot be inside an if
+# statement since it is lexically scoped.
+use if $utf8, 'open', ':std', ':encoding(UTF-8)';
 
 sub max($$) {
    $_[0] < $_[1] ? $_[1] : $_[0];
