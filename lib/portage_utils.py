@@ -17,7 +17,10 @@ from __future__ import print_function, unicode_literals, division, absolute_impo
 import sys
 import argparse
 import re
-import __builtin__
+if sys.version_info[0] < 3:
+   import __builtin__ as builtins
+else:
+   import builtins
 from subprocess import Popen, PIPE
 
 __all__ = ["printCopyright",
@@ -175,12 +178,12 @@ def open(filename, mode='r', quiet=True):
          else:
             theFile = Popen(["zcat", "-f", filename], stdout=PIPE).stdout
       elif mode == 'w':
-         internal_file = __builtin__.open(filename, mode)
+         internal_file = builtins.open(filename, mode)
          theFile = Popen(["gzip"], close_fds=True, stdin=PIPE, stdout=internal_file).stdin
       else:
          fatal_error("Unsupported mode for gz files.")
    else:
-      theFile = __builtin__.open(filename, mode)
+      theFile = builtins.open(filename, mode)
 
    return theFile
 
