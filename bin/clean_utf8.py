@@ -12,14 +12,22 @@
 # Copyright 2019, Her Majesty in Right of Canada /
 # Copyright 2019, Sa Majeste la Reine du Chef du Canada
 
-## import sys
-## import os
-## import shutil
 import builtins
-from argparse import ArgumentParser
+import os
 import re
 import string
-from nrc_utils import *
+import sys
+from argparse import ArgumentParser
+
+# If this script is run from within src/ rather than from the installed bin
+# directory, we add src/utils to the Python module include path (sys.path)
+# to arrange that portage_utils will be imported from src/utils.
+if sys.argv[0] not in ('', '-c'):
+   bin_path = os.path.dirname(sys.argv[0])
+   if os.path.basename(bin_path) != "bin":
+      sys.path.insert(1, os.path.normpath(os.path.join(bin_path, "..", "utils")))
+
+from portage_utils import *
 
 
 class CleanUTF8:
