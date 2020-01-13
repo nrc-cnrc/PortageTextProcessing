@@ -108,7 +108,9 @@ while (<IN>) {
    s/ᖅᕿ/ᖅᑭ/g and ++$counter;
    s/ᖅᖁ/ᖅᑯ/g and ++$counter;
    s/ᖅᖃ/ᖅᑲ/g and ++$counter;
-   s/ᖅᖅ/ᖅᒃ/g and ++$counter;
+   # Poor consensus for qq final: both forms are considered invalid Inuktitut
+   # by some, so don't normalize "invalid" text.
+   #s/ᖅᖅ/ᖅᒃ/g and ++$counter;
 
    # Rule 5: consistently use the syllabic ᕼ in Inuktut words, not the ASCII H
    # ASCII H followed by syllabics character -> syllabic ᕼ
