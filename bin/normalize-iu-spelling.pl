@@ -41,6 +41,8 @@ Usage: $0 [IN [OUT]]
    exit @_ ? 1 : 0;
 }
 
+binmode(STDERR,  ":encoding(UTF-8)");
+
 use Getopt::Long;
 Getopt::Long::Configure("no_ignore_case");
 # Note to programmer: Getopt::Long automatically accepts unambiguous
