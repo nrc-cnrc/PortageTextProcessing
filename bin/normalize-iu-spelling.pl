@@ -29,7 +29,8 @@ Usage: $0 [IN [OUT]]
    - Rule 2: ᖏ = ng(V) should be one character
    - Rule 3: ᙱ = nng(V) should be one character
    - Rule 4: doubled ᕿ = q(V) should be ᖅᑭ = qk(V)
-   - Rule 5: consistently use the syllabic ᕼ in Inuktut words, not the ASCII H
+   - Rule 5a: consistently use the syllabic ᕼ before another syllabic character
+   - Rule 5b: consistently use the ASCII H before another ASCII letter
 ";
 
 #Options:
@@ -114,9 +115,16 @@ while (<IN>) {
    # by some, so don't normalize "invalid" text.
    #s/ᖅᖅ/ᖅᒃ/g and ++$counter;
 
-   # Rule 5: consistently use the syllabic ᕼ in Inuktut words, not the ASCII H
+   # Rule 5a: consistently use the syllabic ᕼ in Inuktut words, not the ASCII H
    # ASCII H followed by syllabics character -> syllabic ᕼ
    s/H(?=[\x{1400}-\x{167f}])/ᕼ/g and ++$counter;
+
+   # Rule 5b: consistently use the ASCII H before another ASCII letter
+   s/ᕼ(?=[a-zA-Z])/H/g and ++$counter;
+
+   # Note: we don't normalize H/ᕼ in other contexts, like punctuation, numbers,
+   # apostrophes, or even accented characters, because those cases can be
+   # ambiguous.
 
    print OUT;
 }
