@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# @file normalize-iu.pl 
+# @file normalize-iu-spelling.pl 
 # @brief Apply the character normalizations recommended by Inuktut Tusaalanga on Inuktut text
 #
 # @author Eric Joanis
