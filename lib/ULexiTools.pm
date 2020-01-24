@@ -1100,21 +1100,23 @@ sub tokenize_file($$$$$$$$$$$)
          }
          else {
             # User asked for sentence splitting only, no tokenization.
-            my $sentence_start = 0;
-            for (my $i = 0; $i < $#sent_positions+1; ++$i) {
-               # sent_position indicate the beginning of the next sentence, since
-               # we want index to be the end of the sentence, we need the previous
-               # tuple's index.
-               my $index = $sent_positions[$i]-2;
+            if ($para ne "\n") {
+               my $sentence_start = 0;
+               for (my $i = 0; $i < $#sent_positions+1; ++$i) {
+                  # sent_position indicate the beginning of the next sentence, since
+                  # we want index to be the end of the sentence, we need the previous
+                  # tuple's index.
+                  my $index = $sent_positions[$i]-2;
 
-               my $sentence_end = $token_positions[$index] + $token_positions[$index+1];
-               my $sentence = get_sentence($para, $sentence_start, $sentence_end);
-               $sentence =~ s/\s*\n\s*/ /g; # remove sentence-internal newlines
-               print OUT $sentence;
-               print OUT " $sentence_start,$sentence_end" if ($v);
-               print OUT ($v ? "<sent>" : "");
-               print OUT "\n" unless ($i == $#sent_positions);
-               $sentence_start = $token_positions[$sent_positions[$i]];
+                  my $sentence_end = $token_positions[$index] + $token_positions[$index+1];
+                  my $sentence = get_sentence($para, $sentence_start, $sentence_end);
+                  $sentence =~ s/\s*\n\s*/ /g; # remove sentence-internal newlines
+                  print OUT $sentence;
+                  print OUT " $sentence_start,$sentence_end" if ($v);
+                  print OUT ($v ? "<sent>" : "");
+                  print OUT "\n" unless ($i == $#sent_positions);
+                  $sentence_start = $token_positions[$sent_positions[$i]];
+               }
             }
             print OUT ($v ?  "<para>\n" : $psep);
          }
