@@ -71,37 +71,55 @@ while (<IN>) {
    # Rule 1: ᕿ = q(V) should be one character
    # r + k(V) -> q(V)
    s/ᕐᑭ/ᕿ/g and ++$counter;
+   s/ᕐᑮ/ᖀ/g and ++$counter;
    s/ᕐᑯ/ᖁ/g and ++$counter;
+   s/ᕐᑰ/ᖂ/g and ++$counter;
    s/ᕐᑲ/ᖃ/g and ++$counter;
+   s/ᕐᑳ/ᖄ/g and ++$counter;
    s/ᕐᒃ/ᖅ/g and ++$counter;
 
    # Rule 2: ᖏ = ng(V) should be one character
    # n + g(V) -> ng(V)
    s/ᓐᒋ/ᖏ/g and ++$counter;
+   s/ᓐᒌ/ᖐ/g and ++$counter;
    s/ᓐᒍ/ᖑ/g and ++$counter;
+   s/ᓐᒎ/ᖒ/g and ++$counter;
    s/ᓐᒐ/ᖓ/g and ++$counter;
+   s/ᓐᒑ/ᖔ/g and ++$counter;
    s/ᓐᒡ/ᖕ/g and ++$counter;
    # ng + g(V) -> ng(V)
    s/ᖕᒋ/ᖏ/g and ++$counter;
+   s/ᖕᒌ/ᖐ/g and ++$counter;
    s/ᖕᒍ/ᖑ/g and ++$counter;
+   s/ᖕᒎ/ᖒ/g and ++$counter;
    s/ᖕᒐ/ᖓ/g and ++$counter;
+   s/ᖕᒑ/ᖔ/g and ++$counter;
    s/ᖕᒡ/ᖕ/g and ++$counter;
 
    # Rule 3: ᙱ = nng(V) should be one character
    # n + ng(V) -> nng(V)
    s/ᓐᖏ/ᙱ/g and ++$counter;
+   s/ᓐᖐ/ᙲ/g and ++$counter;
    s/ᓐᖑ/ᙳ/g and ++$counter;
+   s/ᓐᖒ/ᙴ/g and ++$counter;
    s/ᓐᖓ/ᙵ/g and ++$counter;
+   s/ᓐᖔ/ᙶ/g and ++$counter;
    s/ᓐᖕ/ᖖ/g and ++$counter;
    # ng + ng(V) -> nng(V)
    s/ᖕᖏ/ᙱ/g and ++$counter;
+   s/ᖕᖐ/ᙲ/g and ++$counter;
    s/ᖕᖑ/ᙳ/g and ++$counter;
+   s/ᖕᖒ/ᙴ/g and ++$counter;
    s/ᖕᖓ/ᙵ/g and ++$counter;
+   s/ᖕᖔ/ᙶ/g and ++$counter;
    s/ᖕᖕ/ᖖ/g and ++$counter;
    # nng + g(V) -> nng(V)
    s/ᖖᒋ/ᙱ/g and ++$counter;
+   s/ᖖᒌ/ᙲ/g and ++$counter;
    s/ᖖᒍ/ᙳ/g and ++$counter;
+   s/ᖖᒎ/ᙴ/g and ++$counter;
    s/ᖖᒐ/ᙵ/g and ++$counter;
+   s/ᖖᒑ/ᙶ/g and ++$counter;
    s/ᖖᒡ/ᖖ/g and ++$counter;
    # Note: the rules above are carefully ordered so that n+n+g(V), n+ng+g(V),
    # ng+n+g(V) and ng+ng+g(V) also all correctly get mapped to nng(V).
@@ -109,8 +127,11 @@ while (<IN>) {
    # Rule 4: doubled ᕿ = q(V) should be ᖅᑭ = qk(V)
    # doubled q = q + q(V) -> qk(V)
    s/ᖅᕿ/ᖅᑭ/g and ++$counter;
+   s/ᖅᖀ/ᖅᑮ/g and ++$counter;
    s/ᖅᖁ/ᖅᑯ/g and ++$counter;
+   s/ᖅᖂ/ᖅᑰ/g and ++$counter;
    s/ᖅᖃ/ᖅᑲ/g and ++$counter;
+   s/ᖅᖄ/ᖅᑳ/g and ++$counter;
    # Poor consensus for qq final: both forms are considered invalid Inuktitut
    # by some, so don't normalize "invalid" text.
    #s/ᖅᖅ/ᖅᒃ/g and ++$counter;
