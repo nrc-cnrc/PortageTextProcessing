@@ -1100,7 +1100,7 @@ sub tokenize_file($$$$$$$$$$$)
          }
          else {
             # User asked for sentence splitting only, no tokenization.
-            if ($para ne "\n") {
+            if (@token_positions) {
                my $sentence_start = 0;
                for (my $i = 0; $i < $#sent_positions+1; ++$i) {
                   # sent_position indicate the beginning of the next sentence, since
