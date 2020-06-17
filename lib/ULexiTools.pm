@@ -376,11 +376,13 @@ sub tokenize($$$) #(paragraph, pretok?, xtags?)
          # pre-tokenized: don't retokenize, just mark token positions.
          push(@tok_posits, pos($para)-len($2), len($2)); # real token
       } else {
-         my @posits = split_punc($2, pos($para) - len($2)); # real token
+         my $tok = $2; # real token
+         my $para_offset = pos($para) - len($2); # where the token is in the paragraph
+         my @posits = split_punc($tok, 0);
          for (my $i = 0; $i < $#posits; $i += 2) {
             push (@tok_posits,
-                  &$split_word(substr($para, $posits[$i], $posits[$i+1]),
-                               $posits[$i]));
+                  &$split_word(substr($tok, $posits[$i], $posits[$i+1]),
+                               $para_offset+$posits[$i]));
          }
       }
    }
