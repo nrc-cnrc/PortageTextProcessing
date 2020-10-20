@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 # @file strip-parallel-blank-lines.py
 # @brief Strip blank lines in parallel from one or more line-aligned files:

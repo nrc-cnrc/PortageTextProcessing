@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # $Id: prog.py,v 1.3 2012/05/15 20:36:59 joanise Exp $
 
 # @file strip-parallel-duplicates.py

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 # @file filter-parallel.py
 # @brief Filter lines in parallel from multiple line-aligned files according to
