@@ -15,8 +15,10 @@
 
 use strict;
 use warnings;
-use encoding "UTF-8";
 use XML::Writer;
+
+binmode STDIN, ":encoding(UTF-8)";
+binmode STDOUT, ":encoding(UTF-8)";
 
 BEGIN {
    # If this script is run from within src/ rather than being properly
@@ -116,7 +118,9 @@ sub process(@) {
 
          print STDERR "E: $file_en  F: $file_fr\n" if ($debug);
          open (E, "$file_en") or die "Error: Unable to open ${item}_en.al";
+         binmode E, ":encoding(UTF-8)";
          open (F, "$file_fr") or die "Error: Unable to open ${item}_fr.al";
+         binmode F, ":encoding(UTF-8)";
          while (defined(my $e = <E>) and defined(my $f = <F>)) {
             chomp $e;
             chomp $f;
