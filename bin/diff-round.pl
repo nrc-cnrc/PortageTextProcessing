@@ -51,7 +51,6 @@ Options:
   -h(elp):   print this help message
   -sort:     sort the files before doing the diff, e.g., to compare two
              phrase tables or ttables containing the same phrase/word pairs
-  -diffpipe: use diffpipe to handle line insertions and deletions.
   -q:        don't print individual differences, just a global summary
   -min:      use min(|a|,|b|) instead of max when calculating rel diffs
   -abs:      use |a-b| instead of a relative difference
@@ -74,7 +73,6 @@ GetOptions(
                   "-z no longer required: automatically enabled as needed\n";
                },
    sort     => \my $sort,
-   diffpipe => \my $pipe,
    quiet    => \my $quiet,
    min      => \my $use_min,
    abs      => \my $use_abs,
@@ -86,12 +84,6 @@ my $pow_prec = 1/(10**$prec);
 if (-d $ARGV[1] && -f $ARGV[0]) {
    $ARGV[1] .= "/" . `basename $ARGV[0]`;
    $ARGV[1] =~ s/\s*$//;
-}
-
-if ( $pipe ) {
-   my $sort_cmd = ($sort ? " LC_ALL=C sort |" : "");
-   exec("diffpipe -w -prec $prec 'gzip -cqfd $ARGV[0] |$sort_cmd' 'gzip -cqfd $ARGV[1] |$sort_cmd'")
-      or die "Error: Can't exec diffpipe: $!";
 }
 
 # Will hold the maximum numerical difference found

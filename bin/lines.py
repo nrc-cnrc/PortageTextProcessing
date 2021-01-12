@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 # @file lines.py
 # @brief extract the given lines from a file.

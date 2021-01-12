@@ -24,7 +24,7 @@ use warnings;
 B< >
 
  This Perl module is intended to contain common utility functions for all Perl
- scripts in the Portage project.
+ scripts in the PortageII project.
 
 B< >
 
@@ -47,8 +47,10 @@ B< =============================================
 
 =item B<SYNOPSIS>
 
+ printCopyright(START_YEAR);
  printCopyright("PROGRAM_NAME", START_YEAR);
 
+ PROGRAM_NAME is the basename of the $0 if left unspecified.
  START_YEAR should be the first year of Copyright for PROGRAM_NAME;
  the Crown Copyright will be asserted for START_YEAR to latest release year.
  
@@ -56,11 +58,25 @@ B< =============================================
 
 =cut
 
-my $current_year = 2016;
+my $current_year = 2020;
 
 sub printCopyright($;$) {
-   # Just like in sh_utils.sh, we don't actually bother with the Copyright
-   # statement within Portage.
+   if ( !$ENV{PORTAGE_INTERNAL_CALL} ) {
+      my $name;
+      if (@_ == 2) {
+         $name = shift;
+      } else {
+         $name = $0;
+         $name =~ s/.*\///;
+      }
+      my $year = shift;
+      print STDERR
+         "\n$name, NRC-CNRC, (c) $year",
+         ($year == $current_year ? "" : " - $current_year"),
+         ", Her Majesty in Right of Canada\n",
+         "Please run \"portage_info -notice\" for Copyright ",
+         "notices of 3rd party libraries.\n\n";
+   }
 }
 
 
@@ -151,7 +167,7 @@ B< =============================================
 
 =item B<DESCRIPTION>
 
- Portage's perl magicstream.  Tries to deduce if the stream is input or output,
+ PortageII's perl magicstream.  Tries to deduce if the stream is input or output,
  if it is compressed (.gz,z,Z,bz2,bzip2,bz,lzma), piped or just a normal file,
  and does the proper thing to open the stream.
 
@@ -217,7 +233,7 @@ B< =============================================
 
 =item B<DESCRIPTION>
 
- Portage's perl magicstream.  Tries to deduce if the input is compressed, piped
+ PortageII's perl magicstream.  Tries to deduce if the input is compressed, piped
  or just a normal file and does the proper thing to open the stream.
 
 =item B<SYNOPSIS>
@@ -308,7 +324,7 @@ B< =============================================
 
 =item B<DESCRIPTION>
 
- Portage's perl magicstream.  Tries to deduce if the output is compressed, piped
+ PortageII's perl magicstream.  Tries to deduce if the output is compressed, piped
  or just a normal file and does the proper thing to open the stream.
 
 =item B<SYNOPSIS>

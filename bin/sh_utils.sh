@@ -109,10 +109,19 @@ run_cmd() {
 
 # Print the standard NRC Copyright notice
 # Usage: print_nrc_copyright program_name year
+current_year=2020
 print_nrc_copyright() {
    prog_name=$1
    year=$2
-   # In Portage, we don't bother with the Copyright
+   if [[ ! $PORTAGE_INTERNAL_CALL ]]; then
+      echo -n "$prog_name, NRC-CNRC, (c) $year"
+      if [[ $year != $current_year ]]; then
+         echo -n " - $current_year"
+      fi
+      echo ", Her Majesty in Right of Canada";
+      echo "Please run \"portage_info -notice\" for Copyright notices of 3rd party libraries."
+      echo ""
+   fi >&2
 }
 
 # This library's help message.

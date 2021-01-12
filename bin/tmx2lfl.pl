@@ -145,7 +145,7 @@ foreach my $file (@filename) {
    #my $findLanguageTags = "grep '^[[:space:]]*<tuv' | egrep -m10 -o '(xml:)?lang=\"[^\"]+\"' | sort -u";
    my $findLanguageTags = "perl `which xml_grep` --nb_results 10 --cond 'tuv[\@xml:lang]' --cond 'tuv[\@lang]' --pretty_print record_c | egrep -m10 -o '(xml:)?lang=\"[^\"]+\"' | sort -u";
    debug("cat \"$file\" | $findLanguageTags");
-   $spec .= `cat \"$file\" | $findLanguageTags`;
+   $spec .= `cat \"$file\" 2>/dev/null | $findLanguageTags`;
    while ($spec =~ /"([^\"]+)"/g) {
       push(@lang_specifiers, $1);
    }
