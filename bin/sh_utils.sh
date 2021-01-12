@@ -113,7 +113,7 @@ current_year=2020
 print_nrc_copyright() {
    prog_name=$1
    year=$2
-   if [[ ! $PORTAGE_INTERNAL_CALL ]]; then
+   if [[ "" && ! $PORTAGE_INTERNAL_CALL ]]; then
       echo -n "$prog_name, NRC-CNRC, (c) $year"
       if [[ $year != $current_year ]]; then
          echo -n " - $current_year"

@@ -61,7 +61,7 @@ B< =============================================
 my $current_year = 2020;
 
 sub printCopyright($;$) {
-   if ( !$ENV{PORTAGE_INTERNAL_CALL} ) {
+   if ( 0 && !$ENV{PORTAGE_INTERNAL_CALL} ) {
       my $name;
       if (@_ == 2) {
          $name = shift;
