@@ -16,6 +16,7 @@
 
 use strict;
 use warnings;
+use File::Basename;
 
 BEGIN {
    # If this script is run from within src/ rather than being properly
@@ -43,9 +44,10 @@ Usage: $0 [-v] UNICODEDATA UTF8InputText(s) > CanonicalUTF8Output
   UnicodeData.txt, or a subset thereof.  All non-canonical characters found in
   the input are converted into their canonical equivalent.
 
-  The program will look for UNICODEDATA first in the local directory, then in
-  \$PORTAGE/models/unicode.  Provided subsets: UnicodeData-Arabic.txt, (alias:
-  ar), and UnicodeData-Arabic-full.txt, (alias: ar-full).  (Refer to
+  The program will look for UNICODEDATA first in the local directory, then
+  where this script is located, finally in \$PORTAGE/models/unicode.
+  Provided subsets: UnicodeData-Arabic.txt, (alias: ar), and
+  UnicodeData-Arabic-full.txt, (alias: ar-full).  (Refer to
   \$PORTAGE/models/unicode/README for details.)
 
 Options:
@@ -74,7 +76,9 @@ if ( $unicode_data eq "ar"  ) { $unicode_data = "UnicodeData-Arabic.txt" }
 if ( $unicode_data eq "ar-full" ) { $unicode_data = "UnicodeData-Arabic-full.txt" }
 
 if ( ! -e $unicode_data ) {
-   if ( ! exists $ENV{PORTAGE} ) {
+   if ( -e dirname($0)."/".$unicode_data ) {
+      $unicode_data = dirname($0)."/".$unicode_data;
+   } elsif ( ! exists $ENV{PORTAGE} ) {
       die "Error: Can't find $unicode_data file in local directory, and \$PORTAGE " .
           "is not \ndefined, so there is nowhere else to look.\n"
    } elsif ( -e "$ENV{PORTAGE}/models/unicode/$unicode_data" ) {
@@ -85,16 +89,24 @@ if ( ! -e $unicode_data ) {
    }
 }
 
+if ($debug || $verbose) {
+   print STDERR "Using data from: $unicode_data\n";
+}
+
 # hex2utf8($hex_char) returns the UTF-8 character number UCS $hex_char
 sub hex2utf8 ($) {
+   no warnings;
    use encoding 'utf-8';
    return chr(hex($_[0]));
+   use warnings;
 }
 
 # utf82hex($utf8_char) returns the UCS hex representation of $utf8_char
 sub utf82hex ($) {
+   no warnings;
    use encoding 'utf-8';
    return sprintf "%04X", ord($_[0]);
+   use warnings;
 }
 
 open UNICODEDATA, $unicode_data or die "Error: Can't open $unicode_data: $!\n";
