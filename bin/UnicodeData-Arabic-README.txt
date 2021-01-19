@@ -3,7 +3,7 @@ The UnicodeData-Arabic* file are the models needed by normalize-unicode.pl.
 They used to be in $PORTAGE/models/unicode but the Arabic versions are small
 enough to add to source control.
 
-UnicodeData.txt (still only in $PORTAGe/models/unicode) is the official Unicode
+UnicodeData.txt (not included) is the official Unicode
 character list from http://www.unicode.org/Public/UNIDATA/UnicodeData.txt
 You can obtain the up-to-date version at any time by doing wget on that URL.
 
