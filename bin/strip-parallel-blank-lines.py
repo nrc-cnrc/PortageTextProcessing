@@ -57,7 +57,7 @@ if len(args) > 1 and args[0] == "-r":
     replace = True
     args = args[1:]
 
-if len(args) < 1:
+if len(args) < 1 or args[0] == "-h":
     sys.stderr.write(help);
     sys.exit(1)
     
