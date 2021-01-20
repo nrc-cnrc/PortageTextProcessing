@@ -16,9 +16,10 @@ usage() {
    as exit status if the suite passes, non-zero otherwise.
 
 Option:
-   -j N       Run the tests N-ways parallel [1]
+   -j N       Run the tests N-ways parallel (requires run-parallel.sh) [1]
    -local L   Run L parallel workers locally [calculated by run-parallel.sh]
    -v(erbose) Increase verbosity
+   -h(elp)    Print this help message
 " >&2
    exit
 }
@@ -33,6 +34,14 @@ while [ $# -gt 0 ]; do
    esac
    shift
 done
+
+if [[ $PARALLEL_MODE ]]; then
+   if ! which-test.sh run-parallel.sh; then
+      echo "run-all-tests.sh ERROR: the -j option requires run-parallel.sh; install clusterUtils or run tests in serial mode." >& 2
+      exit 1
+   fi
+fi
+
 
 TEST_SUITES=$*
 if [[ ! $TEST_SUITES ]]; then
