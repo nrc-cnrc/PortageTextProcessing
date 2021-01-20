@@ -1,0 +1,5 @@
+usage: clean_utf8 [options] [infile [outfile]]
+
+Clean-up / normalize UTF8 text
+
+positional arguments:

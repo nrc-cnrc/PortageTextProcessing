@@ -1,0 +1,5 @@
+usage: select-lines.py [options] indexfile [infile [outfile]]
+
+   Select a set of lines by index from a file.
+   
+   indexfile contains 1-based integer indicies of lines to be extracted.

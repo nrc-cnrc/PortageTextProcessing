@@ -9,9 +9,15 @@
 # Copyright 2012, Sa Majeste la Reine du Chef du Canada
 # Copyright 2012, Her Majesty in Right of Canada
 
+# Use bash by default, never sh, or -- ack -- dash, which is what Ubuntu has for /bin/sh
+SHELL:=/bin/bash
+
 # In all test suites, "make all" should create the .gitignore file
 all: gitignore
 	@echo All tests PASSED.
+
+# Silence Copyright notices for all test suites
+export PORTAGE_INTERNAL_CALL=1
 
 # Having testsuite also depend on gitignore should get the .gitignore file
 # created earlier in the process
