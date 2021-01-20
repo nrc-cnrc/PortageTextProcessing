@@ -16,7 +16,11 @@
 
 use strict;
 use warnings;
+use utf8;
 use File::Basename;
+binmode(STDIN, ":encoding(UTF-8)");
+binmode(STDOUT, ":encoding(UTF-8)");
+binmode(STDERR, ":encoding(UTF-8)");
 
 BEGIN {
    # If this script is run from within src/ rather than being properly
@@ -71,6 +75,9 @@ GetOptions(
 
 @ARGV > 0 or usage "Error: Missing UnicodeData.txt file name";
 my $unicode_data = shift || "-";
+if (!@ARGV) {
+   push @ARGV, "-";
+}
 
 if ( $unicode_data eq "ar"  ) { $unicode_data = "UnicodeData-Arabic.txt" }
 if ( $unicode_data eq "ar-full" ) { $unicode_data = "UnicodeData-Arabic-full.txt" }
@@ -96,7 +103,7 @@ if ($debug || $verbose) {
 # hex2utf8($hex_char) returns the UTF-8 character number UCS $hex_char
 sub hex2utf8 ($) {
    no warnings;
-   use encoding 'utf-8';
+   #use encoding 'utf-8';
    return chr(hex($_[0]));
    use warnings;
 }
@@ -104,7 +111,7 @@ sub hex2utf8 ($) {
 # utf82hex($utf8_char) returns the UCS hex representation of $utf8_char
 sub utf82hex ($) {
    no warnings;
-   use encoding 'utf-8';
+   #use encoding 'utf-8';
    return sprintf "%04X", ord($_[0]);
    use warnings;
 }
@@ -136,6 +143,7 @@ my %normalize_freq;
 # representation of $utf8_char
 sub normalize_char($) {
    my $char = shift;
+   $debug and print "Normalizing \"$char\"\n";
    if ( exists $canonical{$char} ) {
       $normalize_freq{$char}++;
       return $canonical{$char};
@@ -163,11 +171,15 @@ foreach (sort keys %canonical) {
 #}
 
 %normalize_freq = ();
-while (<>) {
-   utf8::upgrade($_);
-   $debug and print;
-   s/($non_canonical_RE)/normalize_char($1)/eg;
-   print;
+for my $file (@ARGV) {
+   open FILE, $file or die "Cannot open file $file: $!";
+   binmode(FILE, ":encoding(UTF-8)");
+   while (<FILE>) {
+      $debug and print;
+      s/($non_canonical_RE)/normalize_char($1)/eg;
+      print;
+   }
+   close FILE;
 }
 
 if ( $verbose ) {
