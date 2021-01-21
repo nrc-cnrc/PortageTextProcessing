@@ -1,0 +1,30 @@
+Y a -t-il " mange -on mangent -t-on un s' en va -t-on qu' est-ce qu' on en dira . "
+« Mangent -ils : ici : aujourd'hui ? »
+Et c' est la vie … Mais c' est encore la vie .. Et c' est toujours la vie .. Et si c’ était des “ guillements ” anglais ?
+Ou des ‘ apostrophes ’ anglaises ?
+Mais encore – il le faut bien — testons les long tirets et les ‹ angles › avec et ‹sans› espaces .
+Un · latin1 et un • cp1252 .
+Et évidemment , j' ai manqué le quelqu'un qui a un traitement spécial .
+D'abord faut -il couvrir tout l' espace des cas spéciaux , d'ailleurs et encore .
+Qu' y peut -on , c' est comme ça .
+Et ici on a une exemple pour tester les abbréviations : Ici sont les US .
+Bruce est ici .
+Ici sont les US. et le Canada .
+Ici sont les XY. Bruce est ici .
+Ici sont les XY. et le Canada .
+Ensuite il faudrait un paragraphe sur plusieurs lignes .
+Comme ça , on pourrait tester si - ss / - noss et - notok fonctionnent correctement ensemble .
+Bon , je triche et je me sers aussi de ce fichier pour tester les pourcentages. 10 % , en français , ça se laisse en deux tokens .
+un-trait d' union
+deux -- traits d' union
+trois -- traits d' union
+quatre -- traits d' union
+cinq-----traits d' union
+six------traits d' union
+-. 1983 .
+--. 1983 .
+--. 1983 .
+--. 1983 .
+-----. 1983 .
+a --. 1983 .
+" -- "

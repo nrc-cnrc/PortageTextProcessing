@@ -1,0 +1,22 @@
+This part of the input tests XLIFF tags.
+December 31<g id="3">st</g> should keep 31st together.
+But (31<g id="3">st</g>) should still tokenize its parentheses away.
+An unbalanced tag breaks this up<g id="4">: 31</g> <g id="5">st</g>. Oh well, garbage in garbage out.
+Global CO<g id="pt13">2</g>e emissions
+we will:</g>
+Sometimes we resolve ambiguity wrong: (CO<g id="55">2</g>e) Oh well, it happens.
+Token-internal self-closing and unmatched tags stay on their own: go <x id="23"/>boy; year)<x id="57"/>. Test abc <g id="3">def ghi</g> jhk.
+Tags on the edges are glued back on: under the <g id="46">Canadian Environmental Protection Act, 1999</g> (CEPA 1999).
+Tag sequences too: <g id="34"><x id="12"/>a b c</g><x id="45"><g id="1"></g> <g id="34"><x id="12"/>abc</g><x id="45"/><g id="1"></g>
+And unmatched inner tags don't break that: <g id="34"><x id="12"/>ab <x id="78"/>c</g><x id="45"/><g id="1"></g>
+While matched inner tags get to merge the whole shebang: <g id="34"><x id="12"/>ab<x id="78">c</x><g id="3">d</g><x id="45"/><g id="1"></g></g>
+Punctuation at the end no longer breaks it up: with the latest code revision, the right tags remain right tags ... <g id="34"><x id="12"/>ab<x id="78">c</x><g id="3">d</g><x id="45"/><g id="1"></g></g>.
+<g id="pt39">Headings</g>: Should keep the colon tokenized.
+
+Now I need to add a section for TMX tags.
+This guidance document intends to provide an easy to read review of the <open_wrap content="&lt;bpt i=&quot;1&quot;>&amp;lt;cf italic=&quot;on&quot;>&lt;/bpt>" id="1"/>Reduction of<close_wrap content="&lt;ept i=&quot;1&quot;>&amp;lt;/cf>&lt;/ept>" id="1"/> <open_wrap content="&lt;bpt i=&quot;2&quot;>&amp;lt;cf italic=&quot;on&quot;>&lt;/bpt>" id="2"/>Gooey Emissions from Gizmos Regulations,<close_wrap content="&lt;ept i=&quot;2&quot;>&amp;lt;/cf>&lt;/ept>" id="2"/> herein referred to as the “Regulations”<open_wrap content="&lt;bpt i=&quot;3&quot;>&amp;lt;cf italic=&quot;on&quot;>&lt;/bpt>" id="3"/>.<close_wrap content="&lt;ept i=&quot;3&quot;>&amp;lt;/cf>&lt;/ept>" id="3"/>
+Given that there are over 18 million wonky-gizmos on Some illos, they are a major contributor to bubble in Amda<tag_wrap content="&lt;it pos=&quot;end&quot;>&amp;lt;/cf>&lt;/it>"/><tag_wrap content="&lt;ph>&amp;lt;footnotereference autonumber=&quot;18&quot;/>&lt;/ph>"/><open_wrap content="&lt;bpt i=&quot;1&quot;>&amp;lt;cf font=&quot;Arial&quot; complexscriptsfont=&quot;Arial&quot; asiantextfont=&quot;Arial&quot;>&lt;/bpt>" id="1"/>.<close_wrap content="&lt;ept i=&quot;1&quot;>&amp;lt;/cf>&lt;/ept>" id="1"/>
+E<open_wrap content="&lt;bpt i=&quot;1&quot;>&amp;lt;cf subscript=&quot;on&quot;>&lt;/bpt>" id="1"/>s<close_wrap content="&lt;ept i=&quot;1&quot;>&amp;lt;/cf>&lt;/ept>" id="1"/> = a x 234/ZZ<open_wrap content="&lt;bpt i=&quot;2&quot;>&amp;lt;cf subscript=&quot;on&quot;>&lt;/bpt>" id="2"/>s<close_wrap content="&lt;ept i=&quot;2&quot;>&amp;lt;/cf>&lt;/ept>" id="2"/>
+<open_wrap content="&lt;bpt i=&quot;1&quot;>&amp;lt;cf subscript=&quot;on&quot;>&lt;/bpt>" id="1"/>s<close_wrap content="&lt;ept i=&quot;1&quot;>&amp;lt;/cf>&lt;/ept>" id="1"/>Foo = a x 234/ZZ<open_wrap content="&lt;bpt i=&quot;2&quot;>&amp;lt;cf subscript=&quot;on&quot;>&lt;/bpt>" id="2"/>s<close_wrap content="&lt;ept i=&quot;2&quot;>&amp;lt;/cf>&lt;/ept>" id="2"/>Bar
+E <open_wrap content="&lt;bpt i=&quot;1&quot;>&amp;lt;cf subscript=&quot;on&quot;>&lt;/bpt>" id="1"/>s<close_wrap content="&lt;ept i=&quot;1&quot;>&amp;lt;/cf>&lt;/ept>" id="2"/> = a x 234/ZZ <open_wrap content="&lt;bpt i=&quot;2&quot;>&amp;lt;cf subscript=&quot;on&quot;>&lt;/bpt>" id="2"/>s<close_wrap content="&lt;ept i=&quot;2&quot;>&amp;lt;/cf>&lt;/ept>" id="1"/>
+
