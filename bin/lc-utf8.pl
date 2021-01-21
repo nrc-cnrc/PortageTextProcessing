@@ -33,6 +33,7 @@ this script does not work on your system and you have ICU.
 
 if ($help || $h) {
     print $HELP;
+    $help = $h = ""; # silence the warning about main::h and main::help being used only once
     exit 0;
 }
  
