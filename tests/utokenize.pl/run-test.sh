@@ -9,5 +9,5 @@
 # Copyright 2008, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2008, Her Majesty in Right of Canada
 
-make -B
+make -B -j 4
 exit

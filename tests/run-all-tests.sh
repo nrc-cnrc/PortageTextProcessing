@@ -91,7 +91,7 @@ if [[ $PARALLEL_MODE ]]; then
 fi
 
 run_test() {
-   { time-mem ./run-test.sh; } >& _log.run-test
+   { time ./run-test.sh; } >& _log.run-test
 }
 
 for TEST_SUITE in $TEST_SUITES; do
