@@ -1,0 +1,5 @@
+
+sh_utils.sh is a library of useful bash functions for other bash scripts.
+
+   Include sh_utils.sh in your bash script using the following snippet of code:
+

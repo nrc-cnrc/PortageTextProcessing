@@ -101,7 +101,7 @@ xml_grep xmllint:
 # What needs to work after a successful installation of Portage.
 testsuite: post_installation
 
-VALIDATE_PGMS := utokenize.pl tmx2lfl.pl clean_utf8.py select-lines.py
+VALIDATE_PGMS := utokenize.pl tmx2lfl.pl clean_utf8.py select-lines.py sh_utils.sh
 .PHONY: post_installation
 post_installation: ${VALIDATE_PGMS}
 	@echo $$'\nPortageTextProcessing itself is correctly installed.\n'
@@ -109,7 +109,8 @@ post_installation: ${VALIDATE_PGMS}
 tmx2lfl.pl: EXPLAIN:=Check your PERL5LIB, or you're missing XML::Twig, or your XML::Twig version is less than 3.32.
 utokenize.pl: EXPLAIN:=Check your PERL5LIB.
 clean_utf8.py: EXPLAIN:=Check your Python 3 version and PYTHONPATH.
-select-lines.py: EXPLAIN:=Check your Python 2.7 version and PYTHONPATH
+select-lines.py: EXPLAIN:=Check your Python 2.7 version and PYTHONPATH.
+sh_utils.sh: EXPLAIN:=Check your PATH.
 
 .PHONY: ${VALIDATE_PGMS}
 # We simply make sure we can invoke the help message to trigger the dependencies.

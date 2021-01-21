@@ -154,7 +154,7 @@ Documentation for these functions is found within sh_utils.sh
 # This file is intended to be a library and not an executable file.
 if [[ `basename $0` == "sh_utils.sh" ]]; then
    _sh_utils_help
-   exit 1
+   exit # exit with 0 status: it's not an error to call this script with -h!
 fi
 
 
