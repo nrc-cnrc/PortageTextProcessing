@@ -25,4 +25,6 @@ if [ "$1" == "-help" -o "$1" == "-h" ]; then
     exit 1
 fi
 
-sed --separate -e '1 s/^\xef\xbb\xbf//' $*
+export LC_ALL=C
+
+sed --separate -e 's/\xef\xbb\xbf//g' $*
