@@ -12,7 +12,6 @@
 # Copyright 2009, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2009, Her Majesty in Right of Canada
 
-CE_TMX:=ce_tmx.pl
 TMX2LFL:=tmx2lfl.pl
 QUIET_DIFF ?= -q
 
@@ -42,14 +41,11 @@ test-suite: unittest6
 test-suite: unittest7
 test-suite: unittest8
 test-suite: unittest9
-test-suite: ce_tmx
-test-suite: preprocess_plugin_test
 test-suite: unittest_ci
 
 
 # General unittest clean up.
 TEMP_FILES=unittest* test.utf8.tmx prepro.out test3.utf8.tmx test5.utf8.tmx
-TEMP_DIRS=ce_tmx_test ce_tmx_test_ci
 include ../Makefile.incl
 
 # The default gitignore and clean targets get the regular files and
@@ -179,33 +175,3 @@ unittest_ci: test.tmx unittest1
 	diff $@.lAnG2     ref/ref.${L2}     ${QUIET_DIFF}
 	diff $@.lAnG2.TxT ref/ref.${L2}.txt ${QUIET_DIFF}
 	diff $@.id        ref/ref.id        ${QUIET_DIFF}
-
-
-########################################
-# This test looks at ce_tmx.pl's handling of optional and non-breaking hyphens
-.PHONY: ce_tmx_test ce_tmx_test_ci
-ce_tmx_test: L1=lang1
-ce_tmx_test: L2=lang2
-ce_tmx_test_ci: L1=LaNg1
-ce_tmx_test_ci: L2=lAnG2
-ce_tmx_test ce_tmx_test_ci: test.utf8.tmx
-	mkdir -p $@
-	${CE_TMX} -src=${L2} -tgt=${L1}  extract $@ test.utf8.tmx
-	diff $@/Q.txt ref/Q.txt ${QUIET_DIFF}
-	utf8_casemap -c u < $@/Q.txt > $@/P.txt
-	${CE_TMX} -src=${L2} -tgt=${L1}  replace $@ out.utf8.tmx
-
-.PHONY: ce_tmx
-ce_tmx: ce_tmx_test ce_tmx_test_ci
-	diff -i ce_tmx_test/QP.template.xml ce_tmx_test_ci/QP.template.xml
-	diff --ignore-match changedate -i ce_tmx_test/QP.xml ce_tmx_test_ci/QP.xml
-
-
-########################################
-# OK, so I'm really starting to abuse of this directory, but it's kind of a
-# place to test preprocessing, especially for special hyphens, so...
-.PHONY: preprocess_plugin_test
-preprocess_plugin_test: prepro.in
-	preprocess_plugin fr < prepro.in > prepro.out
-	diff prepro.out ref/prepro.out ${QUIET_DIFF}
-
