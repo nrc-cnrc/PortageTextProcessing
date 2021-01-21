@@ -40,6 +40,10 @@ test: compare.out.clean-utf8-text
 out.clean-utf8-text: src/dirty-utf8
 	clean-utf8-text.pl < $< > $@
 
+test: compare.out.clean_utf8
+out.clean_utf8: src/dirty-utf8
+	clean_utf8.py < $< > $@
+
 test: compare.out.ridbom
 out.ridbom: src/dirty-utf8
 	ridbom.sh < $< > $@
