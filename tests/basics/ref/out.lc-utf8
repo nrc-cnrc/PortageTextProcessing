@@ -1,0 +1,9 @@
+line with control characters 
+line with a tab	tab	tab
+line with àéîòü accented
+line with fancy hyphens ­‑
+line with crlf
+line with wide punctuation ；？﹗．﹪﹡﹟
+n-dash – m-dash —
+﻿line with boms﻿
+line with/slash

@@ -1,0 +1,13 @@
+==> src/parallel1.uniq <==
+asdf
+qwer
+
+zxcv
+asdf
+
+==> src/parallel2.uniq <==
+Asdf
+
+Qwer
+Zxcv
+asdf

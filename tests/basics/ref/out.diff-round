@@ -1,0 +1,5 @@
+Maximum relative numerical difference: 0.999999889024394
+Threshold used: 1e-06
+1(0) < 1.1234   > 1.1230   rel diff: 0.0003561
+1(1) < 1.12345   > 1.12340   rel diff: 4.451e-05
+1(2) < 1.123456   > 10123450   rel diff: 0.999999889
