@@ -52,7 +52,7 @@ def get_args():
    Filter lines in parallel from multiple line-aligned files according to
    a score in the provided <scores_file>, removing those lines whose score fails
    to satisfy a specified threshold test. Write output to <in_file*><ext>, where
-   <ext> defaults to .dedup. Any number of files can be filtered in parallel.
+   <ext> defaults to .filt. Any number of files can be filtered in parallel.
    All files, including the scores file, must contain the same number of lines.
    """
    
