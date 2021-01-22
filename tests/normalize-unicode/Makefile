@@ -3,5 +3,9 @@
 #
 # Minimal makefile, since this test suite is run inside run-test.sh
 
-all:
+include ../Makefile.incl
+
+all: test
+
+test:
 	./run-test.sh
