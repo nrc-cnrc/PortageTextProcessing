@@ -16,7 +16,7 @@
 
 # Generic error messages
 EXPLAIN := Cannot run your program.
-EXPLAININSTALL = ${EXPLAIN} Did you source SETUP.bash and install the required dependencies?
+EXPLAININSTALL = ${EXPLAIN} Install any module listed as missing above, and make sure you source SETUP.bash.
 
 # Stabilize the output
 export PORTAGE_INTERNAL_CALL=1
@@ -116,7 +116,7 @@ sh_utils.sh: EXPLAIN:=Check your PATH.
 # We simply make sure we can invoke the help message to trigger the dependencies.
 ${VALIDATE_PGMS}:
 	@$(call check,$@ installed,which $@ &> /dev/null,\
-		"NOT FOUND. Cannot locate PortageTextProcessing program $@ in your PATH. Refer to \$$PORTAGE/INSTALL.")
+		"NOT FOUND. Cannot locate PortageTextProcessing program $@ in your PATH. Source SETUP.bash.")
 	@$(call check,$@ runs,$@ -h >& /dev/null,"$@ -h FAILED TO RUN: ${EXPLAININSTALL}")
 	@$(call check,$@ help,$@ -h 2>&1 | head -5 | diff - ref/$@.ref,\
 		"$@ -h did not produce the expected output: Is it the right version? ${EXPLAININSTALL}")
