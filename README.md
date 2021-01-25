@@ -71,3 +71,10 @@ Each script accepts the `-h` option to output its documentation to your terminal
 | `udetokenize.pl`                | Detokenize utf8 text, reversing utokenize.pl.              |
 | `utokenize.pl`                  | Tokenize utf8 text, e.g., for machine translation.         |
 | `which-test.sh`                 | Which-like program with reliable exit status.              |
+
+## Contributing
+
+If you want to contribute scripts to this repo, please:
+ - Make sure they require no compilation or installation (beyond sourcing `SETUP.bash`).
+ - Add unit tests for your scripts under `test/`.
+ - Keep them relevant, which means pretty much anything related to text processing goes.
