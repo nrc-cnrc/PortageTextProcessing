@@ -16,9 +16,8 @@
 use strict;
 use warnings;
 use XML::Writer;
-
-binmode STDIN, ":encoding(UTF-8)";
-binmode STDOUT, ":encoding(UTF-8)";
+use utf8;
+use open ':std', ':encoding(UTF-8)';
 
 BEGIN {
    # If this script is run from within src/ rather than being properly

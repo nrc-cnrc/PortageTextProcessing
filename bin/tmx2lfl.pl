@@ -13,6 +13,8 @@
 
 use strict;
 use warnings;
+use utf8;
+use open ':std', ':encoding(UTF-8)';
 
 BEGIN {
    # If this script is run from within src/ rather than being properly
@@ -35,9 +37,6 @@ use Data::Dumper;
 $Data::Dumper::Indent=1;
 
 use File::Basename;
-
-binmode STDERR, ":encoding(utf-8)";
-binmode STDOUT, ":encoding(utf-8)";
 
 
 # command-line

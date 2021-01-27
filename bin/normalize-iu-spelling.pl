@@ -14,6 +14,7 @@
 use strict;
 use warnings;
 use utf8;
+use open ':std', ':encoding(UTF-8)';
 
 sub usage {
    local $, = "\n";
@@ -41,8 +42,6 @@ Usage: $0 [IN [OUT]]
 #";
    exit @_ ? 1 : 0;
 }
-
-binmode(STDERR,  ":encoding(UTF-8)");
 
 use Getopt::Long;
 Getopt::Long::Configure("no_ignore_case");

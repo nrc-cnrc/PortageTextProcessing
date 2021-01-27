@@ -14,6 +14,7 @@
 use strict;
 use warnings;
 use utf8; # this script has some literal utf8 characters
+use open ':std', ':encoding(UTF-8)';
 
 BEGIN {
    # If this script is run from within src/ rather than being properly
@@ -74,9 +75,6 @@ GetOptions(
 ) or usage "Error: Invalid option(s).";
 
 0 == @ARGV or usage "Error: Superfluous argument(s): @ARGV";
-
-binmode(STDIN,  ":encoding(UTF-8)");
-binmode(STDOUT, ":encoding(UTF-8)");
 
 while (<STDIN>) {
    chomp;

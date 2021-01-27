@@ -60,6 +60,10 @@ test: compare.out.fix-slashes
 out.fix-slashes: src/dirty-utf8
 	fix-slashes.pl < $< > $@
 
+test: compare.out.accent-slash
+out.accent-slash: src/accent-slash
+	fix-slashes.pl $< > $@
+
 test: compare.out.lc-utf8
 out.lc-utf8: src/dirty-utf8
 	lc-utf8.pl < $< > $@

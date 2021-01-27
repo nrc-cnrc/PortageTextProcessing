@@ -13,8 +13,10 @@
 # Copyright 2010-2014, Conseil national de recherches du Canada /
 # Copyright 2010-2014, National Research Council of Canada
 
-
+use strict;
 use warnings;
+use utf8;
+use open ':std', ':encoding(UTF-8)';
 
 if (@ARGV && $ARGV[0] eq "-h") {
    print STDERR "
@@ -30,10 +32,7 @@ Usage: $0 < IN > OUT
 
 my $word = "(?:(?:[[:alpha:]][[:alpha:]\-]{2,})|(?:[[:alpha:]][[:alpha:]\-]*'[[:alpha:]]+))";
 
-binmode( STDIN,  ":encoding(UTF-8)" );
-binmode( STDOUT, ":encoding(UTF-8)" );
-
-while (my $line = <STDIN>) {
+while (my $line = <>) {
     chop $line;
     while ($line =~ m/(?:^|[ ("'])(?!www\.)(${word}\)?(((\/ *)|( \/))\(?${word})+)(?:[ ).?;,:"']|$)/g) {
        my ($pre, $match, $post) = ($`, $&, $');

@@ -17,10 +17,8 @@
 use strict;
 use warnings;
 use utf8;
+use open ':std', ':encoding(UTF-8)';
 use File::Basename;
-binmode(STDIN, ":encoding(UTF-8)");
-binmode(STDOUT, ":encoding(UTF-8)");
-binmode(STDERR, ":encoding(UTF-8)");
 
 BEGIN {
    # If this script is run from within src/ rather than being properly
@@ -40,7 +38,7 @@ sub usage {
     print STDERR @_, "";
     $0 =~ s#.*/##;
     print STDERR "
-Usage: $0 [-v] UNICODEDATA UTF8InputText(s) > CanonicalUTF8Output
+Usage: $0 [-v] UNICODEDATA [UTF8 Input File(s)] > CanonicalUTF8Output
 
   Normalize the UTF8InputText to its canonical representation, as described in
   UNICODEDATA.  UNICODEDATA should be the official UnicodeData.txt file as
@@ -165,15 +163,10 @@ foreach (sort keys %canonical) {
 #}
 
 %normalize_freq = ();
-for my $file (@ARGV) {
-   open FILE, $file or die "Cannot open file $file: $!";
-   binmode(FILE, ":encoding(UTF-8)");
-   while (<FILE>) {
-      $debug and print;
-      s/($non_canonical_RE)/normalize_char($1)/eg;
-      print;
-   }
-   close FILE;
+while (<>) {
+   $debug and print;
+   s/($non_canonical_RE)/normalize_char($1)/eg;
+   print;
 }
 
 if ( $verbose ) {
