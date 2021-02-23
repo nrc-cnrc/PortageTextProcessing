@@ -16,7 +16,7 @@ if [[ -h $SOURCE ]]; then
     SOURCE=$(readlink -f $SOURCE)
 fi
 BASE_DIR="$( cd "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-#echo BASE_DIR=$BASE_DIR
+echo "PortageTextProcessing path: $BASE_DIR" >&2
 export PATH=$BASE_DIR/bin:$PATH
 export PERL5LIB=$BASE_DIR/lib${PERL5LIB:+:$PERL5LIB}
 export PYTHONPATH=$BASE_DIR/lib${PYTHONPATH:+:$PYTHONPATH}
