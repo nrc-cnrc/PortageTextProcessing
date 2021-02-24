@@ -1,3 +1,6 @@
 __pycache__
 *.pyc
 _log.run-test
+.log.run-all-tests-parallel*
+run-p.*
+.logs
