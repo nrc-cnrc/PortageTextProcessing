@@ -30,7 +30,7 @@ __all__ = ["printCopyright",
            "open", "split",
           ]
 
-current_year = 2016
+current_year = 2020
 
 def printCopyright(program_name, start_year):
    """Print the standard NRC Copyright notice.
@@ -167,9 +167,9 @@ def open(filename, mode='r', quiet=True):
       else:
          fatal_error("Unsupported mode.")
    elif filename.endswith('|'):
-      theFile = Popen(filename[:-1], shell=True, stdout=PIPE).stdout
+      theFile = Popen(filename[:-1], shell=True, executable="/bin/bash", stdout=PIPE).stdout
    elif filename.startswith('|'):
-      theFile = Popen(filename[1:], shell=True, stdin=PIPE).stdin
+      theFile = Popen(filename[1:], shell=True, executable="/bin/bash", stdin=PIPE).stdin
    elif filename.endswith(".gz"):
       #theFile = gzip.open(filename, mode+'b')
       if mode == 'r':

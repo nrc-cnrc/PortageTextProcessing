@@ -284,9 +284,10 @@ sub zin($$) {
    $stream_name =~ s/^\s*<//;
 
    # Is this a pipe.
-   if ($stream_name =~ /\|\s*$/) {
+   if ($stream_name =~ s/\|\s*$//) {
       print STDERR "DEBUG zin is a pipe.\n" if ($DEBUG);
-      return open($STREAM, "$stream_name");
+      # We often assume bash syntax is going to work, so make sure we open the pipe using bash
+      return open($STREAM, "-|", "/bin/bash", "-c", "$stream_name");
    }
    # Is this a bzipped 2 stream.
    elsif ($stream_name =~ /$isBzip2/) {
@@ -373,10 +374,11 @@ sub zout($$) {
    $stream_name =~ s/^\s*>//;
 
    # Is this a pipe.
-   if ($stream_name =~ /^\s*\|/) {
+   if ($stream_name =~ s/^\s*\|//) {
       print STDERR "DEBUG zout is a pipe.\n" if ($DEBUG);
       die "Error: Can't append to a pipe." if ($stream_name =~ /^\s*>/);
-      return open($STREAM, "$stream_name");
+      # We often assume bash syntax is going to work, so make sure we open the pipe using bash
+      return open($STREAM, "|-", "/bin/bash", "-c", "$stream_name");
    }
    # Is this a bzipped stream.
    elsif ($stream_name =~ /$isBzip2/) {
