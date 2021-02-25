@@ -1,49 +1,50 @@
-[Français](README-fr.md)
+[English](README.md)
 
-# Portage Text Processing
+# Traitement de texte Portage (PortageTextProcessing)
 
-This repository contains a number of text pre- and post-processing utilities written in
-the context of the Portage Statistical Machine Translation project.  Since they are
-frequently useful outside that context, we have separated them into this repository that
-is trivial to install.
+Ce repo rassemble des outils de pré- et de post-traitement de texte écrits dans le
+contexte du projet de traduction automatique statistique Portage. Comme ils servent
+fréquemment dans d'autres projets, nous les avons regroupés dans ce repo qui se veut
+trivial à installer.
 
 ## Installation
 
-Clone this repo to the location of your choice and add this line to your .profile or .bashrc:
+Clonez ce repo à l'endroit de votre choix et ajoutez cette ligne à votre .profile ou .bashrc:
 
 `source /path/to/PortageTextProcessing/SETUP.bash`
 
-## Dependencies
+## Dépendances
 
-PortageTextProcessing requires:
- - Perl >= 5.14, as `perl` on your PATH;
- - Python 2.7, as `python2` on your PATH;
- - any version of Python 3, as `python3` on your PATH;
+PortageTextProcessing a besoin de:
+ - Perl >= 5.14, nommé `perl` sur votre PATH;
+ - Python 2.7, nommé `python2` sur votre PATH;
+ - n'importe quelle version de Python 3, nommée `python3` sur votre PATH;
  - `/bin/bash`, `/bin/sh`, `/usr/bin/env`.
 
-It also requires a number of Perl, Python 2.7, and Python 3 libraries, which you can
-install with the package manager of your choice. For the list, go to
-`tests/check-installation/` and run `./run-test.sh`. This test suite looks for
-dependencies and flags any missing ones.
+Il faut aussi certaines librairies Perl, Python 2.7 et Python 3, que vous pourrez
+installer à l'aide de gestionnaire de modules de votre choix. La liste peut être obtenue
+en exécutant `./run-test.sh` dans le répertoire `tests/check-installation/`. Cette suite
+de tests valide la présence des dépendances et signale celles qui manquent.
 
-## Testing
+## Validation
 
-For more extensive testing, go to `tests/` and run `./run-all-tests.sh`.  Go into any
-directory showing errors and examine `_log.run-test` to see what went wrong, or run
-`./run-test.sh` interactively.
+Pour tester votre installation plus en profondeur, exécutez `./run-all-tests.sh` dans le
+répertoire `tests/`. Examinez ensuite `_log.run-test` dans tout sous-répertoire où une
+erreur est signalée, ou encore roulez-y `./run-test.sh` directement.
 
-Some test suites are parallelized to run faster. If you have difficulty figuring out
-which command caused the error, you can also run `make -B` interactively in any test
-suite instead of `./run-test.sh`, to run all its test cases sequentially and stop at the
-first error.
+Certaines suites sont parallélisées pour terminer plus rapidement. Si vous avez de la
+difficulté à associer un message d'erreur à sa source, utilisez `make -B` au lieu de
+`./run-test.sh` pour exécuter les tests de la suite de façon séquentielle, en arrêtant à
+la première erreur.
 
 ## Documentation
 
-Each script accepts the `-h` option to output its documentation to your terminal.
+Chaque script accepte l'option `-h` pour produire sa documentation (en anglais) à
+l'écran.
 
-## List of scripts
+## Liste des scripts
 
-| Script                          | Brief Description                                          |
+| Script                          | Description brève (en anglais)                             |
 | ------------------------------- | ---------------------------------------------------------- |
 | `clean-utf8-text.pl`            | Clean up spaces, control chars, hyphen, etc. in utf8 text. |
 | `clean_utf8.py`                 | Yet another utf8 clean up script.                          |
@@ -75,12 +76,14 @@ Each script accepts the `-h` option to output its documentation to your terminal
 | `utokenize.pl`                  | Tokenize utf8 text, e.g., for machine translation.         |
 | `which-test.sh`                 | Which-like program with reliable exit status.              |
 
-## Contributing
+## Contribuer
 
-If you want to contribute scripts to this repo, please:
- - Make sure they require no compilation or installation (beyond sourcing `SETUP.bash`).
- - Add unit tests for your scripts under `tests/`.
- - Keep them relevant, which means pretty much anything related to text processing goes.
+Si vous voulez contribuer des scripts à ce repo, s'il-vous-plaît:
+ - Assurez-vous qu'ils ne requièrent aucune compilation ou installation (autre que
+   sourcer `SETUP.bash`).
+ - Ajouter des tests pour votre script sous `tests/`.
+ - Assurez-vous qu'ils soient pertinents, c'est à dire qu'ils font du traitement simple
+   du langage naturel.
 
 ## Copyright
 
@@ -92,4 +95,5 @@ Conseil national de recherches Canada / National Research Council Canada
 
 Copyright 2021, Sa Majesté la Reine du Chef du Canada / Her Majesty in Right of Canada
 
-Published under the MIT License (see [LICENSE](LICENSE))
+Publié sous la license MIT (voir [LICENSE](LICENSE))
+
