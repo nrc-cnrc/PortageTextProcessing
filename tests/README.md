@@ -30,8 +30,8 @@ Each test suite has to respect the following simple rules:
    - sets `all: test` as a dependency
 
 Including `../Makefile.incl` automates several things for you:
- - The `make clean` target is alread implemented, you just need to declare your
-   temporary files in variable `TEMP_FILES`, and temporary directories in
+ - The `make clean` target is already implemented, you just need to declare
+   your temporary files in variable `TEMP_FILES`, and temporary directories in
    variable `TEMP_DIRS`.
  - The `.gitignore` file gets created for you when you run `make all`.
  - A friendly "All tests PASSED." message gets printed by `make all` when all

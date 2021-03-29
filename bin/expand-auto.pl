@@ -49,7 +49,7 @@ BEGIN {
 }
 
 # If -utf8 occurs on the command line, set all files to utf-8 by default
-# use open ':std', ':encoding(UTF-8)'; would be sipler, but it cannot be inside an if
+# use open ':std', ':encoding(UTF-8)'; would be simpler, but it cannot be inside an if
 # statement since it is lexically scoped.
 use if $utf8, 'open', ':std', ':encoding(UTF-8)';
 
