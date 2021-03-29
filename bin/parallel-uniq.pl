@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# @file parallel-uniq.pl 
+# @file parallel-uniq.pl
 # @brief Remove duplicate lines from parallel files, where a duplicate is a
 # line which is identical to another in *both* files at the same time.
 #

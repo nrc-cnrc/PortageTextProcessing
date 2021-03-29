@@ -2,10 +2,10 @@
 # coding=utf-8
 
 # @file select-lines.py
-# @brief Select a set of lines by index from a file. 
-# 
+# @brief Select a set of lines by index from a file.
+#
 # @author Darlene Stewart
-# 
+#
 # Traitement multilingue de textes / Multilingual Text Processing
 # Centre de recherche en technologies numériques / Digital Technologies Research Centre
 # Conseil national de recherches Canada / National Research Council Canada
@@ -40,12 +40,12 @@ def get_args():
    usage = "select-lines.py [options] indexfile [infile [outfile]]"
    help = """
    Select a set of lines by index from a file.
-   
+
    indexfile contains 1-based integer indicies of lines to be extracted.
    indexfile is assumed to be sorted.
    """
-   
-   parser = ArgumentParser(usage=usage, description=help, 
+
+   parser = ArgumentParser(usage=usage, description=help,
                            formatter_class=RawDescriptionHelpFormatter, add_help=False)
    parser.add_argument("-h", "-help", "--help", action=HelpAction)
    parser.add_argument("-v", "--verbose", action=VerboseAction)
@@ -56,17 +56,17 @@ def get_args():
                        help="with -a, join lines in a range with given joiner [one space]")
    parser.add_argument("--separator", dest="separator", default="\n", type=str,
                        help="with -a, separate ranges with given separator [one newline]")
-   
+
    parser.add_argument("indexfile", type=open, help="sorted index file")
-   
+
    parser.add_argument("infile", nargs='?', type=open, default=sys.stdin,
                        help="input file [sys.stdin]")
-   
-   parser.add_argument("outfile", nargs='?', type=lambda f: open(f,'w'), default=sys.stdout, 
+
+   parser.add_argument("outfile", nargs='?', type=lambda f: open(f,'w'), default=sys.stdout,
                        help="output file [sys.stdout]")
-   
+
    cmd_args = parser.parse_args()
-      
+
    return cmd_args
 
 
@@ -89,7 +89,7 @@ def main():
    os.environ['PORTAGE_INTERNAL_CALL'] = '1';
 
    cmd_args = get_args()
-   
+
    encoding = "utf-8"
    try:
       codecs.lookup(encoding)

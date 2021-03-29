@@ -4,9 +4,9 @@ eval 'exec perl -x -s -wS $0 ${1+"$@"}'
    if 0;
 
 
-# @file lc-utf8.pl 
+# @file lc-utf8.pl
 # @brief Lowercase mapping for utf-8
-# 
+#
 # @author Eric Joanis, based on lc-latin.pl by George Foster
 #
 # Technologies langagieres interactives / Interactive Language Technologies
@@ -36,10 +36,10 @@ if ($help || $h) {
     $help = $h = ""; # silence the warning about main::h and main::help being used only once
     exit 0;
 }
- 
+
 $in = shift || "/dev/stdin";
 $out = shift || "/dev/stdout";
- 
+
 if (!open(IN, "< :encoding(utf-8)", $in)) {die "Error: Can't open $in for reading";}
 if (!open(OUT, "> :encoding(utf-8)", $out)) {die "Error: Can't open $out for writing";}
 

@@ -3,9 +3,9 @@
 # @file filter-parallel.py
 # @brief Filter lines in parallel from multiple line-aligned files according to
 # a score in the provided scores file.
-# 
+#
 # @author Darlene Stewart
-# 
+#
 # Technologies langagieres interactives / Interactive Language Technologies
 # Tech. de l'information et des communications / Information and Communications Tech.
 # Conseil national de recherches Canada / National Research Council Canada
@@ -46,7 +46,7 @@ class OpAction(Action):
 
 def get_args():
    """Command line argument processing."""
-   
+
    usage="filter-parallel.py [options] scores_file in_file1 [in_file2 ...]"
    help="""
    Filter lines in parallel from multiple line-aligned files according to
@@ -55,7 +55,7 @@ def get_args():
    <ext> defaults to .filt. Any number of files can be filtered in parallel.
    All files, including the scores file, must contain the same number of lines.
    """
-   
+
    # Use the argparse module, not the deprecated optparse module.
    parser = ArgumentParser(usage=usage, description=help, add_help=False)
 
@@ -93,10 +93,10 @@ def get_args():
 
 def main():
    printCopyright("filter-parallel.py", 2015);
-   
+
    cmd_args = get_args()
    out_files = tuple(open(f.name+cmd_args.ext, 'w') for f in cmd_args.in_files)
-   
+
    for score_line in cmd_args.scores_file:
       score = float(score_line)
       lines = []

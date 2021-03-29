@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# @file diff-round.pl 
+# @file diff-round.pl
 # @brief diff two ff files, i.e., files of floating point numbers, where
 # rounding differences are not real differences
 #

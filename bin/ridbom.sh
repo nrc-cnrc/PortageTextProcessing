@@ -13,9 +13,9 @@
 # Copyright 2010, Conseil national de recherches du Canada /
 # Copyright 2010, National Research Council of Canada
 
-## 
+##
 ## Usage: crlf2lf.sh [FILES ...]
-## 
+##
 ## Rid UTF-8 FILES from BOM (Byte-Order Marker), stdin if no files are
 ## specified.  Output goes to stdout.
 ##

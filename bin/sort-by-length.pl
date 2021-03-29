@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# @file sort-by-length.pl 
+# @file sort-by-length.pl
 # @brief sort a text file by sentence length.
 #
 # @author Eric Joanis
@@ -57,7 +57,7 @@ GetOptions(
 
 # Read the whole input, be it stdin or any number of files specified on the
 # command line
-my @lines = <>; 
+my @lines = <>;
 # Print it by sorted order of length using a Schwarzian transform.
 print
     map { $print_numbers ? "$_->[0]\t$_->[1]" : $_->[1] }

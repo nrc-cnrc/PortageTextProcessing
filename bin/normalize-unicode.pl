@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# @file normalize-unicode.pl 
+# @file normalize-unicode.pl
 # @brief Normalize unicode input into canonical representations.
 #
 # Particularly useful in Arabic where the same text can be encoded in many
@@ -146,15 +146,15 @@ sub normalize_char($) {
 
 foreach (sort keys %canonical) {
    while ( $canonical{$_} =~ s/($non_canonical_RE)/normalize_char($1)/eg ) {
-      $debug and 
+      $debug and
          print "Recursive defn required for ", utf82hex($_),
                " = $_ -> $canonical{$_}\n";
    }
 }
-      
+
 #while ( my ($char, $equiv) = each %canonical ) {
 #   while ( $equiv =~ s/($non_canonical_RE)/normalize_char($1)/eg ) {
-#      $debug and 
+#      $debug and
 #         print "Recursive defn required for ", utf82hex($char),
 #               " = $char -> $equiv = $canonical{$char}\n";
 #      };

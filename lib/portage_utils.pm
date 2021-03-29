@@ -53,7 +53,7 @@ B< =============================================
  PROGRAM_NAME is the basename of the $0 if left unspecified.
  START_YEAR should be the first year of Copyright for PROGRAM_NAME;
  the Crown Copyright will be asserted for START_YEAR to latest release year.
- 
+
 =back
 
 =cut

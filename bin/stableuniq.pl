@@ -5,12 +5,12 @@ eval 'exec perl -x -s -wS $0 ${1+"$@"}'
 
 use warnings;
 
-# @file stableuniq.pl 
+# @file stableuniq.pl
 # @brief Output unique lines from INPUT (or standard input) to OUTPUT (or
 # standard output).
-# 
+#
 # @author Aaron Tikuisis
-# 
+#
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada

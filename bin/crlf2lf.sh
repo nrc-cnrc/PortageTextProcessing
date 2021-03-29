@@ -15,9 +15,9 @@
 # Copyright 2010, National Research Council of Canada
 #############################################################
 
-## 
+##
 ## Usage: crlf2lf.sh [FILES ...]
-## 
+##
 ## Convert CRLF (DOS-style) line endings to LF (UNIX-style) in FILES,
 ## stdin if no files are specified.  Output goes to stdout.
 ##

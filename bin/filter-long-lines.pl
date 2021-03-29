@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
-# @file filter-long-lines.pl 
-# @brief Filter out long lines (> L tokens) from multiple line-aligned files. 
+# @file filter-long-lines.pl
+# @brief Filter out long lines (> L tokens) from multiple line-aligned files.
 # Write output to files <fileN>.filt<L>.
-# 
+#
 # @author Darlene Stewart based on George Foster's strip-parallel-blank-lines.pl
 #
 # Technologies langagieres interactives / Interactive Language Technologies
@@ -35,11 +35,11 @@ filter-long-lines.pl [-length=LEN] FILE1 [FILE2 [FILE3]]
   Filter out lines longer than LEN tokens from multiple line-aligned files.
   If the ith line is longer than LEN tokens in any of the input files, then
   the ith input line is omitted from all the output files.
-  
+
   Output is written to files <FILEn>.filt<LEN>
-  
+
   Options:
-  
+
   -length=LEN  Filter lines greater than LEN tokens in length. [300]
   -v           Be verbose.
   -d           Print debugging information.

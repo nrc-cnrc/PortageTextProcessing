@@ -1,6 +1,6 @@
 # @file ULexiTools.pm
 # @brief Library for tokenizing, detokenizing and sentence-splitting.
-# 
+#
 # @author George Foster, Michel Simard, Eric Joanis, Samuel Larkin,
 #         UTF-8 adaptation by Michel Simard,
 #         Spanish support added by Samuel Larkin
@@ -1616,7 +1616,7 @@ sub detokenize_file($$$$$$$)
 
    close IN;
    close OUT;
-   
+
    return 0;
 }
 

@@ -93,7 +93,7 @@ class CleanUTF8:
    # If ||| appears stand-alone in text, that causes problems with Portage
         if (self.phrase_table):
             line = self.re_phrase_table.sub(' ___|||___', line)
-   
+
    # Basic wide punctuation mapping
         if (self.wide_punct):
             line = self.re_wide.sub(' \g<1> ', line)
@@ -102,7 +102,7 @@ class CleanUTF8:
    # Collapse multiple spaces to a single space
         line = self.re_mspace.sub(' ', line)
         line = line.strip()
-        
+
         return line
 
 

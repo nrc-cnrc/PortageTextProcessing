@@ -3,9 +3,9 @@
 
 # @file select-random-chunks.py
 # @brief Select a number of random chunks of a specified size producing an index file.
-# 
+#
 # @author Darlene Stewart
-# 
+#
 # Traitement multilingue de textes / Multilingual Text Processing
 # Centre de recherche en technologies numériques / Digital Technologies Research Centre
 # Conseil national de recherches Canada / National Research Council Canada
@@ -43,15 +43,15 @@ def get_args():
 #    usage = "select-random-chunks.py [options] [outfile]"
    help = """
    Select a number of random chunks of a specified size producing an index file.
-   
+
    The generated indicies are 1-based.
-   
+
    outfile can be used as an indexfile for select-lines.py.
    """
 
-#    parser = ArgumentParser(usage=usage, description=help, add_help=False, 
+#    parser = ArgumentParser(usage=usage, description=help, add_help=False,
 #                            formatter_class=RawDescriptionHelpFormatter)
-   parser = ArgumentParser(description=help, add_help=False, 
+   parser = ArgumentParser(description=help, add_help=False,
                            formatter_class=RawDescriptionHelpFormatter)
    parser.add_argument("-h", "-help", "--help", action=HelpAction)
    parser.add_argument("-v", "--verbose", action=VerboseAction)
@@ -74,12 +74,12 @@ def get_args():
 
    parser.add_argument("-s", "--seed", dest="seed", default=2020, type=int,
                        help="Seed for random number generator. [%(default)s]")
-   
-   parser.add_argument("outfile", nargs='?', type=lambda f: open(f,'w'), default=sys.stdout, 
+
+   parser.add_argument("outfile", nargs='?', type=lambda f: open(f,'w'), default=sys.stdout,
                        help="output file [sys.stdout]")
-   
+
    cmd_args = parser.parse_args()
-      
+
    return cmd_args
 
 
@@ -96,9 +96,9 @@ def main():
    os.environ['PORTAGE_INTERNAL_CALL'] = '1';
 
    cmd_args = get_args()
-      
+
    random.seed(cmd_args.seed)
-   
+
    if cmd_args.output_size is not None:
       num_chunks = cmd_args.output_size // cmd_args.chunk_size
    else:
@@ -118,14 +118,14 @@ def main():
       verbose("infile:", cmd_args.infile)
    verbose("max_index: ", max_index)
    verbose("outfile: ", cmd_args.outfile)
-   
+
    if num_chunks * cmd_args.chunk_size > max_index:
       fatal_error("num_chunks * chunk_size (", num_chunks * cmd_args.chunk_size,
                   ") must be <= max_index (", max_index, ").")
-   
+
    max_range = max_index - (cmd_args.chunk_size-1) + 1
    chunks = sorted(random.sample(range(1, max_range, cmd_args.chunk_size), num_chunks))
-   
+
    for index in chunks:
       for i in range(cmd_args.chunk_size):
          print(index+i, file=cmd_args.outfile)

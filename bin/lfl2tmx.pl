@@ -173,7 +173,7 @@ if ($copyright and $copyright ne "") {
    binmode(C, ":encoding(UTF-8)");
    @copyright = <C>;
    close C;
-   $writer->dataElement('note', 
+   $writer->dataElement('note',
       "\n" . join("", @copyright),
       'xml:lang'=>'FR-CA');
 
@@ -188,7 +188,7 @@ if ($copyright and $copyright ne "") {
 $writer->endTag(  );  # ends header
 $writer->startTag( 'body' );
 
-process(@ARGV); 
+process(@ARGV);
 
 $writer->endTag(  );   # ends  body
 $writer->endTag(  );   # ends tmx

@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# @file clean-utf8-text.pl 
+# @file clean-utf8-text.pl
 # @brief Clean up spaces, control characters, hyphen and such in utf8 corpora
 #
 # @author Eric Joanis

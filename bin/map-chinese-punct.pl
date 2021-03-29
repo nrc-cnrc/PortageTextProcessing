@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# @file map-chinese-punct.pl 
+# @file map-chinese-punct.pl
 # @brief Map Chinese punctuation characters to western equivalents.
 #
 # @author Eric Joanis
@@ -99,7 +99,7 @@ while (<IN>) {
       tr/“”‘’‹›•/""''''·/;
       s/—/--/g;
    }
-   
+
    if ($ascii) {
       tr/«»´„‚·/""'"'./;
    }

@@ -131,7 +131,7 @@ $notok = 0 unless defined $notok;
 $pretok = 0 unless defined $pretok;
 $paraline = 0 unless defined $paraline;
 $xtags = 0 unless defined $xtags;
- 
+
 my $in  = shift || "-";
 my $out = shift || "-";
 

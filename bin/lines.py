@@ -37,7 +37,7 @@ else:
 nums = []
 line = numFile.readline()
 while line!="":
-    nums.append(int(string.strip(line)))    
+    nums.append(int(string.strip(line)))
     line = numFile.readline()
 nums.sort()
 

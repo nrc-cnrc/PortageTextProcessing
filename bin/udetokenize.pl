@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# @file udetokenize.pl 
+# @file udetokenize.pl
 # @brief Transform tokenized UTF-8 text in normal text.
 #
 # We now support English, French, Spanish and Danish text tokenized with

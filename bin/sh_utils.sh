@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# @file sh_utils.sh 
+# @file sh_utils.sh
 # @brief Library of useful bash commands.
-# 
+#
 # @author Samuel Larkin
-# 
+#
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada

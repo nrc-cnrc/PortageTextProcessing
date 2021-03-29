@@ -2,9 +2,9 @@
 
 # @file tmx2lfl.pl
 # @brief Extract a parallel corpus from tmx files.
-# 
+#
 # @author Samuel Larkin based on Michel Simard's work.
-# 
+#
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
@@ -129,7 +129,7 @@ foreach my $file (@filename) {
       die "[BAD]\nError: Fix $file to be XML well-formed.";
    }
    verbose("\r[Checking XML well-formness of $file] [OK]]\n");
-   
+
    # Quickly grab language specifiers from the TMX.
    my $spec;
    # In order to minimize dependencies and since there is no speed difference
@@ -155,7 +155,7 @@ if (not defined($src) and not defined($tgt)) {
    # Remove duplicate language identifiers.
    @lang_specifiers = keys %{{ map { $_ => 1 } @lang_specifiers }};
    unless (scalar(@lang_specifiers) == 2) {
-      die "Error: Too many language identifiers to automatically extract segments.\n" 
+      die "Error: Too many language identifiers to automatically extract segments.\n"
       . "Select two language identifiers and rerun using -src=X -tgt=Y\n"
       . "Language identifiers found are: " . join(":", sort @lang_specifiers) . "\n"
       . "Too many or too few language specifiers in your input TMX.\n";
@@ -265,17 +265,17 @@ sub processTU {
          debug("DOCID: $docid\n");
       }
    }
-   
+
    if ($add_filename and $docid eq "UNKNOWN") {
       $docid = $parser->{infile};
    }
-   
+
    if ($add_timestamp) {
       my $creationdate = $tu->{att}{creationdate};
       $creationdate = 0 unless defined $creationdate;
       $docid .= " $creationdate";
    }
-   
+
    print ID "$docid\n";
    if (defined($debug) and $docid eq "UNKNOWN") {
       print STDERR "no docid for tuid: $tuid\n";
@@ -308,7 +308,7 @@ sub processTU {
          # Get content WITHOUT the rtf markings.
          if ( defined($txt) ) {
             push @{$variants{"$lc_lang$lc_txt"}}, join(" ", map(normalize($_->text_only), @segs));
-         }  
+         }
       }
    }
 
@@ -332,7 +332,7 @@ sub debug { printf STDERR (@_) if (defined($debug)); }
 
 sub normalize {
     my ($text) = @_;
-    
+
     $text =~ s/[\n\r\t\f]/ /go; # Newlines etc. are converted to spaces
     $text =~ s/ +/ /go;         # Multiple spaces are compressed;
 

@@ -3,10 +3,10 @@
 # @file strip-parallel-blank-lines.py
 # @brief Strip blank lines in parallel from one or more line-aligned files:
 # strip if EITHER of the first two files contains a blank line.
-# 
+#
 # @author George Foster
-# 
-# COMMENTS: 
+#
+# COMMENTS:
 #
 # George Foster
 # Technologies langagieres interactives / Interactive Language Technologies
@@ -60,7 +60,7 @@ if len(args) > 1 and args[0] == "-r":
 if len(args) < 1 or args[0] == "-h":
     sys.stderr.write(help);
     sys.exit(1)
-    
+
 blankline = re.compile("^\s*$")
 
 ifiles = []
