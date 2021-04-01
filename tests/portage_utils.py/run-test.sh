@@ -11,6 +11,6 @@
 # Copyright 2011, Her Majesty in Right of Canada
 
 \make clean
-\make all -B -j 4
+\make all -B -j ${OMP_NUM_THREADS:-$(nproc)}
 
 exit

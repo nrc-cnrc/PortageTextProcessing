@@ -12,6 +12,6 @@
 # Copyright 2009, Her Majesty in Right of Canada
 
 make clean
-make all -k -j 4
+make all -k -j ${OMP_NUM_THREADS:-$(nproc)}
 
 exit
