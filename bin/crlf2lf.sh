@@ -1,6 +1,4 @@
 #!/bin/bash
-#############################################################
-#
 # @file crlf2lf.sh
 # @brief Convert CRLF (DOS-style) line endings to LF (UNIX-style).
 #
@@ -13,7 +11,6 @@
 # Conseil national de recherches Canada / National Research Council Canada
 # Copyright 2010, Conseil national de recherches du Canada /
 # Copyright 2010, National Research Council of Canada
-#############################################################
 
 ##
 ## Usage: crlf2lf.sh [FILES ...]
