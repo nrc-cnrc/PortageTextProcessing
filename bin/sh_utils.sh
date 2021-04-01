@@ -109,7 +109,7 @@ run_cmd() {
 
 # Print the standard NRC Copyright notice
 # Usage: print_nrc_copyright program_name year
-current_year=2020
+current_year=2021
 print_nrc_copyright() {
    prog_name=$1
    year=$2
