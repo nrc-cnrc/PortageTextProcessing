@@ -1,0 +1,74 @@
+# clean_utf8.py --phrase-table --wide-punct < clean_utf8.txt
+
+hyphens => '-'
+hh
+h­h
+h‑h
+
+dhyphens => ''
+hh
+
+space => ' '
+s⁠s
+s﻿s
+s s
+s s
+s s
+s s
+s s
+
+ctrl => ' '
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+c	c
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+cc
+
+crlf => ''
+cc
+c
+
+phrase table => ' ___|||___'
+|||
+
+wide => narrow width
+w，w
+w。w
+w：w
+w）w
+w（w
+w；w
+w？w
+w﹗w
+w．w
+w﹪w
+w﹡w
+w﹟w
+
+multiple spaces => ' '
+ms    ms
+ms	        ms
+ms 	 ms
