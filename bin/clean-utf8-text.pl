@@ -107,7 +107,7 @@ while (<STDIN>) {
    s/[\x{2060}\x{FEFF}\x{00A0}\x{2007}\x{202F}\x{2028}\x{2029}]/ /g;
 
    # replace remaining control characters by spaces.
-   s/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/ /g;
+   s/[\x00-\x09\x0B\x0C\x0E-\x1D\x7F]/ /g;
 
    # equivalent to crlf2lf.sh: convert DOS newlines to Linux ones
    s/\x0D$//;
@@ -120,6 +120,8 @@ while (<STDIN>) {
       s/([，。：）（；？﹗．﹪﹡﹟])/ $1 /g;
       tr/，。：）（；？﹗．﹪﹡﹟/,.:)(;?!.%*\#/;
    }
+
+   # \s means the five characters [ \f\n\r\t]
 
    # Collapse multiple spaces to a single space
    s/\s+/ /g;

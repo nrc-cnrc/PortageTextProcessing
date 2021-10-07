@@ -37,11 +37,11 @@ class CleanUTF8:
        self.re_hyphens = re.compile('[\u001E\u00AD\u2011]')
        self.re_dhyphens = re.compile('\x1F')
        self.re_space = re.compile('[\u2060\uFEFF\u00A0\u2007\u202F\u2028\u2029]')
-       self.re_ctrl = re.compile('[\x01-\x09\x0B\x0C\x0E-\x1F\x7F]')
+       self.re_ctrl = re.compile('[\x01-\x09\x0B\x0C\x0E-\x1D\x7F]')
        self.re_crlf = re.compile('\x0D$')
        self.re_phrase_table = re.compile('(^| )\|\|\|(?= |$)')
        self.re_wide = re.compile('([，。：）（；？﹗．﹪﹡﹟])')
-       self.re_mspace = re.compile('\s+')
+       self.re_mspace = re.compile('\s+')   # \s => [ \t\n\r\f\v]
 
     def __call__(self, text):
        if isinstance(text, list):
