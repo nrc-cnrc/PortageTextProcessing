@@ -90,6 +90,6 @@ Centre de recherche en technologies numériques / Digital Technologies Research 
 
 Conseil national de recherches Canada / National Research Council Canada
 
-Copyright 2021, Sa Majesté la Reine du Chef du Canada / Her Majesty in Right of Canada
+Copyright 2022, Sa Majesté la Reine du Chef du Canada / Her Majesty in Right of Canada
 
 Published under the MIT License (see [LICENSE](LICENSE))
