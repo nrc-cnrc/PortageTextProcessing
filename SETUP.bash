@@ -1,7 +1,7 @@
 # @file SETUP.bash
 # @brief Source this file to add the Portage Text Processing tools to your PATH
 #
-# @author Eric Joanis
+# @author Eric Joanis / Samuel Larkin
 #
 # Traitement multilingue de textes / Multilingual Text Processing
 # Technologies numériques / Digital Technologies
@@ -19,4 +19,5 @@ BASE_DIR="$( cd "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 echo "PortageTextProcessing path: $BASE_DIR" >&2
 export PATH=$BASE_DIR/bin:$PATH
 export PERL5LIB=$BASE_DIR/lib${PERL5LIB:+:$PERL5LIB}
-export PYTHONPATH=$BASE_DIR/lib${PYTHONPATH:+:$PYTHONPATH}
+# Note that some of our python file are both libraries and cli scripts.
+export PYTHONPATH=$BASE_DIR/bin:$BASE_DIR/lib${PYTHONPATH:+:$PYTHONPATH}
