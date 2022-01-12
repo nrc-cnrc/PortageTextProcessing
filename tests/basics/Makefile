@@ -18,7 +18,7 @@
 
 include ../Makefile.incl
 TEMP_FILES=out.* src/parallel*.no-blanks src/parallel*.dedup \
-           src/parallel*.filt src/parallel*.uniq
+           src/parallel*.filt src/parallel*.uniq seq.gz
 TEMP_DIRS=
 SHELL:=/bin/bash
 
@@ -107,3 +107,10 @@ out.stableuniq: src/parallel1 src/parallel2
 test: compare.out.random-chunks
 out.random-chunks:
 	select-random-chunks.py  -o 35 -m 100 | wc -l > $@
+
+test: test.lines.py
+test.lines.py:
+	diff <(lines.py <(echo $$'2\n4\n4\n10\n1') <(seq 1 20)) <(echo $$'1\n2\n4\n4\n10')
+	seq 1 20 | gzip > seq.gz
+	diff <(lines.py <(echo $$'2\n4\n4\n10\n1') seq.gz) <(echo $$'1\n2\n4\n4\n10')
+
