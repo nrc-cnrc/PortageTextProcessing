@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# $Id: prog.py,v 1.3 2012/05/15 20:36:59 joanise Exp $
+#!/usr/bin/env python3
 
 # @file strip-parallel-duplicates.py
 # @brief Strip lines in parallel from multiple line-aligned files if the lines
@@ -13,28 +12,23 @@
 # Copyright 2012, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2012, Her Majesty in Right of Canada
 
-from __future__ import print_function, unicode_literals, division, absolute_import
-
-import sys
-import os.path
 from argparse import ArgumentParser, FileType
 
-# If this script is run from within src/ rather than from the installed bin
-# directory, we add src/utils to the Python module include path (sys.path)
-# to arrange that portage_utils will be imported from src/utils.
-if sys.argv[0] not in ('', '-c'):
-   bin_path = os.path.dirname(sys.argv[0])
-   if os.path.basename(bin_path) != "bin":
-      sys.path.insert(1, os.path.normpath(os.path.join(bin_path, "..", "utils")))
-
-from portage_utils import *
+from portage_utils import (
+    open,
+    fatal_error,
+    printCopyright,
+    DebugAction,
+    HelpAction,
+    VerboseAction,
+)
 
 
 def get_args():
    """Command line argument processing."""
 
-   usage="strip-parallel-duplicates.py [options] file1 file2 [file3 ...]"
-   help="""
+   usage = "strip-parallel-duplicates.py [options] file1 file2 [file3 ...]"
+   help = """
    Strip lines in parallel from multiple line-aligned files if the lines
    from the compared files are identical. Write output to <file*><ext>, where
    <ext> defaults to .dedup.
@@ -68,7 +62,7 @@ def get_args():
    return cmd_args
 
 def main():
-   printCopyright("strip-parallel-duplicates.py", 2012);
+   printCopyright("strip-parallel-duplicates.py", 2012)
 
    cmd_args = get_args()
    out_files = tuple(open(f.name+cmd_args.ext, 'w') for f in cmd_args.in_files)
@@ -78,7 +72,7 @@ def main():
       lines = []
       for f in cmd_args.in_files:
          lines.append(f.readline())
-         if len(lines[-1]) is 0: eof = True
+         if len(lines[-1]) == 0: eof = True
       if eof: break
       for i in range(1, cmd_args.compare):
          if lines[i] != lines[0]: identical = False; break
