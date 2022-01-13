@@ -41,7 +41,13 @@ if sys.argv[0] not in ('', '-c'):
    if os.path.basename(bin_path) != "bin":
       sys.path.insert(1, os.path.normpath(os.path.join(bin_path, "..", "utils")))
 
-from portage_utils import *
+from portage_utils import (
+        DebugAction,
+        HelpAction,
+        VerboseAction,
+        open,
+        verbose,
+        )
 
 
 class CleanUTF8:
