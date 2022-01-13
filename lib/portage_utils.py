@@ -199,7 +199,7 @@ def open(filename, mode='r', quiet=True, encoding="utf8"):
                             stderr=open('/dev/null', 'w')).stdout
          else:
             theFile = Popen(["zcat", "-f", filename], stdout=PIPE, encoding=encoding).stdout
-      elif mode in ('w', 'wt', 'rb'):
+      elif mode in ('w', 'wt', 'wb'):
          internal_file = builtin_open(filename, mode, encoding=encoding)
          theFile = Popen(["gzip"], close_fds=True, stdin=PIPE, encoding=encoding,
                          stdout=internal_file).stdin
