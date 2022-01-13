@@ -22,6 +22,14 @@ from typing import (
         List,
         Union,
         )
+try:
+    import regex
+    regex_available = True
+except:
+    #print("Failed to import regex to filter out Extended Control characters.", file=sys.stderr)
+    #print("Consider `pip install --user regex`", file=sys.stderr)
+    regex_available = False
+
 
 # If this script is run from within src/ rather than from the installed bin
 # directory, we add src/utils to the Python module include path (sys.path)
@@ -38,7 +46,13 @@ class CleanUTF8:
     def __init__(self,
             wide_punct: bool=True,
             phrase_table: bool=False,
+            extended_crtl_character_filtering: bool=False,
             ):
+       """
+       wide_punct: Substitute fullwidth punctuation for their equivalent in ascii.
+       phrase_table: Escapes phrase table entry separator " ||| " for " ___|||___ "
+       extended_crtl_character_filtering: filter out all unicode characters and not just the ascii control characters.
+       """
        self.wide_punct = wide_punct
        self.phrase_table = phrase_table
        self.re_hyphens = re.compile('[\u001E\u00AD\u2011]')
@@ -49,6 +63,12 @@ class CleanUTF8:
        self.re_phrase_table = re.compile('(^| )\|\|\|(?= |$)')
        self.re_wide = re.compile('([，。：）（；？﹗．﹪﹡﹟])')
        self.re_mspace = re.compile('\s+')   # \s => [ \t\n\r\f\v]
+
+       self.re_ctrl_extended = None
+       if extended_crtl_character_filtering:
+           if not regex_available:
+               assert "Can't perform unicode extended control character filtering since regex is not installed."
+           self.re_ctrl_extended = regex.compile(r'\p{C}')
 
     def __call__(self, text: Union[str, List[str]]) -> Union[str, List[str]]:
        if isinstance(text, list):
@@ -110,6 +130,9 @@ class CleanUTF8:
         line = self.re_mspace.sub(' ', line)
         line = line.strip()
 
+        if self.re_ctrl_extended is not None:
+            line = self.re_ctrl_extended.sub('', line)
+
         return line
 
 
@@ -144,6 +167,13 @@ def get_args():
            action='store_true',
            default=False,
            help="Handle wide punctuation [%(default)s]")
+   parser.add_argument(
+           "-x",
+           "--extended",
+           dest="extended_crtl_character_filtering",
+           action="store_true",
+           default=False,
+           help="Filter out all unicode Control Characters [%(default)s]")
 
    # The following use the nrc_utils version of open to open files.
    parser.add_argument(
@@ -166,7 +196,11 @@ def get_args():
 def main():
    cmd_args = get_args()
 
-   clean = CleanUTF8(wide_punct = cmd_args.wide_punct, phrase_table = cmd_args.phrase_table)
+   clean = CleanUTF8(
+           wide_punct=cmd_args.wide_punct,
+           phrase_table=cmd_args.phrase_table,
+           extended_crtl_character_filtering=cmd_args.extended_crtl_character_filtering,
+           )
 
    for count, line in enumerate(cmd_args.infile, 1):
        if count % 1000 == 0:
