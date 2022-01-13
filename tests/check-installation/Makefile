@@ -63,7 +63,7 @@ perl_version:
 
 .PHONY: perl_modules
 perl_modules:
-	@rc=0; for module in XML::Twig XML::XPath File::Temp Getopt::Long POSIX File::Basename Data::Dumper locale; do \
+	@rc=0; for module in XML::Twig XML::XPath XML::Writer File::Temp Getopt::Long POSIX File::Basename Data::Dumper locale; do \
 		$(call check,Perl module $$module,perldoc -l $$module >& /dev/null,NOT FOUND) || rc=1; \
 	done; [[ $$rc == 0 ]] || ! echo "Some required Perl modules are missing."
 	@$(call check,XML::Twig version,perl -e 'use XML::Twig 3.32;',Portage requires XML::Twig version 3.32 or greater.)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # @file strip-parallel-blank-lines.py
 # @brief Strip blank lines in parallel from one or more line-aligned files:
@@ -17,15 +17,6 @@
 
 import sys
 import re
-
-# If this script is run from within src/ rather than from the installed bin
-# directory, we add src/utils to the Python module include path (sys.path)
-# to arrange that portage_utils will be imported from src/utils.
-import os.path
-if sys.argv[0] not in ('', '-c'):
-   bin_path = os.path.dirname(sys.argv[0])
-   if os.path.basename(bin_path) != "bin":
-      sys.path.insert(1, os.path.normpath(os.path.join(bin_path, "..", "utils")))
 
 # portage_utils provides a bunch of useful and handy functions, including:
 #   HelpAction, VerboseAction, DebugAction (helpers for argument processing)
@@ -66,8 +57,8 @@ blankline = re.compile("^\s*$")
 ifiles = []
 ofiles = []
 for file in args:
-    ifiles.append(open(file, "r"))
-    ofiles.append(open(re.sub(r'(.gz$|$)', r'.no-blanks\g<1>', file), "w"))
+    ifiles.append(open(file, "rt", encoding="utf8"))
+    ofiles.append(open(re.sub(r'(.gz$|$)', r'.no-blanks\g<1>', file, count=1), "wt"))
 
 second = 1
 if len(ifiles) < 2: second = 0          # only use file1 if only file1 given
