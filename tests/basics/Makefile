@@ -121,3 +121,8 @@ test.lines.py:
 	seq 1 20 | gzip > seq.gz
 	diff <(lines.py <(echo $$'2\n4\n4\n10\n1') seq.gz) <(echo $$'1\n2\n4\n4\n10')
 
+test: test.select-lines.py
+test.select-lines.py:
+	diff <(select-lines.py <(echo $$'2\n4\n5\n10') <(seq 1 20)) <(echo $$'2\n4\n5\n10')
+	! select-lines.py <(echo $$'2\n4\n3\n10') <(seq 1 20) >& /dev/null
+	! select-lines.py <(echo not-a-number) <(seq 1 20) >& /dev/null
