@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # @file filter-parallel.py
 # @brief Filter lines in parallel from multiple line-aligned files according to
@@ -12,21 +12,17 @@
 # Copyright 2015, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2015, Her Majesty in Right of Canada
 
-from __future__ import print_function, unicode_literals, division, absolute_import
-
 import sys
 import os.path
 from argparse import ArgumentParser, FileType, Action
 
-# If this script is run from within src/ rather than from the installed bin
-# directory, we add src/utils to the Python module include path (sys.path)
-# to arrange that portage_utils will be imported from src/utils.
-if sys.argv[0] not in ('', '-c'):
-   bin_path = os.path.dirname(sys.argv[0])
-   if os.path.basename(bin_path) != "bin":
-      sys.path.insert(1, os.path.normpath(os.path.join(bin_path, "..", "utils")))
-
-from portage_utils import *
+from portage_utils import (
+   open,
+   printCopyright,
+   DebugAction,
+   HelpAction,
+   VerboseAction,
+)
 
 
 class Op(object):

@@ -10,7 +10,12 @@
 # Copyright 2011, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2011, Her Majesty in Right of Canada
 
-\make clean
-\make all -B -j ${OMP_NUM_THREADS:-$(nproc)}
+# Run the test suite with Python 2.7
+make clean
+make all -B -j ${OMP_NUM_THREADS:-$(nproc)} --makefile Makefile.python2
+
+# Run the test suite with Python 3
+make clean
+make all -B -j ${OMP_NUM_THREADS:-$(nproc)}
 
 exit

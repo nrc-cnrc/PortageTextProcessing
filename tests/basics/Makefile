@@ -17,7 +17,7 @@
 # Copyright 2021, Her Majesty in Right of Canada
 
 include ../Makefile.incl
-TEMP_FILES=out.* src/parallel*.no-blanks src/parallel*.dedup \
+TEMP_FILES=out.* in-copy.* src/parallel*.no-blanks src/parallel*.dedup \
            src/parallel*.filt src/parallel*.uniq seq.gz
 TEMP_DIRS=
 SHELL:=/bin/bash
@@ -85,6 +85,13 @@ out.strip-blanks: src/parallel1 src/parallel2
 	strip-parallel-blank-lines.py $+
 	head src/parallel?.no-blanks > $@
 
+test: compare.out.strip-blanks-r
+out.strip-blanks-r: src/parallel1 src/parallel2
+	cp src/parallel1 in-copy.parallel1
+	gzip < src/parallel2 > in-copy.parallel2.gz
+	strip-parallel-blank-lines.py -r in-copy.parallel1 in-copy.parallel2.gz
+	zcat -f in-copy.parallel?.no-blanks* > $@
+
 test: compare.out.strip-dup
 out.strip-dup: src/parallel1 src/parallel2
 	strip-parallel-duplicates.py $+
@@ -114,3 +121,8 @@ test.lines.py:
 	seq 1 20 | gzip > seq.gz
 	diff <(lines.py <(echo $$'2\n4\n4\n10\n1') seq.gz) <(echo $$'1\n2\n4\n4\n10')
 
+test: test.select-lines.py
+test.select-lines.py:
+	diff <(select-lines.py <(echo $$'2\n4\n5\n10') <(seq 1 20)) <(echo $$'2\n4\n5\n10')
+	! select-lines.py <(echo $$'2\n4\n3\n10') <(seq 1 20) >& /dev/null
+	! select-lines.py <(echo not-a-number) <(seq 1 20) >& /dev/null
