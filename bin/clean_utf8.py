@@ -222,7 +222,7 @@ def main():
 
    for count, line in enumerate(cmd_args.infile, 1):
        if count % 1000 == 0:
-           progress("[{} lines...]".format(count))
+           progress(f"[{count} lines...]")
        print(clean(line), file=cmd_args.outfile)
 
    cmd_args.infile.close()
