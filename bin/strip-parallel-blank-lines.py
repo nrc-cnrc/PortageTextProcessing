@@ -18,13 +18,9 @@
 import sys
 import re
 
-# portage_utils provides a bunch of useful and handy functions, including:
-#   HelpAction, VerboseAction, DebugAction (helpers for argument processing)
-#   printCopyright
-#   info, verbose, debug, warn, error, fatal_error
+# portage_utils provides for us:
 #   open (transparently open stdin, stdout, plain text files, compressed files or pipes)
-from portage_utils import *
-
+from portage_utils import open
 
 help = """
 strip-parallel-blank-lines.py [-r] file1 [file2 file3...]
@@ -49,16 +45,16 @@ if len(args) > 1 and args[0] == "-r":
     args = args[1:]
 
 if len(args) < 1 or args[0] == "-h":
-    sys.stderr.write(help);
+    sys.stderr.write(help)
     sys.exit(1)
 
-blankline = re.compile("^\s*$")
+blankline = re.compile(r"^\s*$")
 
 ifiles = []
 ofiles = []
 for file in args:
-    ifiles.append(open(file, "rt", encoding="utf8"))
-    ofiles.append(open(re.sub(r'(.gz$|$)', r'.no-blanks\g<1>', file, count=1), "wt"))
+    ifiles.append(open(file, "r"))
+    ofiles.append(open(re.sub(r'(.gz$|$)', r'.no-blanks\g<1>', file, count=1), "w"))
 
 second = 1
 if len(ifiles) < 2: second = 0          # only use file1 if only file1 given
@@ -74,15 +70,15 @@ for lines[0] in ifiles[0]:
 
     if replace:
         rep = blankline.match(lines[0])
-        for i in range(0,len(ifiles)):
+        for i in range(0, len(ifiles)):
             if rep and blankline.match(lines[i]): lines[i] = ".\n"
             ofiles[i].write(lines[i])
     else:
         if not blankline.match(lines[0]) and not blankline.match(lines[second]):
-            for i in range(0,len(ifiles)):
+            for i in range(0, len(ifiles)):
                 ofiles[i].write(lines[i])
 
 for file in ifiles:
-    if (file.readline() != ""):
-        sys.stderr.write("file " + file.name + " too long!\n");
+    if file.readline() != "":
+        sys.stderr.write("file " + file.name + " too long!\n")
         sys.exit(1)
