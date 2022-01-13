@@ -17,6 +17,7 @@ import os
 import re
 import string
 import sys
+
 from argparse import ArgumentParser
 from typing import (
         List,
@@ -51,6 +52,9 @@ from portage_utils import (
 
 
 class CleanUTF8:
+    """
+    Clean up spaces, control characters, hyphen and such in utf8 corpora.
+    """
     def __init__(self,
             wide_punct: bool=True,
             phrase_table: bool=False,
@@ -83,16 +87,25 @@ class CleanUTF8:
            self.re_ctrl_extended = regex.compile(r'\p{C}')
 
     def __call__(self, text: Union[str, List[str]]) -> Union[str, List[str]]:
+       """
+       Apply filters to either a string or a list of string.
+       """
        if isinstance(text, list):
           return self.clean_list(text)
        else:
           return self.clean_line(text)
 
     def clean_list(self, list_of_lines: List[str]) -> List[str]:
+       """
+       Apply filters to either a list of string.
+       """
        assert(isinstance(list_of_lines, list))
        return [self.clean_line(line) for line in list_of_lines]
 
     def clean_line(self, line: str) -> str:
+        """
+        Apply filters to either a string.
+        """
         assert(isinstance(line, str))
         line = line.rstrip()
 
@@ -152,7 +165,11 @@ class CleanUTF8:
 
 
 def progress(*args):
+   """
+   A simple progress report.
+   """
    verbose('\r', *args, sep='', end='')
+
 
 def get_args():
    """Command line argument processing."""
@@ -216,7 +233,11 @@ def get_args():
 
    return cmd_args
 
+
+
 def main():
+   """
+   """
    cmd_args = get_args()
 
    clean = CleanUTF8(
@@ -233,6 +254,10 @@ def main():
 
    cmd_args.infile.close()
    cmd_args.outfile.close()
+
+
+
+
 
 if __name__ == '__main__':
    main()
