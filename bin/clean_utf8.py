@@ -22,6 +22,8 @@ from typing import (
         List,
         Union,
         )
+from unicodedata import normalize
+
 try:
     import regex
     regex_available = True
@@ -47,14 +49,18 @@ class CleanUTF8:
             wide_punct: bool=True,
             phrase_table: bool=False,
             extended_crtl_character_filtering: bool=False,
+            normalization_type: str=None,
             ):
        """
        wide_punct: Substitute fullwidth punctuation for their equivalent in ascii.
        phrase_table: Escapes phrase table entry separator " ||| " for " ___|||___ "
        extended_crtl_character_filtering: filter out all unicode characters and not just the ascii control characters.
+       normalization_type: perform unicode normalization ( None, "NFD", "NFC", "NFKD", "NFKC" )
        """
        self.wide_punct = wide_punct
        self.phrase_table = phrase_table
+       self.normalization_type = normalization_type
+
        self.re_hyphens = re.compile('[\u001E\u00AD\u2011]')
        self.re_dhyphens = re.compile('\x1F')
        self.re_space = re.compile('[\u2060\uFEFF\u00A0\u2007\u202F\u2028\u2029]')
@@ -83,6 +89,9 @@ class CleanUTF8:
     def clean_line(self, line: str) -> str:
         assert(isinstance(line, str))
         line = line.rstrip()
+
+        if self.normalization_type is not None:
+            line = normalize(self.normalization_type, line)
 
    # Convert various non-breaking hyphen encodings to -: \xAD and \x1E for MS
    # Word, \x2011 for Unicode.  Warning: for html documents, \xAD should be
@@ -174,6 +183,14 @@ def get_args():
            action="store_true",
            default=False,
            help="Filter out all unicode Control Characters [%(default)s]")
+   parser.add_argument(
+           "-n",
+           "--normalize",
+           dest="normalization_type",
+           choices=("NFD", "NFC", "NFKD", "NFKC"),
+           type=str,
+           default=None,
+           help="Apply unicode normalization [%(default)s]")
 
    # The following use the nrc_utils version of open to open files.
    parser.add_argument(
@@ -200,6 +217,7 @@ def main():
            wide_punct=cmd_args.wide_punct,
            phrase_table=cmd_args.phrase_table,
            extended_crtl_character_filtering=cmd_args.extended_crtl_character_filtering,
+           normalization_type=cmd_args.normalization_type,
            )
 
    for count, line in enumerate(cmd_args.infile, 1):
