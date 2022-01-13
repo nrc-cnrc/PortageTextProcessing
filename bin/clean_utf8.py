@@ -132,16 +132,32 @@ def get_args():
    parser.add_argument("-v", "--verbose", action=VerboseAction)
    parser.add_argument("-d", "--debug", action=DebugAction)
 
-   parser.add_argument("--phrase-table", dest="phrase_table", action='store_true', default=False,
-                       help="Handle ||| (Portage phrase-table separator) [%(default)s]")
-   parser.add_argument("--wide-punct", dest="wide_punct", action='store_true', default=False,
-                       help="Handle wide punctuation [%(default)s]")
+   parser.add_argument(
+           "--phrase-table",
+           dest="phrase_table",
+           action='store_true',
+           default=False,
+           help="Handle ||| (Portage phrase-table separator) [%(default)s]")
+   parser.add_argument(
+           "--wide-punct",
+           dest="wide_punct",
+           action='store_true',
+           default=False,
+           help="Handle wide punctuation [%(default)s]")
 
    # The following use the nrc_utils version of open to open files.
-   parser.add_argument("infile", nargs='?', type=lambda f: open(f,'r'), default="-",
-                       help="input file [sys.stdin]")
-   parser.add_argument("outfile", nargs='?', type=lambda f: open(f,'w'), default="-",
-                       help="output file [sys.stdout]")
+   parser.add_argument(
+           "infile",
+           nargs='?',
+           type=lambda f: open(f, 'r'),
+           default="-",
+           help="input file [sys.stdin]")
+   parser.add_argument(
+           "outfile",
+           nargs='?',
+           type=lambda f: open(f, 'w'),
+           default="-",
+           help="output file [sys.stdout]")
 
    cmd_args = parser.parse_args()
 
