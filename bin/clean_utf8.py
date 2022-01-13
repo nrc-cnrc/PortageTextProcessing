@@ -4,7 +4,7 @@
 # @file clean_utf8.py
 # @brief Clean up spaces, control characters, hyphen and such in utf8 corpora
 #
-# @author Michel Simard -- adated from Perl code by Eric Joanis
+# @author Michel Simard / Samuel Larkin -- adopted from Perl code by Eric Joanis
 #
 # Multilingual Text Processing / Traitement multilingue de textes
 # Digital Technologies Research Centre / Centre de recherche en technologies numériques
@@ -18,6 +18,10 @@ import re
 import string
 import sys
 from argparse import ArgumentParser
+from typing import (
+        List,
+        Union,
+        )
 
 # If this script is run from within src/ rather than from the installed bin
 # directory, we add src/utils to the Python module include path (sys.path)
@@ -31,7 +35,10 @@ from portage_utils import *
 
 
 class CleanUTF8:
-    def __init__(self, wide_punct=True, phrase_table=False):
+    def __init__(self,
+            wide_punct: bool=True,
+            phrase_table: bool=False,
+            ):
        self.wide_punct = wide_punct
        self.phrase_table = phrase_table
        self.re_hyphens = re.compile('[\u001E\u00AD\u2011]')
@@ -43,17 +50,17 @@ class CleanUTF8:
        self.re_wide = re.compile('([，。：）（；？﹗．﹪﹡﹟])')
        self.re_mspace = re.compile('\s+')   # \s => [ \t\n\r\f\v]
 
-    def __call__(self, text):
+    def __call__(self, text: Union[str, List[str]]) -> Union[str, List[str]]:
        if isinstance(text, list):
           return self.clean_list(text)
        else:
           return self.clean_line(text)
 
-    def clean_list(self, list_of_lines):
+    def clean_list(self, list_of_lines: List[str]) -> List[str]:
        assert(isinstance(list_of_lines, list))
        return [self.clean_line(line) for line in list_of_lines]
 
-    def clean_line(self, line):
+    def clean_line(self, line: str) -> str:
         assert(isinstance(line, str))
         line = line.rstrip()
 
