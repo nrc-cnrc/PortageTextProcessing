@@ -168,9 +168,7 @@ def main():
 
    clean = CleanUTF8(wide_punct = cmd_args.wide_punct, phrase_table = cmd_args.phrase_table)
 
-   count = 0
-   for line in cmd_args.infile:
-       count += 1
+   for count, line in enumerate(cmd_args.infile, 1):
        if count % 1000 == 0:
            progress("[{} lines...]".format(count))
        print(clean(line), file=cmd_args.outfile)
