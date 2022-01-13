@@ -168,7 +168,8 @@ def open(filename, mode='r', quiet=True, encoding="utf8"):
    encoding: defaults to "utf8" for text modes (Python 3 only; ignored in Python 2.7)
    return: file handle to the open file.
    """
-   if mode in ("rb", "wb"):
+
+   if "b" in mode:
       # you cannot open a file in binary mode with an encoding in Python 3
       encoding = None
 
