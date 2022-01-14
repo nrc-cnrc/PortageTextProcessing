@@ -198,6 +198,7 @@ def progress(*args):
        help="Apply unicode normalization")
 @click.argument('infile', default='-', type=str)
 @click.argument('outfile', default='-', type=str)
+@click.help_option("-h", "--help")
 def main(
         infile: str,
         outfile: str,
