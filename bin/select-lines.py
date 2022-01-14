@@ -12,9 +12,11 @@
 # Copyright 2018, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2018, Her Majesty in Right of Canada
 
+import codecs
+import io
+import os
 import sys
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
-import os
 
 from portage_utils import (
     fatal_error,
@@ -49,13 +51,19 @@ def get_args():
    parser.add_argument("--separator", dest="separator", default="\n", type=str,
                        help="with -a, separate ranges with given separator [one newline]")
 
-   parser.add_argument("indexfile", type=open, help="sorted index file")
+   parser.add_argument("indexfile",
+                       type=lambda f: open(f, "r", encoding="utf-8"),
+                       help="sorted index file")
 
-   parser.add_argument("infile", nargs='?', type=open, default=sys.stdin,
+   parser.add_argument("infile", nargs='?',
+                       type=lambda f: open(f, "r", encoding="utf-8"),
+                       default=io.TextIOWrapper(sys.stdin.buffer, encoding="utf-8"),
                        help="input file [sys.stdin]")
 
-   parser.add_argument("outfile", nargs='?', type=lambda f: open(f, 'w', encoding="utf8"),
-                       default=sys.stdout, help="output file [sys.stdout]")
+   parser.add_argument("outfile", nargs='?',
+                       type=lambda f: open(f, "w", encoding="utf-8"),
+                       default=io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8"),
+                       help="output file [sys.stdout]")
 
    cmd_args = parser.parse_args()
 
@@ -85,6 +93,9 @@ def main():
    indexfile = cmd_args.indexfile
    infile = cmd_args.infile
    outfile = cmd_args.outfile
+
+   # The following allows stderr to handle non-ascii characters:
+   sys.stderr = codecs.getwriter("utf-8")(sys.stderr.detach())
 
    line_number = 0
 
