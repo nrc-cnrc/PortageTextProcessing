@@ -1,5 +1,5 @@
-usage: clean_utf8 [options] [infile [outfile]]
+Usage: clean_utf8.py [OPTIONS] [INFILE] [OUTFILE]
 
-Clean-up / normalize UTF8 text
+  Clean-up / normalize UTF8 text
 
-positional arguments:
+  clean_utf8 [options] [infile [outfile]]
