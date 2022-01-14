@@ -61,14 +61,14 @@ class CleanUTF8:
         self.phrase_table = phrase_table
         self.normalization_type = normalization_type
 
-        self.re_hyphens = re.compile("[\u001E\u00AD\u2011]")
-        self.re_dhyphens = re.compile("\x1F")
-        self.re_space = re.compile("[\u2060\uFEFF\u00A0\u2007\u202F\u2028\u2029]")
-        self.re_ctrl = re.compile("[\x01-\x09\x0B\x0C\x0E-\x1D\x7F]")
-        self.re_crlf = re.compile("\x0D$")
-        self.re_phrase_table = re.compile("(^| )\|\|\|(?= |$)")
-        self.re_wide = re.compile("([，。：）（；？﹗．﹪﹡﹟])")
-        self.re_mspace = re.compile("\s+")  # \s => [ \t\n\r\f\v]
+        self.re_hyphens = re.compile(r"[\u001E\u00AD\u2011]")
+        self.re_dhyphens = re.compile(r"\x1F")
+        self.re_space = re.compile(r"[\u2060\uFEFF\u00A0\u2007\u202F\u2028\u2029]")
+        self.re_ctrl = re.compile(r"[\x01-\x09\x0B\x0C\x0E-\x1D\x7F]")
+        self.re_crlf = re.compile(r"\x0D$")
+        self.re_phrase_table = re.compile(r"(^| )\|\|\|(?= |$)")
+        self.re_wide = re.compile(r"([，。：）（；？﹗．﹪﹡﹟])")
+        self.re_mspace = re.compile(r"\s+")  # \s => [ \t\n\r\f\v]
 
         self.re_ctrl_extended = None
         if extended_crtl_character_filtering:
@@ -141,7 +141,7 @@ class CleanUTF8:
 
         # Basic wide punctuation mapping
         if self.wide_punct:
-            line = self.re_wide.sub(" \g<1> ", line)
+            line = self.re_wide.sub(r" \g<1> ", line)
             line = line.translate(str.maketrans("，。：）（；？﹗．﹪﹡﹟", ",.:)(;?!.%*#"))
 
         # Collapse multiple spaces to a single space
