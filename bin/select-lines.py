@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # coding=utf-8
 
 # @file select-lines.py
@@ -12,26 +12,18 @@
 # Copyright 2018, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2018, Her Majesty in Right of Canada
 
-from __future__ import print_function, unicode_literals, division, absolute_import
-
-import time
-start_time = time.time()
-
 import sys
-import codecs
-import re
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 import os
-import os.path
 
-# If this script is run from within src/ rather than from the installed bin
-# directory, we add src/utils to the Python module include path (sys.path).
-if sys.argv[0] not in ('', '-c'):
-    bin_path = os.path.dirname(sys.argv[0])
-    if os.path.basename(bin_path) != "bin":
-        sys.path.insert(1, os.path.normpath(os.path.join(bin_path, "..", "utils")))
-
-from portage_utils import *
+from portage_utils import (
+    fatal_error,
+    open,
+    printCopyright,
+    DebugAction,
+    HelpAction,
+    VerboseAction,
+)
 
 
 def get_args():
@@ -62,8 +54,8 @@ def get_args():
    parser.add_argument("infile", nargs='?', type=open, default=sys.stdin,
                        help="input file [sys.stdin]")
 
-   parser.add_argument("outfile", nargs='?', type=lambda f: open(f,'w'), default=sys.stdout,
-                       help="output file [sys.stdout]")
+   parser.add_argument("outfile", nargs='?', type=lambda f: open(f, 'w', encoding="utf8"),
+                       default=sys.stdout, help="output file [sys.stdout]")
 
    cmd_args = parser.parse_args()
 
@@ -73,34 +65,26 @@ def get_args():
 def parse_alignment_line(line, column):
    tokens = line.split()
    try:
-      (start,end) = tokens[column-1].split('-', 1)
-      start=int(start)
-      end=int(end)
+      (start, end) = tokens[column-1].split('-', 1)
+      start = int(start)
+      end = int(end)
    except:
       fatal_error("Invalid alignment info line:", line.strip())
    if end < start:
       fatal_error("Invalid alignment has end<start at:", line.strip())
-   return (start,end)
+   return (start, end)
 
 
 def main():
 
-   printCopyright("select-lines.py", 2018);
-   os.environ['PORTAGE_INTERNAL_CALL'] = '1';
+   printCopyright("select-lines.py", 2018)
+   os.environ['PORTAGE_INTERNAL_CALL'] = '1'
 
    cmd_args = get_args()
 
-   encoding = "utf-8"
-   try:
-      codecs.lookup(encoding)
-   except LookupError:
-      fatal_error("utf-8 codec not found.")
-
-   indexfile = codecs.getreader(encoding)(cmd_args.indexfile)
-   infile = codecs.getreader(encoding)(cmd_args.infile)
-   outfile = codecs.getwriter(encoding)(cmd_args.outfile)
-   # The following allows stderr to handle non-ascii characters:
-   sys.stderr = codecs.getwriter(encoding)(sys.stderr)
+   indexfile = cmd_args.indexfile
+   infile = cmd_args.infile
+   outfile = cmd_args.outfile
 
    line_number = 0
 
