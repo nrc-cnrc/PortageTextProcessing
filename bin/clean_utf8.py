@@ -36,6 +36,9 @@ except:
 from portage_utils import open
 
 
+__version__ = "1.1"
+
+
 
 class CleanUTF8:
     """
@@ -199,6 +202,7 @@ def progress(*args):
 @click.argument('infile', default='-', type=str)
 @click.argument('outfile', default='-', type=str)
 @click.help_option("-h", "--help")
+@click.version_option(version=__version__, package_name="PortageTextProcessing", prog_name="clean_utf8")
 def main(
         infile: str,
         outfile: str,
