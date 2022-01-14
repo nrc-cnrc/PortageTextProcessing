@@ -13,11 +13,9 @@
 # Copyright 2019-2022, Sa Majeste la Reine du Chef du Canada
 
 import click
-import os
 import re
 import sys
 
-from argparse import ArgumentParser
 from typing import (
     List,
     Union,
