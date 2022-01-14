@@ -4,13 +4,17 @@
 # @file portage_utils.py
 # @brief Useful common Python classes and functions
 #
-# @author Darlene Stewart & Samuel Larkin
+# @author Darlene Stewart & Samuel Larkin & Eric Joanis
 #
 # Technologies langagieres interactives / Interactive Language Technologies
 # Inst. de technologie de l'information / Institute for Information Technology
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright 2011, Sa Majeste la Reine du Chef du Canada /
-# Copyright 2011, Her Majesty in Right of Canada
+# Copyright 2011, 2022, Sa Majeste la Reine du Chef du Canada /
+# Copyright 2011, 2022, Her Majesty in Right of Canada
+
+# The portage_utils.py library is used by both Python 2.7 scripts (in Portage-SMT-TAS)
+# and Python 3 scripts (in PortageTextProcessing and Portage-SMT-TAS), so we keep it
+# working for both versions.
 
 from __future__ import print_function, unicode_literals, division, absolute_import
 
