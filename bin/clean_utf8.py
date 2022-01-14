@@ -12,10 +12,9 @@
 # Copyright 2019-2022, Her Majesty in Right of Canada /
 # Copyright 2019-2022, Sa Majeste la Reine du Chef du Canada
 
-import builtins
+import click
 import os
 import re
-import string
 import sys
 
 from argparse import ArgumentParser
@@ -34,21 +33,8 @@ except:
     regex_available = False
 
 
-# If this script is run from within src/ rather than from the installed bin
-# directory, we add src/utils to the Python module include path (sys.path)
-# to arrange that portage_utils will be imported from src/utils.
-if sys.argv[0] not in ('', '-c'):
-   bin_path = os.path.dirname(sys.argv[0])
-   if os.path.basename(bin_path) != "bin":
-      sys.path.insert(1, os.path.normpath(os.path.join(bin_path, "..", "utils")))
+from portage_utils import open
 
-from portage_utils import (
-        DebugAction,
-        HelpAction,
-        VerboseAction,
-        open,
-        verbose,
-        )
 
 
 class CleanUTF8:
@@ -168,92 +154,77 @@ def progress(*args):
    """
    A simple progress report.
    """
-   verbose('\r', *args, sep='', end='')
+   print('\r', *args, sep='', end='', file=sys.stderr)
 
 
-def get_args():
-   """Command line argument processing."""
 
-   usage="clean_utf8 [options] [infile [outfile]]"
-   help="""
+@click.command()
+@click.option(
+        "-v",
+       "--verbose",
+       "verbose",
+       is_flag=True,
+       default=False,
+       show_default=True,
+       help="Display progress")
+@click.option(
+       "--phrase-table",
+       "phrase_table",
+       is_flag=True,
+       default=False,
+       show_default=True,
+       help="Handle ||| (Portage phrase-table separator)")
+@click.option(
+       "--wide-punct",
+       "wide_punct",
+       is_flag=True,
+       default=False,
+       show_default=True,
+       help="Handle wide punctuation")
+@click.option(
+       "-x",
+       "--extended",
+       "extended_crtl_character_filtering",
+       is_flag=True,
+       default=False,
+       show_default=True,
+       help="Filter out all unicode Control Characters")
+@click.option(
+       "-n",
+       "--normalize",
+       "normalization_type",
+       type=click.Choice(("NFD", "NFC", "NFKD", "NFKC"), case_sensitive=False),
+       default=None,
+       help="Apply unicode normalization")
+@click.argument('infile', default='-', type=str)
+@click.argument('outfile', default='-', type=str)
+def main(
+        infile: str,
+        outfile: str,
+        phrase_table: bool,
+        wide_punct: bool,
+        extended_crtl_character_filtering: bool,
+        normalization_type: str,
+        verbose: bool,
+        ):
+   """
    Clean-up / normalize UTF8 text
+
+   clean_utf8 [options] [infile [outfile]]
    """
-
-   # Use the argparse module, not the deprecated optparse module.
-   parser = ArgumentParser(usage=usage, description=help, add_help=False)
-
-   # Use our standard help, verbose and debug support.
-   parser.add_argument("-h", "-help", "--help", action=HelpAction)
-   parser.add_argument("-v", "--verbose", action=VerboseAction)
-   parser.add_argument("-d", "--debug", action=DebugAction)
-
-   parser.add_argument(
-           "--phrase-table",
-           dest="phrase_table",
-           action='store_true',
-           default=False,
-           help="Handle ||| (Portage phrase-table separator) [%(default)s]")
-   parser.add_argument(
-           "--wide-punct",
-           dest="wide_punct",
-           action='store_true',
-           default=False,
-           help="Handle wide punctuation [%(default)s]")
-   parser.add_argument(
-           "-x",
-           "--extended",
-           dest="extended_crtl_character_filtering",
-           action="store_true",
-           default=False,
-           help="Filter out all unicode Control Characters [%(default)s]")
-   parser.add_argument(
-           "-n",
-           "--normalize",
-           dest="normalization_type",
-           choices=("NFD", "NFC", "NFKD", "NFKC"),
-           type=str,
-           default=None,
-           help="Apply unicode normalization [%(default)s]")
-
-   # The following use the nrc_utils version of open to open files.
-   parser.add_argument(
-           "infile",
-           nargs='?',
-           type=lambda f: open(f, 'r'),
-           default="-",
-           help="input file [sys.stdin]")
-   parser.add_argument(
-           "outfile",
-           nargs='?',
-           type=lambda f: open(f, 'w'),
-           default="-",
-           help="output file [sys.stdout]")
-
-   cmd_args = parser.parse_args()
-
-   return cmd_args
-
-
-
-def main():
-   """
-   """
-   cmd_args = get_args()
-
    clean = CleanUTF8(
-           wide_punct=cmd_args.wide_punct,
-           phrase_table=cmd_args.phrase_table,
-           extended_crtl_character_filtering=cmd_args.extended_crtl_character_filtering,
-           normalization_type=cmd_args.normalization_type,
+           wide_punct=wide_punct,
+           phrase_table=phrase_table,
+           extended_crtl_character_filtering=extended_crtl_character_filtering,
+           normalization_type=normalization_type,
            )
 
-   for count, line in enumerate(cmd_args.infile, 1):
-       if count % 1000 == 0:
-           progress(f"[{count} lines...]")
-       print(clean(line), file=cmd_args.outfile)
-
-   cmd_args.infile.close()
-   cmd_args.outfile.close()
+   with open(str(infile), mode='r', encoding='UTF-8') as cin, open(str(outfile), mode='w', encoding='UTF-8') as cout:
+       cin = map(str.strip, cin)
+       for count, line in enumerate(cin, 1):
+           if verbose and count % 1000 == 0:
+               progress(f"[{count} lines...]")
+           print(clean(line), file=cout)
 
 
 
