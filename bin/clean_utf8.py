@@ -26,7 +26,7 @@ try:
     import regex
 
     regex_available = True
-except:
+except ModuleNotFoundError:
     # print("Failed to import regex to filter out Extended Control characters.", file=sys.stderr)
     # print("Consider `pip install --user regex`", file=sys.stderr)
     regex_available = False
