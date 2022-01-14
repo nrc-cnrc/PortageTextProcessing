@@ -12,12 +12,6 @@
 # Copyright 2020, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2020, Her Majesty in Right of Canada
 
-from __future__ import print_function, unicode_literals, division, absolute_import
-
-# import time
-# from random import randrange
-# start_time = time.time()
-
 import sys
 # import codecs
 # import re
@@ -26,13 +20,6 @@ import os
 import os.path
 import subprocess
 import random
-
-# If this script is run from within src/ rather than from the installed bin
-# directory, we add src/utils to the Python module include path (sys.path).
-if sys.argv[0] not in ('', '-c'):
-    bin_path = os.path.dirname(sys.argv[0])
-    if os.path.basename(bin_path) != "bin":
-        sys.path.insert(1, os.path.normpath(os.path.join(bin_path, "..", "utils")))
 
 from portage_utils import *
 

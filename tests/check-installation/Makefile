@@ -51,7 +51,6 @@ testsuite: pre_installation
 
 .PHONY: pre_installation
 pre_installation: perl_version perl_modules
-pre_installation: python2_version python2_modules
 pre_installation: python3_version python3_modules
 pre_installation: xml_grep xmllint
 pre_installation:
@@ -68,23 +67,13 @@ perl_modules:
 	done; [[ $$rc == 0 ]] || ! echo "Some required Perl modules are missing."
 	@$(call check,XML::Twig version,perl -e 'use XML::Twig 3.32;',Portage requires XML::Twig version 3.32 or greater.)
 
-.PHONY: python2_version
-python2_version:
-	@$(call check,Python version 2.7,python2 --version 2>&1 | grep -q 2\.7,PortageTextProcessing requires Python 2.7 as python2.)
-
-.PHONY: python2_modules
-python2_modules:
-	@rc=0; for module in argparse __future__ optparse os.path subprocess codecs gzip math os re sys string time; do \
-		$(call check,Python 2 module $$module,python2 -c "import $$module" >& /dev/null,NOT FOUND) || rc=1; \
-	done; [[ $$rc == 0 ]] || ! echo "Some required Python 2 modules are missing."
-
 .PHONY: python3_version
 python3_version:
 	@$(call check,Python version 3.x,python3 --version 2>&1 | grep -q 3,PortageTextProcessing requires Python 3.? as python3.)
 
 .PHONY: python3_modules
 python3_modules:
-	@rc=0; for module in builtins os re string sys argparse __future__ os.path subprocess random; do \
+	@rc=0; for module in click regex builtins os re string sys argparse __future__ os.path subprocess random codecs gzip time; do \
 		$(call check,Python 3 module $$module,python3 -c "import $$module" >& /dev/null,NOT FOUND) || rc=1; \
 	done; [[ $$rc == 0 ]] || ! echo "Some required Python 3 modules are missing."
 

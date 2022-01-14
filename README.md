@@ -17,11 +17,10 @@ Clone this repo to the location of your choice and add this line to your .profil
 
 PortageTextProcessing requires:
  - Perl >= 5.14, as `perl` on your PATH;
- - Python 2.7, as `python2` on your PATH;
  - any version of Python 3, as `python3` on your PATH;
  - `/bin/bash`, `/bin/sh`, `/usr/bin/env`.
 
-It also requires a number of Perl, Python 2.7, and Python 3 libraries, which you can
+It also requires a number of Perl and Python 3 libraries, which you can
 install with the package manager of your choice. For the list, go to
 `tests/check-installation/` and run `./run-test.sh`. This test suite looks for
 dependencies and flags any missing ones.
