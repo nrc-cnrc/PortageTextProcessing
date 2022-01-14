@@ -1,13 +1,13 @@
 ==> src/parallel1.dedup <==
-asdf
-qwer
+asdfé
+qwerû
 
-zxcv
-zxcv
+zxcvà
+zxcvà
 
 ==> src/parallel2.dedup <==
-Asdf
+Asdfé
 
-Qwer
-Zxcv
-Zxcv
+Qwerû
+Zxcvà
+Zxcvà
