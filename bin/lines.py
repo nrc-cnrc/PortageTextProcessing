@@ -14,7 +14,9 @@
 # Copyright 2008, Her Majesty in Right of Canada
 
 import gzip
+import io
 import sys
+from portage_utils import open
 
 if len(sys.argv) != 3:
     sys.stderr.write("Usage: lines.py  \n\
@@ -26,14 +28,14 @@ if len(sys.argv) != 3:
     sys.exit(1)
 
 ### Read arguments
-numFile = open(sys.argv[1])
-txtFileName = sys.argv[2]
-if txtFileName[-3:] == '.gz':
-    txtFile = gzip.open(txtFileName, mode="rt")
-elif txtFileName == "-":
-    txtFile = sys.stdin
-else:
-    txtFile = open(txtFileName)
+# We use latin-1 as an arbitrary 8-bit encoding for encoding-agnostic processing
+# this works with utf-8, any iso-8859-*, ascii, and every encoding where newline
+# is represented as \x0A. Using "utf_8" would make logical sense too, but it
+# would be less versatile for this utility that doesn't inspect line contents.
+encoding = "latin-1"
+numFile = open(sys.argv[1], mode="rt", encoding=encoding)
+txtFile = open(sys.argv[2], mode="rt", encoding=encoding)
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=encoding)
 
 ### Read line numbers
 nums = sorted([int(line.strip()) for line in numFile])
@@ -47,6 +49,7 @@ while (line != "") and (not done):
     #print("%",n1,n2)
     while n1 == n2:
         #sys.stderr.write("Line %i: %s\n" % (n2,line))
+        #sys.stdout.write(str(line))
         print(line, end='')
         if len(nums) == 0:
             done = True

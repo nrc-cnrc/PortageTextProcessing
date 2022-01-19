@@ -74,10 +74,10 @@ def get_args():
    ops.add_argument('-le', dest="op", action=OpAction, const=Op.le, type=float,
                     metavar="THRESHOLD", help='''Keep if less than or equal to threshold''')
 
-   parser.add_argument("scores_file", type=FileType('r'),
+   parser.add_argument("scores_file", type=FileType('r', encoding="utf8"),
                        help="files to strip lines from in parallel")
 
-   parser.add_argument("in_files", nargs="+", type=FileType('r'),
+   parser.add_argument("in_files", nargs="+", type=FileType('r', encoding="utf8"),
                        help="file of scores to use for filtering")
 
    try:
@@ -91,7 +91,7 @@ def main():
    printCopyright("filter-parallel.py", 2015);
 
    cmd_args = get_args()
-   out_files = tuple(open(f.name+cmd_args.ext, 'w') for f in cmd_args.in_files)
+   out_files = tuple(open(f.name+cmd_args.ext, 'w', encoding="utf_8") for f in cmd_args.in_files)
 
    for score_line in cmd_args.scores_file:
       score = float(score_line)

@@ -18,6 +18,7 @@
 
 from __future__ import print_function, unicode_literals, division, absolute_import
 
+import io
 import sys
 import argparse
 import re
@@ -184,9 +185,9 @@ def open(filename, mode='r', quiet=True, encoding="utf8"):
 
    if filename == "-":
       if mode in ('r', 'rt'):
-         theFile = sys.stdin
+         theFile = io.TextIOWrapper(sys.stdin.buffer, encoding=encoding)
       elif mode in ('w', 'wt'):
-         theFile = sys.stdout
+         theFile = io.TextIOWrapper(sys.stdout.buffer, encoding=encoding)
       else:
          fatal_error("Unsupported mode.")
    elif filename.endswith('|'):

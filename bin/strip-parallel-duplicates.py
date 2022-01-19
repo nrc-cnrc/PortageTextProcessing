@@ -50,7 +50,7 @@ def get_args():
    parser.add_argument("-ext", dest="ext", type=str, default=".dedup",
                        help="extension for output files [%(default)s]")
 
-   parser.add_argument("in_files", nargs="*", type=FileType('r'),
+   parser.add_argument("in_files", nargs="*", type=FileType('r', encoding="utf-8"),
                        help="files to strip lines from in parallel")
 
    cmd_args = parser.parse_args()
@@ -65,7 +65,7 @@ def main():
    printCopyright("strip-parallel-duplicates.py", 2012)
 
    cmd_args = get_args()
-   out_files = tuple(open(f.name+cmd_args.ext, 'w') for f in cmd_args.in_files)
+   out_files = tuple(open(f.name+cmd_args.ext, 'w', encoding="utf8") for f in cmd_args.in_files)
 
    eof = False
    while True:
