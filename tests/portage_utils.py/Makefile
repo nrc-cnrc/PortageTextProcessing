@@ -25,7 +25,7 @@ TEMP_FILES=test* open_unittest*
 include ../Makefile.incl
 
 test:
-	echo -e "This is a test.\nThen there is a second line.\nBut it ends on the third line." > $@
+	echo -e "This is a test àçéïôù.\nThen there is a second line.\nBut it ends on the third line." > $@
 
 test.gz: test
 	cat $< | gzip > $@

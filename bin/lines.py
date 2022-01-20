@@ -28,11 +28,7 @@ if len(sys.argv) != 3:
     sys.exit(1)
 
 ### Read arguments
-# We use latin-1 as an arbitrary 8-bit encoding for encoding-agnostic processing
-# this works with utf-8, any iso-8859-*, ascii, and every encoding where newline
-# is represented as \x0A. Using "utf_8" would make logical sense too, but it
-# would be less versatile for this utility that doesn't inspect line contents.
-encoding = "latin-1"
+encoding = "utf-8"
 numFile = open(sys.argv[1], mode="rt", encoding=encoding)
 txtFile = open(sys.argv[2], mode="rt", encoding=encoding)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=encoding)
