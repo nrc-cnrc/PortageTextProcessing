@@ -41,7 +41,7 @@ open_testsuite: open_unittest6
 open_testsuite: open_unittest7
 open_testsuite: open_unittest8
 open_testsuite: open_unittest9
-
+open_testsuite: open_newlines_encodings
 
 # Test reading standard in.
 open_unittest0: test
@@ -143,3 +143,7 @@ split_unittest2:
 	echo "from portage_utils import split; print(split(u'\n'))" \
 	| python3 \
 	| diff - <(echo "[]")
+
+# Test a multiplicity and newlines and encoding options
+open_newlines_encodings:
+	python3 $@.py | diff - ref/$@.out
