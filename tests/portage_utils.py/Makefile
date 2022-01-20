@@ -21,7 +21,7 @@ SHELL := bash
 all: open_testsuite split_testsuite
 
 
-TEMP_FILES=test* open_unittest*
+TEMP_FILES=test* open_unittest* big.gz newlines.* outlines.*
 include ../Makefile.incl
 
 test:
