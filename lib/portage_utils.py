@@ -227,6 +227,11 @@ def open_python3(filename, mode='r', quiet=True, encoding=DEFAULT_ENCODING_VALUE
 
    if filename == "-":
       if mode in ('r', 'rt'):
+         # Notes on this solution: the now more standard
+         #    sys.stdin.reconfigure(encoding='utf-8')
+         # only works since Python 3.7 and we want to support older versions with
+         # this very generic library. And io.TextIOWrapper does not work on
+         # stdin/stdout (at least not with 3.6).
          theFile = builtins.open(sys.stdin.fileno(), mode, encoding=encoding, newline=newline)
       elif mode == "rb":
          theFile = sys.stdin
