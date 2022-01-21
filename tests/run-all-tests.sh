@@ -18,7 +18,7 @@ usage() {
 Option:
    -j N       Run the tests N-ways parallel (requires run-parallel.sh) [1]
    -local L   Run L parallel workers locally [calculated by run-parallel.sh]
-   -show-logs Display all the log files [don't]
+   -show-logs Display the log files of failed test, or all tests with -v [don't]
    -v(erbose) Increase verbosity
    -h(elp)    Print this help message
 " >&2
@@ -117,13 +117,11 @@ set -o pipefail
             FAIL="$FAIL $TEST_SUITE"
          elif run_test; then
             echo PASSED $TEST_SUITE
+            [[ $SHOW_LOGS && $VERBOSE ]] && cat _log.run-test
          else
             echo '***' FAILED $TEST_SUITE: ./run-test.sh returned $?
             FAIL="$FAIL $TEST_SUITE"
-         fi
-
-         if [[ $SHOW_LOGS ]]; then
-            cat _log.run-test
+            [[ $SHOW_LOGS ]] && cat _log.run-test
          fi
 
          cd ..

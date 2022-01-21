@@ -1,4 +1,4 @@
-name: PortestTextProcessing test suite
+name: PortageTextProcessing test suite
 
 on: [push]
 
@@ -19,7 +19,7 @@ jobs:
         pip3 install -r requirements.txt
     - name: Install Perl dependencies
       run: |
-        sudo apt-get install -y libxml-twig-perl libxml-writer-perl libxml-xpath-perl
+        sudo apt-get install -y libxml-twig-perl libxml-writer-perl libxml-xpath-perl xml-twig-tools libxml2-utils
     - name: Run tests
       run: |
         source SETUP.bash && cd tests && ./run-all-tests.sh -show-logs
