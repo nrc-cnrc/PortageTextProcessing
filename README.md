@@ -5,7 +5,7 @@
 This repository contains a number of text pre- and post-processing utilities written in
 the context of the Portage Statistical Machine Translation project.  Since they are
 frequently useful outside that context, we have separated them into this repository that
-is trivial to install.
+is designed to be trivial to install.
 
 ## Installation
 
@@ -17,15 +17,17 @@ Clone this repo to the location of your choice and add this line to your .profil
 
 PortageTextProcessing requires:
  - Perl >= 5.14, as `perl` on your PATH, with the packages listed in cpanfile;
- - any version of Python 3, as `python3` on your PATH, with the packages listed in
-   requirements.txt;
+ - any version of Python 3, as `python3` on your PATH, with the packages listed
+   in requirements.txt;
  - `/bin/bash`, `/bin/sh`, `/usr/bin/env`;
  - `xmllint` (comes with libxml2) and `xml_grep` (comes with Perl's XML::Twig).
 
-Install the dependencies with the package manager of your choice, ideally the
-OS's own distro manager, like apt, yum, or brew.  To validate that you've
-installed all the dependencies, go to `tests/check-installation/` and run
-`./run-test.sh`. This test suite will flag any missing dependencies.
+First, check if you already have these dependencies, since they are very common:
+go to `tests/check-installation/` and run `./run-test.sh`. This test suite will
+flag any missing dependencies.
+
+Install missing dependencies with the package manager of your choice, ideally
+the OS's own distro manager, like apt, yum, or brew.
 
 CentOS 7 packages:
 
@@ -35,6 +37,10 @@ Ubuntu 20.04 packages:
 
     apt-get install libxml-twig-perl libxml-xpath-perl libxml-writer-perl
     apt-get install libxml2-utils xml-twig-tools python3
+
+For the Python 3 dependencies, with any OS:
+
+    pip3 install -r requirements.txt
 
 ## Testing
 
@@ -47,6 +53,9 @@ which command caused the error, you can also run `make -B` interactively in any 
 suite instead of `./run-test.sh`, to run all its test cases sequentially and stop at the
 first error.
 
+If you have installed [PortageClusterUtils](https://github.com/nrc-cnrc/PortageClusterUtils),
+you can also run all the test suites in parallel with `./run-all-tests.sh -j 12`.
+
 ## Documentation
 
 Each script accepts the `-h` option to output its documentation to your terminal.
@@ -56,7 +65,7 @@ Each script accepts the `-h` option to output its documentation to your terminal
 | Script                          | Brief Description                                          |
 | ------------------------------- | ---------------------------------------------------------- |
 | `clean-utf8-text.pl`            | Clean up spaces, control chars, hyphen, etc. in utf8 text. |
-| `clean_utf8.py`                 | Yet another utf8 clean up script.                          |
+| `clean_utf8.py`                 | Yet another utf8 clean up script, now in Python 3.         |
 | `crlf2lf.sh`                    | Convert CRLF (DOS-style) line endings to LF (UNIX-style).  |
 | `diff-round.pl`                 | Like diff, but ignore rounding errors.                     |
 | `expand-auto.pl`                | Like expand, with automatically calculated tab stops.      |
