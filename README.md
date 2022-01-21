@@ -19,12 +19,22 @@ PortageTextProcessing requires:
  - Perl >= 5.14, as `perl` on your PATH, with the packages listed in cpanfile;
  - any version of Python 3, as `python3` on your PATH, with the packages listed in
    requirements.txt;
- - `/bin/bash`, `/bin/sh`, `/usr/bin/env`.
+ - `/bin/bash`, `/bin/sh`, `/usr/bin/env`;
+ - `xmllint` (comes with libxml2) and `xml_grep` (comes with Perl's XML::Twig).
 
 Install the dependencies with the package manager of your choice, ideally the
 OS's own distro manager, like apt, yum, or brew.  To validate that you've
 installed all the dependencies, go to `tests/check-installation/` and run
 `./run-test.sh`. This test suite will flag any missing dependencies.
+
+CentOS 7 packages:
+
+    yum install perl-XML-Twig perl-XML-XPath perl-XML-Writer libxml2 python3
+
+Ubuntu 20.04 packages:
+
+    apt-get install libxml-twig-perl libxml-xpath-perl libxml-writer-perl
+    apt-get install libxml2-utils xml-twig-tools python3
 
 ## Testing
 
