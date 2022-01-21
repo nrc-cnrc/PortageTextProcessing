@@ -22,7 +22,6 @@ import io
 import sys
 import argparse
 import re
-from subprocess import Popen, PIPE
 
 if sys.version_info[0] < 3:
    import __builtin__ as builtins
