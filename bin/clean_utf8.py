@@ -232,7 +232,7 @@ def main(
         normalization_type=normalization_type,
     )
 
-    with open(str(infile), mode="r", encoding="UTF-8") as cin, open(
+    with open(str(infile), mode="r", encoding="UTF-8", newline="\n") as cin, open(
         str(outfile), mode="w", encoding="UTF-8"
     ) as cout:
         cin = map(str.strip, cin)

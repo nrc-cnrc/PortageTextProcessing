@@ -1,0 +1,111 @@
+newlines.txt None None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+newlines.txt None '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+newlines.txt None '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+newlines.txt None '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+newlines.txt None '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+newlines.txt latin1 None ['TestÃ©Ã\xa0Ã»LF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+newlines.txt latin1 '' ['TestÃ©Ã\xa0Ã»LF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+newlines.txt latin1 '\n' ['TestÃ©Ã\xa0Ã»LF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+newlines.txt latin1 '\r' ['TestÃ©Ã\xa0Ã»LF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+newlines.txt latin1 '\r\n' ['TestÃ©Ã\xa0Ã»LF\nCR\rLF\nCRLF\r\n', 'LF\n']
+newlines.txt utf8 None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+newlines.txt utf8 '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+newlines.txt utf8 '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+newlines.txt utf8 '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+newlines.txt utf8 '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+newlines.txt default None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+newlines.txt default '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+newlines.txt default '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+newlines.txt default '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+newlines.txt default '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+newlines.txt rb [b'Test\xc3\xa9\xc3\xa0\xc3\xbbLF\n', b'CR\rLF\n', b'CRLF\r\n', b'LF\n']
+newlines.gz None None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+newlines.gz None '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+newlines.gz None '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+newlines.gz None '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+newlines.gz None '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+newlines.gz latin1 None ['TestÃ©Ã\xa0Ã»LF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+newlines.gz latin1 '' ['TestÃ©Ã\xa0Ã»LF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+newlines.gz latin1 '\n' ['TestÃ©Ã\xa0Ã»LF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+newlines.gz latin1 '\r' ['TestÃ©Ã\xa0Ã»LF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+newlines.gz latin1 '\r\n' ['TestÃ©Ã\xa0Ã»LF\nCR\rLF\nCRLF\r\n', 'LF\n']
+newlines.gz utf8 None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+newlines.gz utf8 '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+newlines.gz utf8 '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+newlines.gz utf8 '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+newlines.gz utf8 '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+newlines.gz default None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+newlines.gz default '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+newlines.gz default '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+newlines.gz default '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+newlines.gz default '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+newlines.gz rb [b'Test\xc3\xa9\xc3\xa0\xc3\xbbLF\n', b'CR\rLF\n', b'CRLF\r\n', b'LF\n']
+cat newlines.txt | None None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+cat newlines.txt | None '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+cat newlines.txt | None '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+cat newlines.txt | None '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+cat newlines.txt | None '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+cat newlines.txt | latin1 None ['TestÃ©Ã\xa0Ã»LF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+cat newlines.txt | latin1 '' ['TestÃ©Ã\xa0Ã»LF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+cat newlines.txt | latin1 '\n' ['TestÃ©Ã\xa0Ã»LF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+cat newlines.txt | latin1 '\r' ['TestÃ©Ã\xa0Ã»LF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+cat newlines.txt | latin1 '\r\n' ['TestÃ©Ã\xa0Ã»LF\nCR\rLF\nCRLF\r\n', 'LF\n']
+cat newlines.txt | utf8 None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+cat newlines.txt | utf8 '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+cat newlines.txt | utf8 '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+cat newlines.txt | utf8 '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+cat newlines.txt | utf8 '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+cat newlines.txt | default None ['TestéàûLF\n', 'CR\n', 'LF\n', 'CRLF\n', 'LF\n']
+cat newlines.txt | default '' ['TestéàûLF\n', 'CR\r', 'LF\n', 'CRLF\r\n', 'LF\n']
+cat newlines.txt | default '\n' ['TestéàûLF\n', 'CR\rLF\n', 'CRLF\r\n', 'LF\n']
+cat newlines.txt | default '\r' ['TestéàûLF\nCR\r', 'LF\nCRLF\r', '\nLF\n']
+cat newlines.txt | default '\r\n' ['TestéàûLF\nCR\rLF\nCRLF\r\n', 'LF\n']
+cat newlines.txt | rb [b'Test\xc3\xa9\xc3\xa0\xc3\xbbLF\n', b'CR\rLF\n', b'CRLF\r\n', b'LF\n']
+outlines.txt latin1 None b'\xe0\xe9CR\rCRLF\r\nLF\n'
+outlines.txt latin1 '' b'\xe0\xe9CR\rCRLF\r\nLF\n'
+outlines.txt latin1 '\n' b'\xe0\xe9CR\rCRLF\r\nLF\n'
+outlines.txt latin1 '\r' b'\xe0\xe9CR\rCRLF\r\rLF\r'
+outlines.txt latin1 '\r\n' b'\xe0\xe9CR\rCRLF\r\r\nLF\r\n'
+outlines.txt utf8 None b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.txt utf8 '' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.txt utf8 '\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.txt utf8 '\r' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\rLF\r'
+outlines.txt utf8 '\r\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\r\nLF\r\n'
+outlines.txt default None b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.txt default '' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.txt default '\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.txt default '\r' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\rLF\r'
+outlines.txt default '\r\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\r\nLF\r\n'
+outlines.txt wb b'CR\rCRLF\r\nLF\n'
+outlines.gz latin1 None b'\xe0\xe9CR\rCRLF\r\nLF\n'
+outlines.gz latin1 '' b'\xe0\xe9CR\rCRLF\r\nLF\n'
+outlines.gz latin1 '\n' b'\xe0\xe9CR\rCRLF\r\nLF\n'
+outlines.gz latin1 '\r' b'\xe0\xe9CR\rCRLF\r\rLF\r'
+outlines.gz latin1 '\r\n' b'\xe0\xe9CR\rCRLF\r\r\nLF\r\n'
+outlines.gz utf8 None b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.gz utf8 '' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.gz utf8 '\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.gz utf8 '\r' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\rLF\r'
+outlines.gz utf8 '\r\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\r\nLF\r\n'
+outlines.gz default None b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.gz default '' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.gz default '\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+outlines.gz default '\r' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\rLF\r'
+outlines.gz default '\r\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\r\nLF\r\n'
+outlines.gz wb b'CR\rCRLF\r\nLF\n'
+| cat > outlines.txt latin1 None b'\xe0\xe9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt latin1 '' b'\xe0\xe9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt latin1 '\n' b'\xe0\xe9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt latin1 '\r' b'\xe0\xe9CR\rCRLF\r\rLF\r'
+| cat > outlines.txt latin1 '\r\n' b'\xe0\xe9CR\rCRLF\r\r\nLF\r\n'
+| cat > outlines.txt utf8 None b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt utf8 '' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt utf8 '\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt utf8 '\r' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\rLF\r'
+| cat > outlines.txt utf8 '\r\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\r\nLF\r\n'
+| cat > outlines.txt default None b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt default '' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt default '\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\nLF\n'
+| cat > outlines.txt default '\r' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\rLF\r'
+| cat > outlines.txt default '\r\n' b'\xc3\xa0\xc3\xa9CR\rCRLF\r\r\nLF\r\n'
+| cat > outlines.txt wb b'CR\rCRLF\r\nLF\n'

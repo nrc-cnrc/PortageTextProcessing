@@ -12,13 +12,24 @@
 
 # Run the test suite with Python 2.7, but only if we find python2, since
 # PortageTextProcessing no longer actually has any python2 scripts.
+
+EXIT_CODE=
+
 if which-test.sh python2; then
    make clean
-   make all -B -j ${OMP_NUM_THREADS:-$(nproc)} --makefile Makefile.python2
+   if ! make all -B -j ${OMP_NUM_THREADS:-$(nproc)} --makefile Makefile.python2; then
+      EXIT_CODE=1
+   fi
 fi
 
 # Run the test suite with Python 3
 make clean
-make all -B -j ${OMP_NUM_THREADS:-$(nproc)}
+if ! make all -B -j ${OMP_NUM_THREADS:-$(nproc)}; then
+   EXIT_CODE=1
+fi
 
-exit
+if [[ $EXIT_CODE ]]; then
+   echo Some tests FAILED, running with either python2 or python3. Scroll up for details.
+fi
+
+exit $EXIT_CODE

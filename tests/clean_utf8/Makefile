@@ -20,6 +20,13 @@ include ../Makefile.incl
 
 ########################################
 # Compare a run to a reference
-test:
-	diff --brief <(clean-utf8-text.pl -wide-punct  < clean_utf8.txt) ref/clean_utf8.txt
-	diff --brief <(clean_utf8.py --phrase-table --wide-punct < clean_utf8.txt) ref/clean_utf8.txt
+test: test_perl test_python_stdin test_python_file
+
+test_perl:
+	diff <(clean-utf8-text.pl -wide-punct  < clean_utf8.txt) ref/clean_utf8.txt --brief
+
+test_python_stdin:
+	diff <(clean_utf8.py --phrase-table --wide-punct < clean_utf8.txt) ref/clean_utf8.txt --brief
+
+test_python_file:
+	diff <(clean_utf8.py --phrase-table --wide-punct clean_utf8.txt) ref/clean_utf8.txt --brief

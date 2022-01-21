@@ -18,27 +18,16 @@
 
 from __future__ import print_function, unicode_literals, division, absolute_import
 
+import io
 import sys
 import argparse
 import re
-from subprocess import Popen, PIPE
 
 if sys.version_info[0] < 3:
    import __builtin__ as builtins
-   def ignore_encoding_wrapper(fn):
-      """Wrapper for open() and Popen(), to ignore the encoding= argument,
-      which is not supported in Python 2.7."""
-      def fn_wrapper(*args, **kwargs):
-         try:
-            del kwargs["encoding"]
-         except KeyError:
-            pass
-         return fn(*args, **kwargs)
-      return fn_wrapper
-   builtin_open = ignore_encoding_wrapper(builtins.open)
-   Popen = ignore_encoding_wrapper(Popen)
 else:
-   from builtins import open as builtin_open
+   import builtins
+from subprocess import Popen, PIPE
 
 __all__ = ["printCopyright",
            "HelpAction", "VerboseAction", "VerboseMultiAction", "DebugAction",
@@ -158,8 +147,10 @@ def verbose(*args, **kwargs):
    if verbose_flag or debug_flag:
       print(*args, file=sys.stderr, **kwargs)
 
-def open(filename, mode='r', quiet=True, encoding="utf8"):
+def open_python2(filename, mode='r', quiet=True):
    """Transparently open files that are stdin, stdout, plain text, compressed or pipes.
+
+   This version of open() is optimized for python2, with its limited options.
 
    examples: open("-")
       open("file.txt")
@@ -169,13 +160,65 @@ def open(filename, mode='r', quiet=True, encoding="utf8"):
    filename: name of the file to open
    mode: open mode
    quiet:  suppress "zcat: stdout: Broken pipe" messages.
-   encoding: defaults to "utf8" for text modes (Python 3 only; ignored in Python 2.7)
+   return: file handle to the open file.
+   """
+   filename.strip()
+   #debug("open: ", filename, " in ", mode, " mode")
+   if len(filename) == 0:
+      fatal_error("You must provide a filename")
+
+   if filename == "-":
+      if mode == 'r':
+         theFile = sys.stdin
+      elif mode == 'w':
+         theFile = sys.stdout
+      else:
+         fatal_error("Unsupported mode.")
+   elif filename.endswith('|'):
+      theFile = Popen(filename[:-1], shell=True, executable="/bin/bash", stdout=PIPE).stdout
+   elif filename.startswith('|'):
+      theFile = Popen(filename[1:], shell=True, executable="/bin/bash", stdin=PIPE).stdin
+   elif filename.endswith(".gz"):
+      #theFile = gzip.open(filename, mode+'b')
+      if mode == 'r':
+         if quiet:
+            theFile = Popen(["zcat", "-f", filename], stdout=PIPE, stderr=open('/dev/null', 'w')).stdout
+         else:
+            theFile = Popen(["zcat", "-f", filename], stdout=PIPE).stdout
+      elif mode == 'w':
+         internal_file = builtins.open(filename, mode)
+         theFile = Popen(["gzip"], close_fds=True, stdin=PIPE, stdout=internal_file).stdin
+      else:
+         fatal_error("Unsupported mode for gz files.")
+   else:
+      theFile = builtins.open(filename, mode)
+
+   return theFile
+
+DEFAULT_ENCODING_VALUE=object()  # Sentinel object so we know encoding was not specified
+def open_python3(filename, mode='r', quiet=True, encoding=DEFAULT_ENCODING_VALUE, newline=None):
+   """Transparently open files that are stdin, stdout, plain text, compressed or pipes.
+
+   This version of open() is optimized for Python 3, and supports the encoding
+   and newline parameters.
+
+   examples: open("-")
+      open("file.txt", encoding="latin1")
+      open("file.gz", newline="\n")
+      open("zcat file.gz | grep a |")
+
+   filename: name of the file to open
+   mode: open mode
+   quiet:  suppress "zcat: stdout: Broken pipe" messages.
+   encoding: same as in builtins.open() but defaults to "utf8" for text modes
+   newline: same as in builtins.open()
    return: file handle to the open file.
    """
 
-   if "b" in mode:
-      # you cannot open a file in binary mode with an encoding in Python 3
-      encoding = None
+   if encoding is DEFAULT_ENCODING_VALUE:
+      encoding = None if "b" in mode else "utf-8"
+   if "b" in mode and encoding is not None:
+      fatal_error("Cannot specify encoding with binary files")
 
    filename.strip()
    #debug("open: ", filename, " in ", mode, " mode")
@@ -184,35 +227,54 @@ def open(filename, mode='r', quiet=True, encoding="utf8"):
 
    if filename == "-":
       if mode in ('r', 'rt'):
+         # Notes on this solution: the now more standard
+         #    sys.stdin.reconfigure(encoding='utf-8')
+         # only works since Python 3.7 and we want to support older versions with
+         # this very generic library. And io.TextIOWrapper does not work on
+         # stdin/stdout (at least not with 3.6).
+         theFile = builtins.open(sys.stdin.fileno(), mode, encoding=encoding, newline=newline)
+      elif mode == "rb":
          theFile = sys.stdin
       elif mode in ('w', 'wt'):
+         theFile = builtins.open(sys.stdout.fileno(), mode, encoding=encoding, newline=newline)
+      elif mode == "wb":
          theFile = sys.stdout
       else:
          fatal_error("Unsupported mode.")
    elif filename.endswith('|'):
-      theFile = Popen(filename[:-1], shell=True, executable="/bin/bash", encoding=encoding,
-                      stdout=PIPE).stdout
+      theFile = Popen(filename[:-1], shell=True, executable="/bin/bash", stdout=PIPE).stdout
+      if "b" not in mode:
+         theFile = io.TextIOWrapper(theFile, encoding=encoding, newline=newline)
    elif filename.startswith('|'):
-      theFile = Popen(filename[1:], shell=True, executable="/bin/bash", encoding=encoding,
-                      stdin=PIPE).stdin
+      theFile = Popen(filename[1:], shell=True, executable="/bin/bash", stdin=PIPE).stdin
+      if "b" not in mode:
+         theFile = io.TextIOWrapper(theFile, encoding=encoding, newline=newline)
    elif filename.endswith(".gz"):
       #theFile = gzip.open(filename, mode+'b')
       if mode in ('r', 'rt', 'rb'):
          if quiet:
-            theFile = Popen(["zcat", "-f", filename], stdout=PIPE, encoding=encoding,
+            theFile = Popen(["zcat", "-f", filename], stdout=PIPE,
                             stderr=open('/dev/null', 'w')).stdout
          else:
-            theFile = Popen(["zcat", "-f", filename], stdout=PIPE, encoding=encoding).stdout
+            theFile = Popen(["zcat", "-f", filename], stdout=PIPE).stdout
+         if "b" not in mode:
+            theFile = io.TextIOWrapper(theFile, encoding=encoding, newline=newline)
       elif mode in ('w', 'wt', 'wb'):
-         internal_file = builtin_open(filename, mode, encoding=encoding)
-         theFile = Popen(["gzip"], close_fds=True, stdin=PIPE, encoding=encoding,
-                         stdout=internal_file).stdin
+         internal_file = builtins.open(filename, "wb")
+         theFile = Popen(["gzip"], close_fds=True, stdin=PIPE, stdout=internal_file).stdin
+         if "b" not in mode:
+            theFile = io.TextIOWrapper(theFile, encoding=encoding, newline=newline)
       else:
          fatal_error("Unsupported mode for gz files.")
    else:
-      theFile = builtin_open(filename, mode, encoding=encoding)
+      theFile = builtins.open(filename, mode, encoding=encoding, newline=newline)
 
    return theFile
+
+if sys.version_info[0] < 3:
+   open = open_python2
+else:
+   open = open_python3
 
 # Regular expression to match whitespace the same way that split() in
 # str_utils.cc does, i.e. sequence of spaces, tabs, and/or newlines.

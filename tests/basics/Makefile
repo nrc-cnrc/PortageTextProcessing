@@ -120,6 +120,8 @@ test.lines.py:
 	diff <(lines.py <(echo $$'2\n4\n4\n10\n1') <(seq 1 20)) <(echo $$'1\n2\n4\n4\n10')
 	seq 1 20 | gzip > seq.gz
 	diff <(lines.py <(echo $$'2\n4\n4\n10\n1') seq.gz) <(echo $$'1\n2\n4\n4\n10')
+	diff <(lines.py <(echo $$'2\n4') <(echo $$'à\né\nî\nö\nù')) <(echo $$'é\nö')
+	diff <(echo $$'à\né\nî\nö\nù' | lines.py <(echo $$'2\n4') -) <(echo $$'é\nö')
 
 test: test.select-lines.py
 test.select-lines.py:
