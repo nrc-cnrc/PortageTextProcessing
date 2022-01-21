@@ -18,6 +18,7 @@ usage() {
 Option:
    -j N       Run the tests N-ways parallel (requires run-parallel.sh) [1]
    -local L   Run L parallel workers locally [calculated by run-parallel.sh]
+   -show-logs Display all the log files [don't]
    -v(erbose) Increase verbosity
    -h(elp)    Print this help message
 " >&2
@@ -28,6 +29,7 @@ while [ $# -gt 0 ]; do
    case "$1" in
    -j)      PARALLEL_MODE=1; PARALLEL_LEVEL=$2; shift;;
    -local)  LOCAL="-local $2"; shift;;
+   -show-logs) SHOW_LOGS=1;;
    -v|-verbose) VERBOSE=1;;
    -*)      usage;;
    *)       break;;
@@ -118,6 +120,10 @@ set -o pipefail
          else
             echo '***' FAILED $TEST_SUITE: ./run-test.sh returned $?
             FAIL="$FAIL $TEST_SUITE"
+         fi
+
+         if [[ $SHOW_LOGS ]]; then
+            cat _log.run-test
          fi
 
          cd ..
