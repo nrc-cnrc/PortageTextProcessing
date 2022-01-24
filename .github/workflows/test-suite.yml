@@ -7,19 +7,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
+      matrix:
+        python: [3.6, 3.9]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.6
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.6
-    - name: Install Python 3 dependencies
-      run: |
-        pip3 install -r requirements.txt
     - name: Install Perl dependencies
       run: |
         sudo apt-get install -y libxml-twig-perl libxml-writer-perl libxml-xpath-perl xml-twig-tools libxml2-utils
+    - name: Set up Python ${{ matrix.python }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python }}
+    - name: Install Python 3 dependencies
+      run: |
+        pip3 install -r requirements.txt
     - name: Run tests
       run: |
         source SETUP.bash && cd tests && ./run-all-tests.sh -show-logs
