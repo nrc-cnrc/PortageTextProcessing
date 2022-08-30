@@ -8,13 +8,13 @@ message: >-
   metadata from this file.
 type: software
 authors:
-  - given-names: Samuel
-    family-names: Larkin
-    email: Samuel.Larkin@nrc-cnrc.gc.ca
-    affiliation: National Research Council Canada
   - given-names: Eric
     family-names: Joanis
     email: Eric.Joanis@nrc-cnrc.gc.ca
+    affiliation: National Research Council Canada
+  - given-names: Samuel
+    family-names: Larkin
+    email: Samuel.Larkin@nrc-cnrc.gc.ca
     affiliation: National Research Council Canada
   - given-names: Darlene
     family-names: Stewart
@@ -24,16 +24,27 @@ authors:
     family-names: Simard
     email: Michel.Simard@nrc-cnrc.gc.ca
     affiliation: National Research Council Canada
+  - given-names: George
+    family-names: Foster
+  - given-names: Nicola
+    family-names: Ueffing
+  - given-names: Aaron
+    family-names: Tikuisis
 repository-code: 'https://github.com/nrc-cnrc/PortageTextProcessing'
 abstract: >-
   Text processing tools that came out of the Portage
   SMT project — Outils de traitement de texte issus
   du projet Portage de TAS
 keywords:
+  - MT
+  - Machine Translation
   - Machine Translation
   - NLP
-  - MT
-  - SMT
   - NMT
+  - Natural Language Procressing
+  - Neural Machine Translation
   - Preprocessing
+  - SMT
+  - Statistical Machine Translation
+  - Text Processing
 license: MIT
