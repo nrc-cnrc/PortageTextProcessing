@@ -101,6 +101,17 @@ If you want to contribute scripts to this repo, please:
  - Add unit tests for your scripts under `tests/`.
  - Keep them relevant, which means pretty much anything related to text processing goes.
 
+## Citation
+
+```bib
+@misc{Portage_Text_Processing,
+author = {Joanis, Eric and Larkin, Samuel and Stewart, Darlene and Simard, Michel and Foster, George and Ueffing, Nicola and Tikuisis, Aaron},
+license = {MIT},
+title = {{Portage Text Processing}},
+url = {https://github.com/nrc-cnrc/PortageTextProcessing}
+}
+```
+
 ## Copyright
 
 Traitement multilingue de textes / Multilingual Text Processing \

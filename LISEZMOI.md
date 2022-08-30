@@ -85,6 +85,17 @@ Si vous voulez contribuer des scripts à ce repo, s'il-vous-plaît:
  - Assurez-vous qu'ils soient pertinents, c'est à dire qu'ils font du traitement simple
    du langage naturel.
 
+## Citation
+
+```bib
+@misc{Portage_Text_Processing,
+author = {Joanis, Eric and Larkin, Samuel and Stewart, Darlene and Simard, Michel and Foster, George and Ueffing, Nicola and Tikuisis, Aaron},
+license = {MIT},
+title = {{Portage Text Processing}},
+url = {https://github.com/nrc-cnrc/PortageTextProcessing}
+}
+```
+
 ## Copyright
 
 Traitement multilingue de textes / Multilingual Text Processing
