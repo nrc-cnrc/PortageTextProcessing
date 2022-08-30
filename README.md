@@ -105,7 +105,7 @@ If you want to contribute scripts to this repo, please:
 
 ```bib
 @misc{Portage_Text_Processing,
-author = {Joanis, Eric and Larkin, Samuel and Stewart, Darlene and Simard, Michel and Foster, George and Ueffing, Nicola and Tikuisis, Aaron},
+author = {Larkin, Samuel and Joanis, Eric and Stewart, Darlene and Simard, Michel and Foster, George and Ueffing, Nicola and Tikuisis, Aaron},
 license = {MIT},
 title = {{Portage Text Processing}},
 url = {https://github.com/nrc-cnrc/PortageTextProcessing}

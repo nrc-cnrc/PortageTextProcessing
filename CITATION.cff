@@ -8,13 +8,13 @@ message: >-
   metadata from this file.
 type: software
 authors:
-  - given-names: Eric
-    family-names: Joanis
-    email: Eric.Joanis@nrc-cnrc.gc.ca
-    affiliation: National Research Council Canada
   - given-names: Samuel
     family-names: Larkin
     email: Samuel.Larkin@nrc-cnrc.gc.ca
+    affiliation: National Research Council Canada
+  - given-names: Eric
+    family-names: Joanis
+    email: Eric.Joanis@nrc-cnrc.gc.ca
     affiliation: National Research Council Canada
   - given-names: Darlene
     family-names: Stewart
