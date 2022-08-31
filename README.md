@@ -109,6 +109,7 @@ author = {Larkin, Samuel and Joanis, Eric and Stewart, Darlene and Simard, Miche
 license = {MIT},
 title = {{Portage Text Processing}},
 url = {https://github.com/nrc-cnrc/PortageTextProcessing}
+year = {2022},
 }
 ```
 
