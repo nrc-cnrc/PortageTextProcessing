@@ -6,10 +6,10 @@
 # Traitement multilingue de textes / Multilingual Text Processing
 # Technologies numériques / Digital Technologies
 # Conseil national de recherches Canada / National Research Council Canada
-# Copyright 2021, Sa Majeste la Reine du Chef du Canada /
-# Copyright 2021, Her Majesty in Right of Canada
+# Copyright 2022, Sa Majeste le Roi du Chef du Canada /
+# Copyright 2022, His Majesty the King in Right of Canada
 
-echo "PortageTextProcessing, NRC-CNRC, (c) 2004 - 2021, Her Majesty in Right of Canada" >&2
+echo "PortageTextProcessing, NRC-CNRC, (c) 2004 - 2022, His Majesty the King in Right of Canada" >&2
 
 SOURCE="${BASH_SOURCE[0]}"
 if [[ -h $SOURCE ]]; then
