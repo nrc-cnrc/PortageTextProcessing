@@ -1466,7 +1466,7 @@ sub is_right_bracket #ch
    #use re qw(Debug All);
    if (0) {
       my $re = qr/^(<[a]>)*[])}”’´]$/;
-      use Devel::Peek;
+      #use Devel::Peek;
       print "RE=$re\n";
    }
    my $ch=shift;
