@@ -19,12 +19,14 @@ import sys
 from portage_utils import open
 
 if len(sys.argv) != 3:
-    sys.stderr.write("Usage: lines.py  \n\
+    sys.stderr.write(
+        "Usage: lines.py  \n\
     <file containing line numbers>  <file containing text (can be gzipped)>\n\n\
     Extracts lines specified in first file from second file.\n\
     Line numbers have to start with 1 (not 0) and may contain repetitions.\n\
     Output will be sorted by line numbers.\n\
-")
+"
+    )
     sys.exit(1)
 
 ### Read arguments
@@ -42,15 +44,15 @@ n2 = nums.pop(0)
 line = txtFile.readline()
 done = False
 while (line != "") and (not done):
-    #print("%",n1,n2)
+    # print("%",n1,n2)
     while n1 == n2:
-        #sys.stderr.write("Line %i: %s\n" % (n2,line))
-        #sys.stdout.write(str(line))
-        print(line, end='')
+        # sys.stderr.write("Line %i: %s\n" % (n2,line))
+        # sys.stdout.write(str(line))
+        print(line, end="")
         if len(nums) == 0:
             done = True
             break
         n2 = nums.pop(0)
-    #print("#", n1, line, end=' ')
-    n1 = n1+1
+    # print("#", n1, line, end=' ')
+    n1 = n1 + 1
     line = txtFile.readline()

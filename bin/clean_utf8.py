@@ -38,7 +38,6 @@ from portage_utils import open
 __version__ = "1.1"
 
 
-
 class CleanUTF8:
     """
     Clean up spaces, control characters, hyphen and such in utf8 corpora.
@@ -142,7 +141,9 @@ class CleanUTF8:
         # Basic wide punctuation mapping
         if self.wide_punct:
             line = self.re_wide.sub(r" \g<1> ", line)
-            line = line.translate(str.maketrans("，。：）（；？﹗．﹪﹡﹟", ",.:)(;?!.%*#"))
+            line = line.translate(
+                str.maketrans("，。：）（；？﹗．﹪﹡﹟", ",.:)(;?!.%*#")
+            )
 
         # Collapse multiple spaces to a single space
         line = self.re_mspace.sub(" ", line)
@@ -159,7 +160,6 @@ def progress(*args):
     A simple progress report.
     """
     print("\r", *args, sep="", end="", file=sys.stderr)
-
 
 
 @click.command()
@@ -232,17 +232,15 @@ def main(
         normalization_type=normalization_type,
     )
 
-    with open(str(infile), mode="r", encoding="UTF-8", newline="\n") as cin, open(
-        str(outfile), mode="w", encoding="UTF-8"
-    ) as cout:
+    with (
+        open(str(infile), mode="r", encoding="UTF-8", newline="\n") as cin,
+        open(str(outfile), mode="w", encoding="UTF-8") as cout,
+    ):
         cin = map(str.strip, cin)
         for count, line in enumerate(cin, 1):
             if verbose and count % 1000 == 0:
                 progress(f"[{count} lines...]")
             print(clean(line), file=cout)
-
-
-
 
 
 if __name__ == "__main__":

@@ -54,24 +54,25 @@ ifiles = []
 ofiles = []
 for file in args:
     ifiles.append(open(file, "r"))
-    ofiles.append(open(re.sub(r'(.gz$|$)', r'.no-blanks\g<1>', file, count=1), "w"))
+    ofiles.append(open(re.sub(r"(.gz$|$)", r".no-blanks\g<1>", file, count=1), "w"))
 
 second = 1
-if len(ifiles) < 2: second = 0          # only use file1 if only file1 given
+if len(ifiles) < 2:
+    second = 0  # only use file1 if only file1 given
 
 lines = [""] * len(ifiles)
 for lines[0] in ifiles[0]:
-
     for i in range(1, len(ifiles)):
         lines[i] = ifiles[i].readline()
-        if (lines[i] == ""):
+        if lines[i] == "":
             sys.stderr.write("file " + ifiles[i].name + " too short!\n")
             sys.exit(1)
 
     if replace:
         rep = blankline.match(lines[0])
         for i in range(0, len(ifiles)):
-            if rep and blankline.match(lines[i]): lines[i] = ".\n"
+            if rep and blankline.match(lines[i]):
+                lines[i] = ".\n"
             ofiles[i].write(lines[i])
     else:
         if not blankline.match(lines[0]) and not blankline.match(lines[second]):
