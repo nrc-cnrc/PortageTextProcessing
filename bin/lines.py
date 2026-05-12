@@ -13,7 +13,6 @@
 # Copyright 2008, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2008, Her Majesty in Right of Canada
 
-import gzip
 import io
 import sys
 from portage_utils import open

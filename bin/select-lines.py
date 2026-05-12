@@ -104,15 +104,16 @@ def parse_alignment_line(line, column):
         (start, end) = tokens[column - 1].split("-", 1)
         start = int(start)
         end = int(end)
-    except:
+    except (ValueError, TypeError):
         fatal_error("Invalid alignment info line:", line.strip())
+
     if end < start:
         fatal_error("Invalid alignment has end<start at:", line.strip())
+
     return (start, end)
 
 
 def main():
-
     printCopyright("select-lines.py", 2018)
     os.environ["PORTAGE_INTERNAL_CALL"] = "1"
 

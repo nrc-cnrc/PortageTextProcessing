@@ -14,15 +14,19 @@
 
 import sys
 
-# import codecs
-# import re
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 import os
-import os.path
 import subprocess
 import random
 
-from portage_utils import *
+from portage_utils import (
+    HelpAction,
+    VerboseAction,
+    DebugAction,
+    fatal_error,
+    printCopyright,
+    verbose,
+)
 
 
 def get_args():

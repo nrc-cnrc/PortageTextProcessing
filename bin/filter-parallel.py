@@ -12,11 +12,10 @@
 # Copyright 2015, Sa Majeste la Reine du Chef du Canada /
 # Copyright 2015, Her Majesty in Right of Canada
 
-import sys
-import os.path
 from argparse import ArgumentParser, FileType, Action
 
 from portage_utils import (
+    fatal_error,
     open,
     printCopyright,
     DebugAction,
